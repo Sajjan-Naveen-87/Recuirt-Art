@@ -1,0 +1,19 @@
+Django & REST Framework
+Django>=6.0
+djangorestframework>=3.16.1
+djangorestframework-simplejwt>=5.3.1
+django-cors-headers>=4.9.0
+
+# Database
+psycopg2-binary>=2.9.11
+
+# Authentication
+PyJWT>=2.10.1
+twilio>=9.10.0
+social-auth-app-django>=5.7.0
+
+# Configuration
+python-dotenv>=1.2.1
+
+# Utilities
+Pillow>=10.0.0

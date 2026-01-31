@@ -10,9 +10,15 @@ export const authService = {
   // Login with email/password
   login: async (credentials) => {
     const response = await api.post('/accounts/login/', credentials);
-    if (response.data.access) {
+    if (response.data.tokens?.access) {
+      localStorage.setItem('access_token', response.data.tokens.access);
+      if (response.data.tokens.refresh) localStorage.setItem('refresh_token', response.data.tokens.refresh);
+    } else if (response.data.access) {
+      // Fallback for flat structure if any
       localStorage.setItem('access_token', response.data.access);
-      localStorage.setItem('refresh_token', response.data.refresh);
+      if (response.data.refresh) {
+        localStorage.setItem('refresh_token', response.data.refresh);
+      }
     }
     return response.data;
   },
@@ -26,9 +32,14 @@ export const authService = {
   // Verify OTP
   verifyOTP: async (mobile, otp) => {
     const response = await api.post('/accounts/otp/verify/', { mobile, otp });
-    if (response.data.access) {
+    if (response.data.tokens?.access) {
+      localStorage.setItem('access_token', response.data.tokens.access);
+      if (response.data.tokens.refresh) localStorage.setItem('refresh_token', response.data.tokens.refresh);
+    } else if (response.data.access) {
       localStorage.setItem('access_token', response.data.access);
-      localStorage.setItem('refresh_token', response.data.refresh);
+      if (response.data.refresh) {
+        localStorage.setItem('refresh_token', response.data.refresh);
+      }
     }
     return response.data;
   },
@@ -36,9 +47,14 @@ export const authService = {
   // Google OAuth login
   googleLogin: async (code) => {
     const response = await api.post('/accounts/google/', { code });
-    if (response.data.access) {
+    if (response.data.tokens?.access) {
+      localStorage.setItem('access_token', response.data.tokens.access);
+      if (response.data.tokens.refresh) localStorage.setItem('refresh_token', response.data.tokens.refresh);
+    } else if (response.data.access) {
       localStorage.setItem('access_token', response.data.access);
-      localStorage.setItem('refresh_token', response.data.refresh);
+      if (response.data.refresh) {
+        localStorage.setItem('refresh_token', response.data.refresh);
+      }
     }
     return response.data;
   },

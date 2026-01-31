@@ -9,7 +9,7 @@ from rest_framework.routers import DefaultRouter
 from enquiries.views import (
     CorporateEnquiryViewSet,
     EnquirySubmitView,
-    ContactUsView,
+    ContactInfoView,
 )
 
 app_name = 'enquiries'
@@ -20,7 +20,7 @@ router.register(r'enquiries', CorporateEnquiryViewSet, basename='enquiry')
 urlpatterns = [
     # Alternative endpoints
     path('enquiry/submit/', EnquirySubmitView.as_view(), name='enquiry-submit'),
-    path('contact-us/', ContactUsView.as_view(), name='contact-us'),
+    path('contact-info/', ContactInfoView.as_view(), name='contact-info'),
     
     # Router URLs
     path('', include(router.urls)),

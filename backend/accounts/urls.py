@@ -12,13 +12,13 @@ from accounts.views import (
     OTPSendView,
     LoginView,
     LogoutView,
-    ProfileView,
     PasswordChangeView,
     PasswordResetRequestView,
     PasswordResetConfirmView,
     TokenRefreshView,
     GoogleAuthView,
 )
+from accounts.profile_views import ProfileView
 from accounts.firebase_views import (
     FirebaseLoginView,
     FirebaseVerifyTokenView,

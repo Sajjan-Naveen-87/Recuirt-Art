@@ -1,14 +1,57 @@
 @import "tailwindcss";
 
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:ital,wght@0,300..900;1,300..900&display=swap');
+
 @layer base {
   :root {
-    --background: 210 40% 98%; /* Light Slate */
-    --primary: 243 75% 59%;    /* Indigo */
+    /* Color Palette from Inspiration */
+    --color-dark: #121212;
+    --color-soft: #f4f4f0; /* Soft off-white */
+    --color-sage: #cbd5b1;
+    --color-accent: #4f46e5; /* Electric Indigo */
+    --color-accent-glow: #818cf8;
+    
+    --font-serif: 'Libre Baskerville', serif;
+    --font-sans: 'Source Sans 3', sans-serif;
   }
   
   body {
-    @apply bg-[#F1F5F9] text-slate-900 antialiased;
-    font-family: 'Inter', system-ui, sans-serif;
+    @apply bg-[#f4f4f0] text-[#121212] antialiased;
+    font-family: var(--font-sans);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-serif);
+    @apply tracking-tight;
+  }
+
+  /* Shazamme-style smooth layout */
+  .layout-wrapper {
+     @apply flex h-screen overflow-hidden bg-[#121212];
+  }
+}
+
+/* Utilities for the specific look */
+@layer utilities {
+  .text-serif {
+    font-family: var(--font-serif);
+  }
+  .text-sans {
+    font-family: var(--font-sans);
+  }
+  .bg-dark {
+    background-color: var(--color-dark);
+  }
+  .bg-soft {
+    background-color: var(--color-soft);
+  }
+  
+  /* Neon glow effect */
+  .glow-sm {
+    box-shadow: 0 0 10px rgba(79, 70, 229, 0.3);
+  }
+  .glow-md {
+    box-shadow: 0 0 20px rgba(79, 70, 229, 0.4);
   }
 }
 
@@ -17,6 +60,6 @@
   width: 5px;
 }
 ::-webkit-scrollbar-thumb {
-  background: #e2e8f0;
+  background: #333;
   border-radius: 10px;
 }

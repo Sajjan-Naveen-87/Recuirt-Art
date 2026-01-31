@@ -45,7 +45,11 @@ export const jobsService = {
 
   // Apply for job
   applyForJob: async (applicationData) => {
-    const response = await api.post('/jobs/applications/', applicationData);
+    const config = {};
+    if (applicationData instanceof FormData) {
+      config.headers = { 'Content-Type': 'multipart/form-data' };
+    }
+    const response = await api.post('/jobs/applications/', applicationData, config);
     return response.data;
   },
 

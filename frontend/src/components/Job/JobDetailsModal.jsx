@@ -176,16 +176,14 @@ const JobDetailsModal = ({ job, isOpen, onClose, onApply }) => {
 
                 {/* Status Badge */}
                 <div className="flex items-center gap-2">
-                  {jobData.is_active ? (
-                    <span className="flex items-center gap-2 px-4 py-2 bg-emerald-50 text-emerald-700 rounded-xl font-medium">
-                      <CheckCircle size={18} />
-                      Accepting Applications
-                    </span>
-                  ) : (
-                    <span className="px-4 py-2 bg-slate-100 text-slate-500 rounded-xl font-medium">
-                      Applications Closed
-                    </span>
-                  )}
+                  <span className={`flex items-center gap-2 px-4 py-2 rounded-xl font-bold uppercase tracking-widest text-xs border ${
+                    jobData.is_active 
+                      ? 'bg-emerald-50 text-emerald-600 border-emerald-100' 
+                      : 'bg-rose-50 text-rose-600 border-rose-100'
+                  }`}>
+                    {jobData.is_active ? <CheckCircle size={14} /> : <X size={14} />}
+                    {jobData.is_active ? 'Job Open' : 'Job Ended'}
+                  </span>
                 </div>
               </div>
 

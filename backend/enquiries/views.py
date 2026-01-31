@@ -167,50 +167,23 @@ class EnquirySubmitView(views.APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ContactUsView(views.APIView):
+class ContactInfoView(views.APIView):
     """
-    API view for general contact us form.
-    
-    POST: Submit general contact message
+    API view for retrieving company contact information.
+    GET: Get contact details
     """
     permission_classes = [AllowAny]
     
-    def post(self, request):
-        """Submit a general contact message."""
-        from django.core.mail import send_mail
-        from django.conf import settings
-        
-        name = request.data.get('name', '').strip()
-        email = request.data.get('email', '').strip().lower()
-        subject = request.data.get('subject', '').strip()
-        message = request.data.get('message', '').strip()
-        
-        if not all([name, email, subject, message]):
-            return Response(
-                {'error': 'All fields are required.'},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        
-        # Send email to admin
-        try:
-            admin_email = settings.DEFAULT_FROM_EMAIL or 'admin@recruitart.com'
-            
-            send_mail(
-                subject=f"Contact Us: {subject}",
-                message=f"Name: {name}\nEmail: {email}\n\nMessage:\n{message}",
-                from_email=email,
-                recipient_list=[admin_email],
-                fail_silently=False,
-            )
-            
-            return Response(
-                {'message': 'Thank you for contacting us! We will respond shortly.'},
-                status=status.HTTP_200_OK
-            )
-            
-        except Exception as e:
-            return Response(
-                {'message': 'Thank you for contacting us! We will respond shortly.'},
-                status=status.HTTP_200_OK
-            )
+    def get(self, request):
+        """Return company contact details."""
+        return Response({
+            "company_name": "Recruit Art",
+            "email": "hr@recruitart.in",
+            "phone": "+91 98765 43210",
+            "address": "123, Tech Park, Bangalore, India",
+            "socials": {
+                "linkedin": "https://linkedin.com/company/recruit-art",
+                "twitter": "https://twitter.com/recruitart"
+            }
+        })
 

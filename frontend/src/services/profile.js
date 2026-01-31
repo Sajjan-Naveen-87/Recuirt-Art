@@ -9,7 +9,11 @@ export const profileService = {
 
   // Update current user's profile
   updateProfile: async (profileData) => {
-    const response = await api.put('/accounts/profile/', profileData);
+    const config = {};
+    if (profileData instanceof FormData) {
+      config.headers = { 'Content-Type': 'multipart/form-data' };
+    }
+    const response = await api.put('/accounts/profile/', profileData, config);
     return response.data;
   },
 

@@ -38,7 +38,8 @@ export const AuthProvider = ({ children }) => {
         
         try {
           const userData = await authService.getProfile();
-          setUser(userData);
+          // Extract user object if wrapped (ProfileView returns { user: {...}, applications: [...] })
+          setUser(userData.user || userData);
         } catch (err) {
           // Token invalid, clear storage
           localStorage.removeItem('access_token');
@@ -65,6 +66,27 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const register = async (userData) => {
+    try {
+      setError(null);
+      const data = await authService.register(userData);
+      // Automatically login or return data depending on backend response
+      // If backend returns token, we can setUser
+      if (data.tokens || data.access) {
+         // Assuming register might return tokens same as login
+         const user = data.user || data.data?.user || data;
+         setUser(user);
+         if (data.tokens?.access) localStorage.setItem('access_token', data.tokens.access);
+         if (data.tokens?.refresh) localStorage.setItem('refresh_token', data.tokens.refresh);
+      }
+      return data;
+    } catch (err) {
+      const message = err.response?.data?.error || err.message || 'Registration failed.';
+      setError(message);
+      throw new Error(message);
+    }
+  };
+
   const logout = async () => {
     try {
       await authService.logout();
@@ -81,13 +103,19 @@ export const AuthProvider = ({ children }) => {
     setUser(userData);
   };
 
+  const clearError = () => {
+    setError(null);
+  };
+
   const value = {
     user,
     loading,
     error,
     login,
+    register,
     logout,
     updateUser,
+    clearError,
     isAuthenticated: !!user,
   };
 

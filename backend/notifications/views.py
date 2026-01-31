@@ -78,16 +78,21 @@ class NotificationViewSet(viewsets.ModelViewSet):
     
     def list(self, request, *args, **kwargs):
         """List user's notifications."""
-        queryset = self.get_queryset()
-        
-        # Pagination
-        page = self.paginate_queryset(queryset)
-        if page is not None:
-            serializer = NotificationListSerializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
-        
-        serializer = NotificationListSerializer(queryset, many=True)
-        return Response(serializer.data)
+        try:
+            queryset = self.get_queryset()
+            
+            # Pagination
+            page = self.paginate_queryset(queryset)
+            if page is not None:
+                serializer = NotificationListSerializer(page, many=True)
+                return self.get_paginated_response(serializer.data)
+            
+            serializer = NotificationListSerializer(queryset, many=True)
+            return Response(serializer.data)
+        except Exception as e:
+            import traceback
+            traceback.print_exc()
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
     def create(self, request, *args, **kwargs):
         """Create a new notification (admin only)."""

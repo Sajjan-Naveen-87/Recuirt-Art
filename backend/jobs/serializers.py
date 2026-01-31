@@ -105,18 +105,22 @@ class JobApplicationCreateSerializer(serializers.ModelSerializer):
     
     def validate_resume(self, value):
         """Validate resume file type and size."""
-        from django.core.exceptions import ValidationError
-        
         # Check file type
-        allowed_types = ['application/pdf', 'application/msword',
-                        'application/vnd.openxmlformats-officedocument.wordprocessingml.document']
+        allowed_types = [
+            'application/pdf', 
+            'application/msword',
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            'image/jpeg',
+            'image/png',
+            'image/webp'
+        ]
         if value.content_type not in allowed_types:
-            raise ValidationError('Resume must be a PDF or Word document.')
+            raise serializers.ValidationError('Resume must be a PDF, Word document, or Image.')
         
         # Check file size (max 5MB)
         max_size = 5 * 1024 * 1024
         if value.size > max_size:
-            raise ValidationError('Resume file size must be less than 5MB.')
+            raise serializers.ValidationError('Resume file size must be less than 5MB.')
         
         return value
     

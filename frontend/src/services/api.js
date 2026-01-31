@@ -47,9 +47,10 @@ api.interceptors.response.use(
         }
       } catch (refreshError) {
         // Refresh failed, redirect to login
+        // Refresh failed, clear tokens and let the app handle logout
         localStorage.removeItem('access_token');
         localStorage.removeItem('refresh_token');
-        window.location.href = '/login';
+        return Promise.reject(refreshError);
       }
     }
 

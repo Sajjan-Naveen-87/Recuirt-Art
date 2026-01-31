@@ -13,6 +13,12 @@ export const enquiriesService = {
     return response.data;
   },
 
+  // Get contact info
+  getContactInfo: async () => {
+    const response = await api.get('/enquiries/contact-info/');
+    return response.data;
+  },
+
   // Alternative enquiry submission endpoint
   submitCorporateEnquiry: async (enquiryData) => {
     const response = await api.post('/enquiry/submit/', enquiryData);

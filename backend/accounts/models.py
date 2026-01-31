@@ -98,12 +98,47 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     
     # Social Auth (legacy)
     google_id = models.CharField('Google ID', max_length=255, blank=True, null=True)
-    
+
+    # Role-based access control
+    ROLE_CHOICES = [
+        ('SUPERUSER', 'Superuser'),
+        ('ADMIN', 'Admin'),
+        ('USER', 'User'),
+    ]
+    role = models.CharField(
+        'User Role',
+        max_length=10,
+        choices=ROLE_CHOICES,
+        default='USER',
+        help_text="User role for access control"
+    )
+
+    # Social Links
+    linkedin_url = models.URLField('LinkedIn URL', blank=True, null=True)
+    portfolio_url = models.URLField('Portfolio URL', blank=True, null=True)
+
+    profile_image = models.ImageField(
+        'Profile Image',
+        upload_to='profile_images/',
+        blank=True,
+        null=True,
+        help_text="User's profile picture"
+    )
+
+    # Resume upload for users
+    resume = models.FileField(
+        'Resume',
+        upload_to='resumes/',
+        blank=True,
+        null=True,
+        help_text="User's resume file (PDF/DOC)"
+    )
+
     # Firestore sync
     firestore_doc_id = models.CharField(
         'Firestore Document ID',
-        max_length=255, 
-        blank=True, 
+        max_length=255,
+        blank=True,
         null=True,
         help_text="Reference to Firebase Firestore document"
     )

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Mail, Lock, ArrowRight, Sparkles, Shield, Zap, Check, Eye, EyeOff, AlertCircle } from 'lucide-react';
+import { Mail, Lock, ArrowRight, Sparkles, Shield, Zap, Check, Eye, EyeOff, AlertCircle, Phone } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
 function Login() {
@@ -67,29 +67,7 @@ function Login() {
     }
   };
 
-  // Demo login for development - skips authentication
-  const handleDemoLogin = () => {
-    setIsLoading(true);
-    
-    // Create a mock user for demo purposes
-    const mockUser = {
-      id: 1,
-      email: 'demo@recruirtart.com',
-      first_name: 'Demo',
-      last_name: 'User',
-      role: 'admin'
-    };
-    
-    // Store mock token
-    localStorage.setItem('access_token', 'demo_token');
-    localStorage.setItem('refresh_token', 'demo_refresh_token');
-    localStorage.setItem('remember_me', 'true');
-    
-    // Navigate after a brief loading animation
-    setTimeout(() => {
-      navigate('/');
-    }, 1000);
-  };
+
 
   const handleSuccess = () => {
     setSuccess(true);
@@ -316,34 +294,22 @@ function Login() {
                   </>
                 )}
               </button>
+              
+              <div className="relative py-2">
+                 <div className="absolute inset-0 flex items-center"><span className="w-full border-t border-slate-200"></span></div>
+                 <div className="relative flex justify-center text-xs uppercase"><span className="bg-white/80 px-2 text-slate-400 font-bold tracking-widest">Or Continue With</span></div>
+              </div>
+
+               <button
+                type="button"
+                className="w-full bg-[#25D366] text-white py-4 rounded-[2rem] font-bold text-lg shadow-lg hover:bg-[#20bd5a] transition-all flex items-center justify-center gap-3 active:scale-[0.98]"
+              >
+                 <Phone size={20} />
+                 Login with WhatsApp
+              </button>
             </form>
 
-            {/* Demo Login Button */}
-            <div className="mt-6">
-              <div className="flex items-center gap-4 my-6">
-                <div className="flex-1 h-px bg-slate-200" />
-                <span className="text-xs font-medium text-slate-400 uppercase tracking-widest">or</span>
-                <div className="flex-1 h-px bg-slate-200" />
-              </div>
-              
-              <button
-                onClick={handleDemoLogin}
-                disabled={isLoading}
-                className="w-full bg-gradient-to-r from-indigo-500 to-purple-500 text-white py-4 rounded-[2rem] font-bold text-lg shadow-lg hover:from-indigo-600 hover:to-purple-600 transition-all flex items-center justify-center gap-2 active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed"
-              >
-                {isLoading ? (
-                  <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                ) : (
-                  <>
-                    <span>🚀</span>
-                    Demo Login
-                  </>
-                )}
-              </button>
-              <p className="text-center text-xs text-slate-400 mt-3">
-                Quick access for development and testing
-              </p>
-            </div>
+
 
             <div className="mt-8 text-center">
               <p className="text-slate-500 font-medium">

@@ -22,6 +22,9 @@ from jobs.serializers import (
     JobApplicationCreateSerializer,
     ApplicationStatusUpdateSerializer,
 )
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class JobViewSet(viewsets.ModelViewSet):
@@ -269,55 +272,68 @@ class JobApplicationViewSet(viewsets.ModelViewSet):
     
     def create(self, request, *args, **kwargs):
         """Submit a new job application."""
+        # Check if user is authenticated (required for job applications)
+        if not request.user.is_authenticated:
+            return Response(
+                {'error': 'Authentication required to apply for jobs.'},
+                status=status.HTTP_401_UNAUTHORIZED
+            )
+
         serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        
+        if not serializer.is_valid():
+            logger.error(f"Job application validation failed: {serializer.errors}")
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
         # Get the job
-        job_id = serializer.validated_data.get('job').id
-        job = get_object_or_404(Job, pk=job_id)
-        
+        job = serializer.validated_data.get('job')
+
         # Check if job is active and not expired
         if not job.is_active:
             return Response(
                 {'error': 'This job is no longer accepting applications.'},
                 status=status.HTTP_400_BAD_REQUEST
             )
-        
+
         # Check for duplicate applications
-        if request.user.is_authenticated:
-            existing = JobApplication.objects.filter(
-                job=job,
-                applicant=request.user
-            ).exists()
-            if existing:
-                return Response(
-                    {'error': 'You have already applied for this job.'},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-        
+        existing = JobApplication.objects.filter(
+            job=job,
+            applicant=request.user
+        ).exists()
+        if existing:
+            return Response(
+                {'error': 'You have already applied for this job.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
         # Save application
-        application = serializer.save(job=job)
-        
-        # Set applicant if user is logged in
-        if request.user.is_authenticated:
-            application.applicant = request.user
-            application.save()
-            
-            # Create notification for application submission
-            try:
-                from notifications.models import notify_application_submitted
-                notify_application_submitted(
-                    user=request.user,
-                    job_title=job.title,
-                    application_id=application.id
-                )
-            except Exception:
-                # Notification creation failed, continue without it
-                pass
-        
+        application = serializer.save(applicant=request.user)
+
+        logger.info(f"Job application submitted: User {request.user.id} ({request.user.email}) applied for job '{job.title}' (ID: {job.id})")
+
+        # Create notification for application submission
+        try:
+            from notifications.models import notify_application_submitted
+            notify_application_submitted(
+                user=request.user,
+                job_title=job.title,
+                application_id=application.id
+            )
+            logger.info(f"Application notification created for user {request.user.id}")
+        except Exception as e:
+            logger.warning(f"Failed to create notification for user {request.user.id}: {e}")
+
+        # Send WhatsApp notification for application submission
+        try:
+            from accounts.whatsapp_service import whatsapp_service
+            message = f"Your application for '{job.title}' has been submitted successfully."
+            whatsapp_service.send_text_message(request.user.mobile, message)
+            logger.info(f"WhatsApp notification sent to {request.user.mobile} for job application")
+        except Exception as e:
+            logger.warning(f"Failed to send WhatsApp notification to {request.user.mobile}: {e}")
+
         # Return full application details
         output_serializer = JobApplicationSerializer(application)
-        
+
         return Response(
             {
                 'message': 'Application submitted successfully.',
@@ -383,14 +399,14 @@ class JobApplicationViewSet(viewsets.ModelViewSet):
         """Update application status (admin only)."""
         application = self.get_object()
         old_status = application.status
-        
+
         serializer = ApplicationStatusUpdateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        
+
         new_status = serializer.validated_data['status']
         application.status = new_status
         application.save()
-        
+
         # Notify applicant of status change
         if application.applicant:
             try:
@@ -402,10 +418,24 @@ class JobApplicationViewSet(viewsets.ModelViewSet):
                     old_status=old_status,
                     new_status=new_status
                 )
-            except Exception:
-                # Notification creation failed, continue without it
-                pass
-        
+            except Exception as e:
+                logger.warning(f"Failed to create notification: {e}")
+
+            # Send WhatsApp notification for status update
+            try:
+                from accounts.whatsapp_service import whatsapp_service
+                status_messages = {
+                    'pending': f'Your application for "{application.job.title}" is now pending review.',
+                    'reviewing': f'Your application for "{application.job.title}" is being reviewed.',
+                    'shortlisted': f'Congratulations! Your application for "{application.job.title}" has been shortlisted.',
+                    'rejected': f'Unfortunately, your application for "{application.job.title}" was not selected.',
+                    'hired': f'Congratulations! You have been selected for "{application.job.title}".',
+                }
+                message = status_messages.get(new_status, f'Your application for "{application.job.title}" status changed to {new_status}.')
+                whatsapp_service.send_text_message(application.applicant.mobile, message)
+            except Exception as e:
+                logger.warning(f"Failed to send WhatsApp notification: {e}")
+
         return Response(
             {
                 'message': 'Application status updated.',

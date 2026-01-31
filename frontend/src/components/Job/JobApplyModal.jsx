@@ -35,9 +35,16 @@ const JobApplyModal = ({ job, isOpen, onClose, onSuccess }) => {
     if (files.length > 0) {
       const file = files[0];
       // Validate file type
-      const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+      const allowedTypes = [
+        'application/pdf', 
+        'application/msword', 
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'image/jpeg',
+        'image/png',
+        'image/webp'
+      ];
       if (!allowedTypes.includes(file.type)) {
-        setErrors(prev => ({ ...prev, [name]: 'Please upload a PDF or Word document' }));
+        setErrors(prev => ({ ...prev, [name]: 'Please upload a valid document (PDF, DOC) or image' }));
         return;
       }
       // Validate file size (5MB max)
@@ -75,8 +82,16 @@ const JobApplyModal = ({ job, isOpen, onClose, onSuccess }) => {
       applicationData.append('full_name', formData.full_name);
       applicationData.append('email', formData.email);
       applicationData.append('mobile', formData.mobile);
-      if (formData.linkedin_url) applicationData.append('linkedin_url', formData.linkedin_url);
-      if (formData.portfolio_url) applicationData.append('portfolio_url', formData.portfolio_url);
+
+      // Fix URLs if protocols are missing
+      const fixUrl = (url) => {
+        if (!url) return '';
+        if (url.startsWith('http://') || url.startsWith('https://')) return url;
+        return `https://${url}`;
+      };
+
+      if (formData.linkedin_url) applicationData.append('linkedin_url', fixUrl(formData.linkedin_url));
+      if (formData.portfolio_url) applicationData.append('portfolio_url', fixUrl(formData.portfolio_url));
       if (formData.expected_salary) applicationData.append('expected_salary', formData.expected_salary);
       if (formData.notice_period) applicationData.append('notice_period', formData.notice_period);
       if (formData.cover_letter) applicationData.append('cover_letter', formData.cover_letter);
@@ -92,7 +107,27 @@ const JobApplyModal = ({ job, isOpen, onClose, onSuccess }) => {
         }, 2000);
       }
     } catch (err) {
-      const errorMessage = err.response?.data?.error || err.response?.data?.message || 'Failed to submit application. Please try again.';
+      console.error('Job application error:', err.response?.data);
+      const data = err.response?.data;
+      let errorMessage = 'Failed to submit application. Please try again.';
+      
+      if (data) {
+        if (typeof data === 'string') {
+          errorMessage = data;
+        } else if (data.error || data.message) {
+          errorMessage = data.error || data.message;
+        } else if (typeof data === 'object') {
+          // Handle DRF field errors
+          const fieldErrors = Object.entries(data)
+            .map(([key, value]) => {
+              const msg = Array.isArray(value) ? value.join(', ') : value;
+              return `${key}: ${msg}`;
+            });
+          if (fieldErrors.length > 0) {
+            errorMessage = fieldErrors.join(' | ');
+          }
+        }
+      }
       setError(errorMessage);
     } finally {
       setLoading(false);
@@ -240,7 +275,7 @@ const JobApplyModal = ({ job, isOpen, onClose, onSuccess }) => {
                         type="file"
                         name="resume"
                         onChange={handleFileChange}
-                        accept=".pdf,.doc,.docx"
+                        accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.webp"
                         className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                       />
                       <div className="text-center">
@@ -256,7 +291,7 @@ const JobApplyModal = ({ job, isOpen, onClose, onSuccess }) => {
                               Click to upload or drag and drop
                             </p>
                             <p className="text-slate-400 text-sm mt-1">
-                              PDF, DOC, or DOCX (max 5MB)
+                              PDF, Word, or Images (max 5MB)
                             </p>
                           </>
                         )}

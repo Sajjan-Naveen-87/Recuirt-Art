@@ -121,21 +121,49 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = [
             'id', 'email', 'mobile', 'full_name', 'email_verified',
-            'mobile_verified', 'date_joined', 'last_login', 'google_id'
+            'mobile_verified', 'date_joined', 'last_login', 'google_id',
+            'resume', 'linkedin_url', 'portfolio_url', 'profile_image'
         ]
         read_only_fields = ['id', 'email', 'mobile', 'date_joined', 'last_login']
 
 
 class UserUpdateSerializer(serializers.ModelSerializer):
     """Serializer for updating user profile."""
-    
+
     class Meta:
         model = User
-        fields = ['full_name']
-    
+        fields = ['full_name', 'resume', 'linkedin_url', 'portfolio_url', 'profile_image']
+
+    def validate_resume(self, value):
+        """Validate resume file."""
+        if value:
+            # Check file size (max 5MB)
+            if value.size > 5 * 1024 * 1024:
+                raise serializers.ValidationError('Resume file size must be less than 5MB.')
+
+            # Check file type
+            allowed_types = [
+                'application/pdf',
+                'application/msword',
+                'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+            ]
+            if value.content_type not in allowed_types:
+                raise serializers.ValidationError('Resume must be a PDF or Word document.')
+
+        return value
+
     def update(self, instance, validated_data):
         """Update user profile."""
         instance.full_name = validated_data.get('full_name', instance.full_name)
+        instance.linkedin_url = validated_data.get('linkedin_url', instance.linkedin_url)
+        instance.portfolio_url = validated_data.get('portfolio_url', instance.portfolio_url)
+        
+        if 'resume' in validated_data:
+            instance.resume = validated_data.get('resume')
+            
+        if 'profile_image' in validated_data:
+            instance.profile_image = validated_data.get('profile_image')
+            
         instance.save()
         return instance
 

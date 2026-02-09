@@ -1,12 +1,21 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Mail, Lock, ArrowRight, Sparkles, Shield, Zap, Check, Eye, EyeOff, AlertCircle, Phone } from 'lucide-react';
+import { Mail, Lock, ArrowRight, Sparkles, Shield, Zap, Check, Eye, EyeOff, AlertCircle, Phone, Smartphone, MessageSquare } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import { auth } from '../firebase';
+import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  // Phone Auth State
+  const [loginMethod, setLoginMethod] = useState('email'); // 'email' or 'phone'
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [otp, setOtp] = useState('');
+  const [confirmationResult, setConfirmationResult] = useState(null);
+  const [otpSent, setOtpSent] = useState(false);
+
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
@@ -31,7 +40,7 @@ function Login() {
   useEffect(() => {
     if (error) clearError();
     setErrors({});
-  }, [email, password, error, clearError]);
+  }, [email, password, phoneNumber, otp, error, clearError]);
 
   const validateEmailForm = () => {
     const newErrors = {};
@@ -47,8 +56,96 @@ function Login() {
     return Object.keys(newErrors).length === 0;
   };
 
+  const validatePhoneForm = () => {
+    const newErrors = {};
+    if (!phoneNumber) {
+      newErrors.phone = 'Phone number is required';
+    } else if (phoneNumber.length < 10) {
+      newErrors.phone = 'Please enter a valid phone number';
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const setupRecaptcha = () => {
+    if (!window.recaptchaVerifier) {
+      window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
+        'size': 'invisible',
+        'callback': (response) => {
+          // reCAPTCHA solved, allow signInWithPhoneNumber.
+        }
+      });
+    }
+  };
+
+  const handleSendOtp = async (e) => {
+    e.preventDefault();
+    if (!validatePhoneForm()) return;
+
+    setIsLoading(true);
+    setupRecaptcha();
+    const appVerifier = window.recaptchaVerifier;
+
+    // Format phone number to E.164 format if not already
+    // Assuming Indian numbers for now based on context, otherwise standard format
+    const formattedPhone = phoneNumber.startsWith('+') ? phoneNumber : `+91${phoneNumber}`;
+
+    try {
+      const confirmation = await signInWithPhoneNumber(auth, formattedPhone, appVerifier);
+      setConfirmationResult(confirmation);
+      setOtpSent(true);
+      setErrors({});
+    } catch (err) {
+      console.error(err);
+      setErrors({ phone: err.message || 'Failed to send OTP. Try again.' });
+      if (window.recaptchaVerifier) {
+         window.recaptchaVerifier.clear();
+         window.recaptchaVerifier = null;
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleVerifyOtp = async (e) => {
+    e.preventDefault();
+    if (!otp) {
+        setErrors({ otp: 'Please enter OTP' });
+        return;
+    }
+
+    setIsLoading(true);
+    try {
+      const result = await confirmationResult.confirm(otp);
+      const idToken = await result.user.getIdToken();
+      
+      // Send execution to backend
+      await login({
+         login_type: 'firebase_phone',
+         id_token: idToken,
+         phone: result.user.phoneNumber
+      });
+      handleSuccess();
+
+    } catch (err) {
+      console.error(err);
+      setErrors({ otp: 'Invalid OTP. Please try again.' });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (loginMethod === 'phone') {
+        if (!otpSent) {
+            handleSendOtp(e);
+        } else {
+            handleVerifyOtp(e);
+        }
+        return;
+    }
     
     if (!validateEmailForm()) return;
     
@@ -195,75 +292,195 @@ function Login() {
               </motion.div>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-5">
-              <div>
-                <label className="block text-xs font-black uppercase tracking-widest text-slate-400 mb-3">
-                  Email Address
-                </label>
-                <div className="relative">
-                  <Mail className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300" size={20} />
-                  <input
-                    ref={emailInputRef}
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    onKeyDown={(e) => handleKeyDown(e, 'email')}
-                    placeholder="you@example.com"
-                    className={`w-full bg-slate-50 border-0 rounded-[2rem] py-5 pl-14 pr-6 text-lg font-medium placeholder:text-slate-300 focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all outline-none ${
-                      errors.email ? 'ring-2 ring-red-300 bg-red-50' : ''
-                    }`}
-                    required
-                  />
-                </div>
-                {errors.email && (
-                  <motion.p 
-                    initial={{ opacity: 0, y: -5 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="text-red-500 text-xs mt-2 ml-4 flex items-center gap-1"
-                  >
-                    <AlertCircle size={12} />
-                    {errors.email}
-                  </motion.p>
-                )}
-              </div>
+            {/* Login Method Tabs */}
+            <div className="flex p-1 bg-slate-100 rounded-[1.5rem] mb-8 relative">
+                <motion.div 
+                    className="absolute top-1 bottom-1 bg-white rounded-[1.2rem] shadow-sm"
+                    initial={false}
+                    animate={{ 
+                        left: loginMethod === 'email' ? '4px' : '50%', 
+                        width: 'calc(50% - 4px)',
+                        x: loginMethod === 'email' ? 0 : 0
+                    }}
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                />
+                <button 
+                    onClick={() => setLoginMethod('email')}
+                    className={`flex-1 relative z-10 py-3 text-sm font-bold transition-colors ${loginMethod === 'email' ? 'text-slate-900' : 'text-slate-500'}`}
+                >
+                    Email + Password
+                </button>
+                <button 
+                    onClick={() => setLoginMethod('phone')}
+                    className={`flex-1 relative z-10 py-3 text-sm font-bold transition-colors ${loginMethod === 'phone' ? 'text-slate-900' : 'text-slate-500'}`}
+                >
+                    Mobile Number
+                </button>
+            </div>
+            
+            {/* Invisible Recaptcha */}
+            <div id="recaptcha-container"></div>
 
-              <div>
-                <label className="block text-xs font-black uppercase tracking-widest text-slate-400 mb-3">
-                  Password
-                </label>
-                <div className="relative">
-                  <Lock className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300" size={20} />
-                  <input
-                    type={showPassword ? 'text' : 'password'}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    onKeyDown={(e) => handleKeyDown(e, 'password')}
-                    placeholder="••••••••"
-                    className={`w-full bg-slate-50 border-0 rounded-[2rem] py-5 pl-14 pr-14 text-lg font-medium placeholder:text-slate-300 focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all outline-none ${
-                      errors.password ? 'ring-2 ring-red-300 bg-red-50' : ''
-                    }`}
-                    required
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-300 hover:text-slate-500 transition-colors"
-                    aria-label={showPassword ? 'Hide password' : 'Show password'}
-                  >
-                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                  </button>
-                </div>
-                {errors.password && (
-                  <motion.p 
-                    initial={{ opacity: 0, y: -5 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="text-red-500 text-xs mt-2 ml-4 flex items-center gap-1"
-                  >
-                    <AlertCircle size={12} />
-                    {errors.password}
-                  </motion.p>
-                )}
-              </div>
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <AnimatePresence mode="wait">
+              {loginMethod === 'email' ? (
+                <motion.div 
+                    key="email-form"
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 20 }}
+                    className="space-y-5"
+                >
+                  <div>
+                    <label className="block text-xs font-black uppercase tracking-widest text-slate-400 mb-3">
+                      Email Address
+                    </label>
+                    <div className="relative">
+                      <Mail className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300" size={20} />
+                      <input
+                        ref={emailInputRef}
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        onKeyDown={(e) => handleKeyDown(e, 'email')}
+                        placeholder="you@example.com"
+                        className={`w-full bg-slate-50 border-0 rounded-[2rem] py-5 pl-14 pr-6 text-lg font-medium placeholder:text-slate-300 focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all outline-none ${
+                          errors.email ? 'ring-2 ring-red-300 bg-red-50' : ''
+                        }`}
+                        required={loginMethod === 'email'}
+                      />
+                    </div>
+                    {errors.email && (
+                      <motion.p 
+                        initial={{ opacity: 0, y: -5 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="text-red-500 text-xs mt-2 ml-4 flex items-center gap-1"
+                      >
+                        <AlertCircle size={12} />
+                        {errors.email}
+                      </motion.p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-black uppercase tracking-widest text-slate-400 mb-3">
+                      Password
+                    </label>
+                    <div className="relative">
+                      <Lock className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300" size={20} />
+                      <input
+                        type={showPassword ? 'text' : 'password'}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        onKeyDown={(e) => handleKeyDown(e, 'password')}
+                        placeholder="••••••••"
+                        className={`w-full bg-slate-50 border-0 rounded-[2rem] py-5 pl-14 pr-14 text-lg font-medium placeholder:text-slate-300 focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all outline-none ${
+                          errors.password ? 'ring-2 ring-red-300 bg-red-50' : ''
+                        }`}
+                        required={loginMethod === 'email'}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-300 hover:text-slate-500 transition-colors"
+                        aria-label={showPassword ? 'Hide password' : 'Show password'}
+                      >
+                        {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                      </button>
+                    </div>
+                    {errors.password && (
+                      <motion.p 
+                        initial={{ opacity: 0, y: -5 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="text-red-500 text-xs mt-2 ml-4 flex items-center gap-1"
+                      >
+                        <AlertCircle size={12} />
+                        {errors.password}
+                      </motion.p>
+                    )}
+                  </div>
+                </motion.div>
+              ) : (
+                <motion.div 
+                    key="phone-form"
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                    className="space-y-5"
+                >
+                    {!otpSent ? (
+                        <div>
+                            <label className="block text-xs font-black uppercase tracking-widest text-slate-400 mb-3">
+                              Mobile Number
+                            </label>
+                            <div className="relative">
+                              <Smartphone className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300" size={20} />
+                              <input
+                                type="tel"
+                                value={phoneNumber}
+                                onChange={(e) => setPhoneNumber(e.target.value)}
+                                onKeyDown={(e) => handleKeyDown(e, 'phone')}
+                                placeholder="9876543210"
+                                className={`w-full bg-slate-50 border-0 rounded-[2rem] py-5 pl-14 pr-6 text-lg font-medium placeholder:text-slate-300 focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all outline-none ${
+                                  errors.phone ? 'ring-2 ring-red-300 bg-red-50' : ''
+                                }`}
+                                required={loginMethod === 'phone' && !otpSent}
+                              />
+                            </div>
+                            {errors.phone && (
+                              <motion.p 
+                                initial={{ opacity: 0, y: -5 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                className="text-red-500 text-xs mt-2 ml-4 flex items-center gap-1"
+                              >
+                                <AlertCircle size={12} />
+                                {errors.phone}
+                              </motion.p>
+                            )}
+                            <p className="text-xs text-slate-400 mt-2 px-4">
+                                We'll send you a One Time Password (OTP) to this mobile number.
+                            </p>
+                        </div>
+                    ) : (
+                        <div>
+                            <label className="block text-xs font-black uppercase tracking-widest text-slate-400 mb-3">
+                              Enter Verification Code
+                            </label>
+                            <div className="relative">
+                              <MessageSquare className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300" size={20} />
+                              <input
+                                type="text"
+                                value={otp}
+                                onChange={(e) => setOtp(e.target.value)}
+                                placeholder="123456"
+                                className={`w-full bg-slate-50 border-0 rounded-[2rem] py-5 pl-14 pr-6 text-lg font-medium placeholder:text-slate-300 focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all outline-none ${
+                                  errors.otp ? 'ring-2 ring-red-300 bg-red-50' : ''
+                                }`}
+                                required={loginMethod === 'phone' && otpSent}
+                              />
+                            </div>
+                            {errors.otp && (
+                              <motion.p 
+                                initial={{ opacity: 0, y: -5 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                className="text-red-500 text-xs mt-2 ml-4 flex items-center gap-1"
+                              >
+                                <AlertCircle size={12} />
+                                {errors.otp}
+                              </motion.p>
+                            )}
+                            <button 
+                                type="button" 
+                                onClick={() => setOtpSent(false)} 
+                                className="text-xs font-bold text-indigo-600 mt-2 px-4 hover:underline"
+                            >
+                                Change Phone Number
+                            </button>
+                        </div>
+                    )}
+                </motion.div>
+              )}
+              </AnimatePresence>
 
               <div className="flex items-center justify-between">
                 <label className="flex items-center gap-3 cursor-pointer group">
@@ -289,7 +506,7 @@ function Login() {
                   <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                 ) : (
                   <>
-                    Sign In
+                    {loginMethod === 'email' ? 'Sign In' : otpSent ? 'Verify & Login' : 'Send OTP'}
                     <ArrowRight size={20} />
                   </>
                 )}

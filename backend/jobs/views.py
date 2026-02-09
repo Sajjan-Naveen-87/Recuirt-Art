@@ -322,14 +322,7 @@ class JobApplicationViewSet(viewsets.ModelViewSet):
         except Exception as e:
             logger.warning(f"Failed to create notification for user {request.user.id}: {e}")
 
-        # Send WhatsApp notification for application submission
-        try:
-            from accounts.whatsapp_service import whatsapp_service
-            message = f"Your application for '{job.title}' has been submitted successfully."
-            whatsapp_service.send_text_message(request.user.mobile, message)
-            logger.info(f"WhatsApp notification sent to {request.user.mobile} for job application")
-        except Exception as e:
-            logger.warning(f"Failed to send WhatsApp notification to {request.user.mobile}: {e}")
+
 
         # Return full application details
         output_serializer = JobApplicationSerializer(application)
@@ -421,20 +414,7 @@ class JobApplicationViewSet(viewsets.ModelViewSet):
             except Exception as e:
                 logger.warning(f"Failed to create notification: {e}")
 
-            # Send WhatsApp notification for status update
-            try:
-                from accounts.whatsapp_service import whatsapp_service
-                status_messages = {
-                    'pending': f'Your application for "{application.job.title}" is now pending review.',
-                    'reviewing': f'Your application for "{application.job.title}" is being reviewed.',
-                    'shortlisted': f'Congratulations! Your application for "{application.job.title}" has been shortlisted.',
-                    'rejected': f'Unfortunately, your application for "{application.job.title}" was not selected.',
-                    'hired': f'Congratulations! You have been selected for "{application.job.title}".',
-                }
-                message = status_messages.get(new_status, f'Your application for "{application.job.title}" status changed to {new_status}.')
-                whatsapp_service.send_text_message(application.applicant.mobile, message)
-            except Exception as e:
-                logger.warning(f"Failed to send WhatsApp notification: {e}")
+
 
         return Response(
             {

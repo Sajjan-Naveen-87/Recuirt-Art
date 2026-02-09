@@ -230,3 +230,13 @@ class GoogleAuthSerializer(serializers.Serializer):
     access_token = serializers.CharField(required=True)
     id_token = serializers.CharField(required=True)
 
+
+class EmailVerificationRequestSerializer(serializers.Serializer):
+    """Serializer for email verification request."""
+    email = serializers.EmailField(required=False)
+
+
+class EmailVerificationConfirmSerializer(serializers.Serializer):
+    """Serializer for email verification confirmation."""
+    otp_code = serializers.CharField(max_length=6)
+    email = serializers.EmailField(required=False)

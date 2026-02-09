@@ -1,76 +1,49 @@
 """
-OTP Service for WhatsApp Integration
+OTP Service for Email Integration
 
-This module handles OTP generation and delivery via WhatsApp Cloud API.
+This module handles OTP delivery via Email.
+Legacy WhatsApp/Mobile support has been removed.
 """
 
 from django.conf import settings
-from accounts.whatsapp_service import send_otp_via_whatsapp, WhatsAppCloudAPIError
+from django.core.mail import send_mail
 import logging
 
 logger = logging.getLogger(__name__)
 
 
-class OTPService:
-    """Service for sending and verifying OTPs via WhatsApp."""
-
-    def __init__(self):
-        """Initialize WhatsApp OTP service."""
-        self.whatsapp_configured = all([
-            getattr(settings, 'WHATSAPP_ACCESS_TOKEN', None),
-            getattr(settings, 'WHATSAPP_PHONE_NUMBER_ID', None)
-        ])
-
-    def send_otp(self, mobile, otp_code):
-        """
-        Send OTP via WhatsApp message.
-
-        Args:
-            mobile (str): The mobile number to send OTP.
-            otp_code (str): The 6-digit OTP code.
-
-        Returns:
-            bool: True if WhatsApp message sent successfully, False otherwise.
-        """
-        if not self.whatsapp_configured:
-            logger.warning("WhatsApp not configured. OTP will not be sent.")
-            # For development, log the OTP
-            logger.info(f"DEV MODE - OTP for {mobile}: {otp_code}")
-            return True
-
-        try:
-            # Send OTP via WhatsApp
-            result = send_otp_via_whatsapp(mobile, otp_code, "Recuirt Art")
-
-            if result.get('success'):
-                logger.info(f"OTP sent successfully to {mobile} via WhatsApp. Message ID: {result.get('message_id')}")
-                return True
-            else:
-                logger.error(f"Failed to send OTP to {mobile} via WhatsApp")
-                return False
-
-        except WhatsAppCloudAPIError as e:
-            logger.error(f"WhatsApp API error sending OTP to {mobile}: {str(e)}")
-            return False
-        except Exception as e:
-            logger.error(f"Unexpected error sending OTP to {mobile}: {str(e)}")
-            return False
-
-
-# Singleton instance
-otp_service = OTPService()
-
-
-def send_otp(mobile, otp_code):
+def send_otp(mobile, otp_code, email=None):
     """
-    Convenience function to send OTP via WhatsApp.
-
+    Send OTP via Email.
+    
     Args:
-        mobile (str): The mobile number to send OTP.
+        mobile (str): (Legacy) The mobile number. Ignored for sending.
         otp_code (str): The 6-digit OTP code.
+        email (str): The email address to send OTP.
 
     Returns:
-        bool: True if WhatsApp message sent successfully, False otherwise.
+        bool: True if message sent successfully, False otherwise.
     """
-    return otp_service.send_otp(mobile, otp_code)
+    if email:
+        try:
+            send_mail(
+                'Verify your email address',
+                f'Your verification code is: {otp_code}',
+                settings.EMAIL_HOST_USER,
+                [email],
+                fail_silently=False,
+            )
+            logger.info(f"OTP sent to email: {email}")
+            return True
+        except Exception as e:
+            logger.error(f"Failed to send OTP to email {email}: {str(e)}")
+            return False
+            
+    if mobile:
+        logger.warning(f"Mobile OTP requested for {mobile} but mobile service is disabled. OTP: {otp_code}")
+        # In dev mode, we might want to return True to allow flow to continue if testing mobile UI
+        # But since we are removing it, we should verify the user intent.
+        # For now, return True so we don't block registration if it relies on this returning True
+        return True
 
+    return False

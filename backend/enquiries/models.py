@@ -46,7 +46,7 @@ class CorporateEnquiry(models.Model):
         choices=[
             ('email', 'Email'),
             ('phone', 'Phone'),
-            ('whatsapp', 'WhatsApp'),
+
         ],
         default='email'
     )

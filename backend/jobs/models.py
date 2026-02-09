@@ -27,6 +27,12 @@ class Job(models.Model):
         ('active', 'Active'),
         ('closed', 'Closed'),
     ]
+
+    JOB_CATEGORY_CHOICES = [
+        ('clinician', 'Clinician'),
+        ('non_clinician', 'Non Clinician'),
+        ('other', 'Other'),
+    ]
     
     # Basic Information
     title = models.CharField('Job Title', max_length=255)
@@ -44,6 +50,12 @@ class Job(models.Model):
     skills_required = models.TextField(
         'Skills Required',
         help_text='Comma-separated list of skills'
+    )
+    category = models.CharField(
+        'Category',
+        max_length=20,
+        choices=JOB_CATEGORY_CHOICES,
+        default='other'
     )
     
     # Additional Information

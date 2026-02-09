@@ -36,6 +36,8 @@ from accounts.serializers import (
     PasswordResetRequestSerializer,
     PasswordResetConfirmSerializer,
     GoogleAuthSerializer,
+    EmailVerificationRequestSerializer,
+    EmailVerificationConfirmSerializer,
 )
 from jobs.models import JobApplication
 from jobs.serializers import JobApplicationSummarySerializer
@@ -66,7 +68,7 @@ class RegistrationView(APIView):
                 user=user,
                 email=user.email
             )
-            send_otp(user.mobile, otp.otp_code)
+            send_otp(user.mobile, otp.otp_code, email=user.email)
 
             return Response({
                 'message': 'User registered successfully.',
@@ -215,7 +217,7 @@ class OTPSendView(APIView):
                         email=user.email
                     )
 
-                send_otp(mobile, otp.otp_code)
+                send_otp(mobile, otp.otp_code, email=user.email)
 
                 return Response({
                     'message': f'OTP sent successfully to {mobile}.'
@@ -547,5 +549,94 @@ class GoogleAuthView(APIView):
                 'access_token': access_token,
                 'id_token': id_token
             }, status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class EmailVerificationRequestView(APIView):
+    """
+    API view for email verification request.
+
+    POST: Request email verification OTP.
+    """
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        """Request email verification OTP."""
+        serializer = EmailVerificationRequestSerializer(data=request.data)
+
+        if serializer.is_valid():
+            user = request.user
+            email = serializer.validated_data.get('email', user.email)
+
+            if user.email_verified and user.email == email:
+                return Response({
+                    'message': 'Email is already verified.'
+                }, status=status.HTTP_200_OK)
+
+            # Generate OTP
+            otp = OTP.generate_otp(
+                mobile=user.mobile, # Still link to user's mobile for unique constraint if needed, or just use user relation
+                otp_type='email_verification',
+                user=user,
+                email=email
+            )
+            
+            # Send OTP via Email
+            if send_otp(None, otp.otp_code, email=email):
+                return Response({
+                    'message': f'Verification OTP sent to {email}.'
+                }, status=status.HTTP_200_OK)
+            else:
+                return Response({
+                    'error': 'Failed to send verification email. Please try again.'
+                }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class EmailVerificationConfirmView(APIView):
+    """
+    API view for email verification confirmation.
+
+    POST: Verify email with OTP.
+    """
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        """Verify email with OTP."""
+        serializer = EmailVerificationConfirmSerializer(data=request.data)
+
+        if serializer.is_valid():
+            otp_code = serializer.validated_data['otp_code']
+            user = request.user
+            email = serializer.validated_data.get('email', user.email)
+
+            # Verify OTP
+            otp = OTP.objects.filter(
+                user=user,
+                otp_code=otp_code,
+                otp_type='email_verification',
+                is_used=False,
+                email=email 
+            ).first()
+
+            if otp and otp.verify_otp(otp_code):
+                otp.is_used = True
+                otp.save()
+
+                user.email_verified = True
+                # If they verified a new email, update it
+                if email and user.email != email:
+                     user.email = email
+                
+                user.save()
+
+                return Response({
+                    'message': 'Email verified successfully.'
+                }, status=status.HTTP_200_OK)
+
+            return Response({
+                'error': 'Invalid or expired OTP.'
+            }, status=status.HTTP_401_UNAUTHORIZED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

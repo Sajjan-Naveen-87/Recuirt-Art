@@ -21,6 +21,7 @@ class OTP(models.Model):
         ('registration', 'Registration'),
         ('login', 'Login'),
         ('password_reset', 'Password Reset'),
+        ('email_verification', 'Email Verification'),
     ]
     
     user = models.ForeignKey(

@@ -130,5 +130,38 @@ export const authService = {
     const response = await api.put('/accounts/profile/', userData);
     return response.data;
   },
+  // Forgot Password
+  forgotPassword: async (emailOrMobile) => {
+    // Determine if input is email or mobile
+    const isEmail = /\S+@\S+\.\S+/.test(emailOrMobile);
+    const payload = isEmail ? { email: emailOrMobile } : { mobile: emailOrMobile };
+
+    const response = await api.post('/accounts/password/reset/', payload);
+    return response.data;
+  },
+
+  // Reset Password with OTP
+  resetPassword: async (mobile, otp, newPassword) => {
+    const response = await api.post('/accounts/password/reset/confirm/', {
+      mobile,
+      otp_code: otp,
+      new_password: newPassword
+    });
+    return response.data;
+  },
+
+  // Request Email Verification
+  requestEmailVerification: async () => {
+    const response = await api.post('/accounts/email/verify/request/');
+    return response.data;
+  },
+
+  // Verify Email OTP
+  verifyEmailOTP: async (otp) => {
+    const response = await api.post('/accounts/email/verify/confirm/', {
+      otp_code: otp
+    });
+    return response.data;
+  },
 };
 

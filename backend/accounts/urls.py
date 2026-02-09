@@ -17,6 +17,8 @@ from accounts.views import (
     PasswordResetConfirmView,
     TokenRefreshView,
     GoogleAuthView,
+    EmailVerificationRequestView,
+    EmailVerificationConfirmView,
 )
 from accounts.profile_views import ProfileView
 from accounts.firebase_views import (
@@ -56,6 +58,10 @@ urlpatterns = [
     path('password/change/', PasswordChangeView.as_view(), name='password-change'),
     path('password/reset/', PasswordResetRequestView.as_view(), name='password-reset-request'),
     path('password/reset/confirm/', PasswordResetConfirmView.as_view(), name='password-reset-confirm'),
+    
+    # Email Verification
+    path('email/verify/request/', EmailVerificationRequestView.as_view(), name='email-verify-request'),
+    path('email/verify/confirm/', EmailVerificationConfirmView.as_view(), name='email-verify-confirm'),
     
     # JWT Token endpoints
     path('token/refresh/', TokenRefreshView.as_view(), name='token-refresh'),

@@ -6,6 +6,9 @@ import JobDetailsModal from './components/Job/JobDetailsModal';
 import JobApplyModal from './components/Job/JobApplyModal';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
+import EmailVerification from './pages/EmailVerification';
 import Profile from './pages/Profile';
 import ProtectedRoute from './components/ProtectedRoute';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
@@ -18,6 +21,7 @@ import ApplicationsList from './components/ApplicationsList';
 import NotificationsDropdown from './components/Notifications/NotificationsDropdown';
 import Achievements from './components/Dashboard/Achievements';
 import MassHiringModal from './components/Contact/MassHiringModal';
+
 
 function Dashboard({ activeTab, setActiveTab }) {
   const [jobs, setJobs] = useState([]);
@@ -311,6 +315,9 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/verify-email" element={<EmailVerification />} />
           <Route path="/" element={<ProtectedRoute><MainLayout /></ProtectedRoute>} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

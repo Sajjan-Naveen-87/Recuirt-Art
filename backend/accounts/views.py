@@ -183,16 +183,21 @@ class OTPSendView(APIView):
                 if otp_type == 'registration':
                     # Check if user already exists
                     if User.objects.filter(mobile=mobile).exists():
-                        return Response({
-                            'error': 'User with this mobile number already exists.'
-                        }, status=status.HTTP_400_BAD_REQUEST)
-
-                    # Create inactive user
-                    user = User.objects.create_user(
-                        email=email,
-                        mobile=mobile,
-                        is_active=False
-                    )
+                        user = User.objects.get(mobile=mobile)
+                        if user.is_active:
+                             return Response({
+                                 'error': 'User with this mobile number already exists.'
+                             }, status=status.HTTP_400_BAD_REQUEST)
+                        else:
+                             # User exists but is inactive, allow resending OTP
+                             pass 
+                    else:
+                        # Create inactive user
+                        user = User.objects.create_user(
+                            email=email,
+                            mobile=mobile,
+                            is_active=False
+                        )
 
                     otp = OTP.generate_otp(
                         mobile=mobile,
@@ -326,15 +331,15 @@ class LoginView(APIView):
                         return Response({
                             'error': 'User not found.'
                         }, status=status.HTTP_404_NOT_FOUND)
-                else:
                     # Send OTP for mobile login
                     try:
                         user = User.objects.get(mobile=mobile)
 
-                        if not user.is_active:
-                            return Response({
-                                'error': 'Account is not activated. Please complete registration first.'
-                            }, status=status.HTTP_401_UNAUTHORIZED)
+                        # Allow inactive users to request OTP so they can verify and activate
+                        # if not user.is_active:
+                        #     return Response({
+                        #         'error': 'Account is not activated. Please complete registration first.'
+                        #     }, status=status.HTTP_401_UNAUTHORIZED)
 
                         otp = OTP.generate_otp(
                             mobile=mobile,

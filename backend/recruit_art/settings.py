@@ -211,9 +211,10 @@ SIMPLE_JWT = {
 
 # CORS Configuration
 CORS_ALLOW_ALL_ORIGINS = DEBUG
-CORS_ALLOWED_ORIGINS = [
-    os.getenv('FRONTEND_URL', 'http://localhost:5173'),
-]
+CORS_ALLOWED_ORIGINS = os.getenv('FRONTEND_URL', 'http://localhost:5173').split(',')
+
+# CSRF Configuration
+CSRF_TRUSTED_ORIGINS = os.getenv('FRONTEND_URL', 'http://localhost:5173').split(',')
 CORS_ALLOW_CREDENTIALS = True
 
 

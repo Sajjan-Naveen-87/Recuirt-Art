@@ -48,7 +48,8 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         """Create a new user with the given data."""
         validated_data.pop('confirm_password')
-        user = User.objects.create_user(**validated_data)
+        # Create user as inactive until OTP verification
+        user = User.objects.create_user(is_active=False, **validated_data)
         return user
 
 

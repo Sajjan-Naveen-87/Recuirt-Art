@@ -81,7 +81,42 @@ export const AuthProvider = ({ children }) => {
       }
       return data;
     } catch (err) {
-      const message = err.response?.data?.error || err.message || 'Registration failed.';
+
+      let message = err.response?.data?.error || err.message || 'Registration failed.';
+      // Handle DRF field errors
+      if (err.response?.data && typeof err.response.data === 'object' && !err.response.data.error) {
+         const values = Object.values(err.response.data).flat();
+         if (values.length > 0) message = values.join(' ');
+      }
+      setError(message);
+      throw new Error(message);
+    }
+  };
+
+  const sendOTP = async (mobile, type = 'login') => {
+    try {
+      setError(null);
+      return await authService.sendOTP(mobile, type);
+    } catch (err) {
+      const message = err.response?.data?.error || err.message || 'Failed to send OTP.';
+      setError(message);
+      throw new Error(message);
+    }
+  };
+
+  const verifyOTP = async (mobile, otp, type = 'login') => {
+    try {
+      setError(null);
+      const data = await authService.verifyOTP(mobile, otp, type);
+       if (data.tokens || data.access) {
+         const user = data.user || data.data?.user || data;
+         setUser(user);
+         if (data.tokens?.access) localStorage.setItem('access_token', data.tokens.access);
+         if (data.tokens?.refresh) localStorage.setItem('refresh_token', data.tokens.refresh);
+      }
+      return data;
+    } catch (err) {
+      const message = err.response?.data?.error || err.message || 'Invalid OTP.';
       setError(message);
       throw new Error(message);
     }
@@ -116,6 +151,8 @@ export const AuthProvider = ({ children }) => {
     logout,
     updateUser,
     clearError,
+    sendOTP,
+    verifyOTP,
     isAuthenticated: !!user,
   };
 

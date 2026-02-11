@@ -63,6 +63,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     
     # Personal information
     full_name = models.CharField('Full Name', max_length=255, blank=True)
+    current_position = models.CharField('Current Position', max_length=255, blank=True, null=True)
     
     # Authentication flags
     email_verified = models.BooleanField('Email Verified', default=False)

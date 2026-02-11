@@ -41,7 +41,9 @@ from accounts.serializers import (
 )
 from jobs.models import JobApplication
 from jobs.serializers import JobApplicationSummarySerializer
+
 from accounts.services import send_otp
+from firebase_admin import auth
 
 User = get_user_model()
 
@@ -112,14 +114,26 @@ class OTPVerificationView(APIView):
                         user = otp.user
                         user.is_active = True
                         user.save()
+                        
+                        refresh = RefreshToken.for_user(user)
 
                         return Response({
                             'message': 'Registration completed successfully.',
-                            'user': UserSerializer(user).data
+                            'user': UserSerializer(user).data,
+                            'tokens': {
+                                'refresh': str(refresh),
+                                'access': str(refresh.access_token),
+                            }
                         }, status=status.HTTP_200_OK)
 
                     elif otp_type == 'login':
                         user = User.objects.get(mobile=mobile)
+                        
+                        # Ensure user is active if they verify OTP
+                        if not user.is_active:
+                             user.is_active = True
+                             user.save()
+                             
                         refresh = RefreshToken.for_user(user)
 
                         return Response({
@@ -328,7 +342,8 @@ class LoginView(APIView):
                             user=user,
                             email=user.email
                         )
-                        send_otp(mobile, otp.otp_code)
+                        # Fix: Pass email for OTP
+                        send_otp(mobile, otp.otp_code, email=user.email)
 
                         return Response({
                             'message': f'OTP sent to {mobile}. Please verify to complete login.',
@@ -339,6 +354,76 @@ class LoginView(APIView):
                         return Response({
                             'error': 'User with this mobile number does not exist.'
                         }, status=status.HTTP_404_NOT_FOUND)
+
+            elif login_type == 'firebase_phone':
+                id_token = serializer.validated_data['id_token']
+                try:
+                    # Verify the ID token
+                    decoded_token = auth.verify_id_token(id_token)
+                    uid = decoded_token['uid']
+                    phone_number = decoded_token.get('phone_number')
+
+                    if not phone_number:
+                         return Response({'error': 'No phone number associated with this account.'}, status=status.HTTP_400_BAD_REQUEST)
+
+                    # Find user by mobile
+                    # Try exact match first (E.164)
+                    user = User.objects.filter(mobile=phone_number).first()
+                    
+                    # If not found, try without country code (assuming +91 for India)
+                    if not user and phone_number.startswith('+91'):
+                        raw_number = phone_number[3:]
+                        user = User.objects.filter(mobile=raw_number).first()
+
+                    if not user:
+                        # Auto-Registration for new mobile users
+                        try:
+                            # Generate a unique placeholder email
+                            import uuid
+                            clean_phone = phone_number.replace('+', '')
+                            email = f"mobile_{clean_phone}@recruitart.temp"
+                            
+                            # Ensure email uniqueness (though unlikely collision with temp domain)
+                            if User.objects.filter(email=email).exists():
+                                email = f"mobile_{clean_phone}_{uuid.uuid4().hex[:4]}@recruitart.temp"
+
+                            user = User.objects.create_user(
+                                email=email,
+                                mobile=phone_number,
+                                password=None, # User will use OTP
+                                full_name='',
+                                is_active=True, 
+                                mobile_verified=True # Verified by Firebase
+                            )
+                            # Update auth provider
+                            user.auth_provider = 'phone'
+                            user.save()
+                            
+                        except Exception as e:
+                            print(f"Auto-registration failed: {e}")
+                            return Response({
+                                'error': 'Registration failed. Please contact support.'
+                            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                    
+                    # Activate user if not active
+                    if not user.is_active:
+                         user.is_active = True
+                         user.save()
+                    
+                    refresh = RefreshToken.for_user(user)
+                    return Response({
+                        'message': 'Login successful.',
+                        'user': UserSerializer(user).data,
+                        'tokens': {
+                            'refresh': str(refresh),
+                            'access': str(refresh.access_token),
+                        }
+                    }, status=status.HTTP_200_OK)
+
+                except Exception as e:
+                    print(f"Firebase Auth Error: {e}")
+                    return Response({'error': 'Invalid or expired ID Token.'}, status=status.HTTP_401_UNAUTHORIZED)
+
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

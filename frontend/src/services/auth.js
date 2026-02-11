@@ -24,14 +24,14 @@ export const authService = {
   },
 
   // Send OTP
-  sendOTP: async (mobile) => {
-    const response = await api.post('/accounts/otp/send/', { mobile });
+  sendOTP: async (mobile, type = 'login') => {
+    const response = await api.post('/accounts/otp/send/', { mobile, otp_type: type });
     return response.data;
   },
 
   // Verify OTP
-  verifyOTP: async (mobile, otp) => {
-    const response = await api.post('/accounts/otp/verify/', { mobile, otp });
+  verifyOTP: async (mobile, otp, type = 'login') => {
+    const response = await api.post('/accounts/otp/verify/', { mobile, otp_code: otp, otp_type: type });
     if (response.data.tokens?.access) {
       localStorage.setItem('access_token', response.data.tokens.access);
       if (response.data.tokens.refresh) localStorage.setItem('refresh_token', response.data.tokens.refresh);

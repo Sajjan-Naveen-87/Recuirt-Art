@@ -82,7 +82,7 @@ class UserLoginSerializer(serializers.Serializer):
     """Serializer for user login."""
     
     login_type = serializers.ChoiceField(
-        choices=['email', 'mobile', 'google']
+        choices=['email', 'mobile', 'google', 'firebase_phone']
     )
     email = serializers.EmailField(required=False)
     mobile = serializers.CharField(max_length=15, required=False)
@@ -92,6 +92,7 @@ class UserLoginSerializer(serializers.Serializer):
         style={'input_type': 'password'}
     )
     otp_code = serializers.CharField(max_length=6, required=False)
+    id_token = serializers.CharField(required=False)
     
     def validate(self, attrs):
         """Validate login credentials based on login type."""
@@ -107,6 +108,11 @@ class UserLoginSerializer(serializers.Serializer):
                 raise serializers.ValidationError({
                     'error': 'Mobile number and OTP are required for mobile login.'
                 })
+        elif login_type == 'firebase_phone':
+             if not attrs.get('id_token'):
+                raise serializers.ValidationError({
+                    'error': 'ID Token is required for Firebase phone login.'
+                })
         elif login_type == 'google':
             # Google login is handled by social auth
             pass
@@ -120,7 +126,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
-            'id', 'email', 'mobile', 'full_name', 'email_verified',
+            'id', 'email', 'mobile', 'full_name', 'current_position', 'email_verified',
             'mobile_verified', 'date_joined', 'last_login', 'google_id',
             'resume', 'linkedin_url', 'portfolio_url', 'profile_image'
         ]
@@ -132,7 +138,7 @@ class UserUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['full_name', 'resume', 'linkedin_url', 'portfolio_url', 'profile_image']
+        fields = ['full_name', 'current_position', 'resume', 'linkedin_url', 'portfolio_url', 'profile_image']
 
     def validate_resume(self, value):
         """Validate resume file."""
@@ -155,6 +161,7 @@ class UserUpdateSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         """Update user profile."""
         instance.full_name = validated_data.get('full_name', instance.full_name)
+        instance.current_position = validated_data.get('current_position', instance.current_position)
         instance.linkedin_url = validated_data.get('linkedin_url', instance.linkedin_url)
         instance.portfolio_url = validated_data.get('portfolio_url', instance.portfolio_url)
         

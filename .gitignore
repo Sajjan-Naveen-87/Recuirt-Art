@@ -173,3 +173,4 @@ backend/.env
 frontend/.env
 backend/media/
 backend/staticfiles/
+backend/env.yaml

@@ -11,7 +11,7 @@ const Profile = () => {
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
-  const [formData, setFormData] = useState({ full_name: '', linkedin_url: '', portfolio_url: '' });
+  const [formData, setFormData] = useState({ full_name: '', current_position: '', linkedin_url: '', portfolio_url: '' });
 
   useEffect(() => {
     fetchProfile();
@@ -25,6 +25,7 @@ const Profile = () => {
       setApplications(response.applications || []);
       setFormData({
         full_name: response.user.full_name || '',
+        current_position: response.user.current_position || '',
         linkedin_url: response.user.linkedin_url || '',
         portfolio_url: response.user.portfolio_url || ''
       });
@@ -134,7 +135,7 @@ const Profile = () => {
               </motion.div>
               
               <h2 className="text-2xl font-black text-slate-900 mb-1">{profile?.full_name || 'User'}</h2>
-              <p className="text-sm font-bold text-slate-400 mb-6">Product Designer</p>
+              <p className="text-sm font-bold text-slate-400 mb-6">{profile?.current_position || ''}</p>
 
               <div className="space-y-3 text-left">
                  <div className="flex items-center gap-3 p-3 bg-slate-50 rounded-xl">
@@ -201,6 +202,16 @@ const Profile = () => {
                            value={formData.full_name}
                            onChange={(e) => setFormData({...formData, full_name: e.target.value})}
                            className="w-full bg-slate-50 p-4 rounded-xl font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                         />
+                      </div>
+                      <div className="space-y-2">
+                         <label className="text-xs font-bold text-slate-400 uppercase ml-1">Current Position</label>
+                         <input
+                           type="text"
+                           value={formData.current_position}
+                           onChange={(e) => setFormData({...formData, current_position: e.target.value})}
+                           className="w-full bg-slate-50 p-4 rounded-xl font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                           placeholder="Product Designer"
                          />
                       </div>
                       <div className="space-y-2">

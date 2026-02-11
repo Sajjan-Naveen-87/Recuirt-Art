@@ -185,7 +185,7 @@ const ApplicationDetailsModal = ({ isOpen, onClose, applicationId }) => {
                         </div>
                       </div>
                       <a 
-                        href={`http://localhost:8000${application.resume}`} 
+                        href={application.resume.startsWith('http') ? application.resume : `${import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000'}${application.resume}`} 
                         target="_blank" 
                         rel="noopener noreferrer"
                         className="flex items-center gap-2 bg-white text-indigo-600 px-6 py-3 rounded-2xl font-bold shadow-sm border border-indigo-100 hover:bg-indigo-600 hover:text-white transition-all group"

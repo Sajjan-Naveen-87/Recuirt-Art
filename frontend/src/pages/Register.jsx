@@ -1,21 +1,23 @@
 import { useState, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Mail, Lock, User, Phone, ArrowRight, Sparkles, Shield, Zap, Check, AlertCircle } from 'lucide-react';
+import { Mail, Lock, User, Smartphone, ArrowRight, Sparkles, Shield, Zap, Check, AlertCircle } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
 function Register() {
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
-    whatsapp: '',
+    mobile: '',
     password: '',
     confirmPassword: ''
   });
+  const [showOtpInput, setShowOtpInput] = useState(false);
+  const [otp, setOtp] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
-  const { register } = useAuth();
+  const { register, verifyOTP } = useAuth();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -28,7 +30,7 @@ function Register() {
     const newErrors = {};
     if (!formData.fullName) newErrors.fullName = 'Full Name is required';
     if (!formData.email) newErrors.email = 'Email is required';
-    if (!formData.whatsapp) newErrors.whatsapp = 'WhatsApp number is required';
+    if (!formData.mobile) newErrors.mobile = 'Mobile number is required';
     if (!formData.password) newErrors.password = 'Password is required';
     if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = 'Passwords do not match';
     setErrors(newErrors);
@@ -43,17 +45,37 @@ function Register() {
     try {
         await register({
             email: formData.email,
-            mobile: formData.whatsapp,
+            mobile: formData.mobile,
             full_name: formData.fullName,
             password: formData.password,
             confirm_password: formData.confirmPassword
         });
         
-        // Redirect to dashboard on success (AuthContext usually sets user)
-        navigate('/');
+        // Show OTP Input instead of redirecting
+        setShowOtpInput(true);
     } catch (err) {
         console.error(err);
         setErrors({ form: err.message });
+    } finally {
+        setIsLoading(false);
+    }
+  };
+
+  const handleVerifyOtp = async (e) => {
+    e.preventDefault();
+    if (!otp) {
+        setErrors({ otp: 'Please enter OTP' });
+        return;
+    }
+
+    setIsLoading(true);
+    try {
+        // verifyOTP will automatically login the user (set token)
+        await verifyOTP(formData.mobile, otp, 'registration');
+        navigate('/');
+    } catch (err) {
+        console.error(err);
+        setErrors({ form: err.message, otp: 'Invalid OTP' });
     } finally {
         setIsLoading(false);
     }
@@ -108,6 +130,41 @@ function Register() {
                 </div>
             )}
 
+            {showOtpInput ? (
+                <div className="space-y-6">
+                    <div className="text-center">
+                        <div className="w-16 h-16 bg-indigo-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <Mail className="text-indigo-600" size={32} />
+                        </div>
+                        <h3 className="text-xl font-bold text-slate-900">Verify your email</h3>
+                        <p className="text-slate-500 mt-2 text-sm">
+                            We sent a verification code to <span className="font-bold text-slate-900">{formData.email}</span>
+                        </p>
+                    </div>
+
+                    <form onSubmit={handleVerifyOtp} className="space-y-4">
+                        <div>
+                            <label className="block text-xs font-black uppercase tracking-widest text-slate-400 mb-2">Enter OTP</label>
+                            <input 
+                                value={otp}
+                                onChange={(e) => setOtp(e.target.value)}
+                                className="w-full bg-slate-50 border-0 rounded-[2rem] py-4 px-6 font-bold text-center text-2xl tracking-[0.5em] outline-none focus:ring-2 focus:ring-indigo-500"
+                                placeholder="••••••"
+                                maxLength={6}
+                            />
+                            {errors.otp && <p className="text-red-500 text-xs mt-2 text-center">{errors.otp}</p>}
+                        </div>
+
+                        <button
+                            type="submit"
+                            disabled={isLoading}
+                            className="w-full bg-slate-950 text-white py-4 rounded-[2rem] font-bold text-lg shadow-xl hover:bg-indigo-600 transition-all flex items-center justify-center gap-3"
+                        >
+                            {isLoading ? <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : "Verify & Continue"}
+                        </button>
+                    </form>
+                </div>
+            ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="block text-xs font-black uppercase tracking-widest text-slate-400 mb-2">Full Name</label>
@@ -140,22 +197,22 @@ function Register() {
                 {errors.email && <p className="text-red-500 text-xs mt-1 ml-4">{errors.email}</p>}
               </div>
 
-               {/* WhatsApp Field (Mandatory) */}
+               {/* Mobile Field */}
               <div>
                 <label className="block text-xs font-black uppercase tracking-widest text-slate-400 mb-2 flex items-center gap-2">
-                   WhatsApp Number <span className="text-indigo-500">*</span>
+                   Mobile Number <span className="text-indigo-500">*</span>
                 </label>
                 <div className="relative">
-                   <Phone className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300" size={20} />
+                   <Smartphone className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300" size={20} />
                    <input 
-                      name="whatsapp" 
-                      value={formData.whatsapp} 
+                      name="mobile" 
+                      value={formData.mobile} 
                       onChange={handleChange} 
                       className="w-full bg-slate-50 border-0 rounded-[2rem] py-4 pl-14 pr-6 font-medium outline-none focus:ring-2 focus:ring-indigo-500" 
                       placeholder="+91 98765 43210" 
                    />
                 </div>
-                {errors.whatsapp && <p className="text-red-500 text-xs mt-1 ml-4">{errors.whatsapp}</p>}
+                {errors.mobile && <p className="text-red-500 text-xs mt-1 ml-4">{errors.mobile}</p>}
               </div>
 
               <div>
@@ -198,6 +255,7 @@ function Register() {
                 {isLoading ? <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : "Create Account"}
               </button>
             </form>
+            )}
 
             <div className="mt-8 text-center">
               <p className="text-slate-500 font-medium">

@@ -22,7 +22,7 @@ function Login() {
   const [errors, setErrors] = useState({});
   const [success, setSuccess] = useState(false);
   
-  const { login, error, clearError } = useAuth();
+  const { login, error, clearError, sendOTP, verifyOTP } = useAuth();
   const navigate = useNavigate();
   const emailInputRef = useRef(null);
 
@@ -68,14 +68,7 @@ function Login() {
   };
 
   const setupRecaptcha = () => {
-    if (!window.recaptchaVerifier) {
-      window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
-        'size': 'invisible',
-        'callback': (response) => {
-          // reCAPTCHA solved, allow signInWithPhoneNumber.
-        }
-      });
-    }
+    // Legacy Recaptcha removed
   };
 
   const handleSendOtp = async (e) => {
@@ -83,25 +76,20 @@ function Login() {
     if (!validatePhoneForm()) return;
 
     setIsLoading(true);
-    setupRecaptcha();
-    const appVerifier = window.recaptchaVerifier;
 
-    // Format phone number to E.164 format if not already
-    // Assuming Indian numbers for now based on context, otherwise standard format
-    const formattedPhone = phoneNumber.startsWith('+') ? phoneNumber : `+91${phoneNumber}`;
+    // Format phone number to ensure no prefix duplication or invalid format
+    // Backend expects existing format in DB
+    const formattedPhone = phoneNumber; 
 
+
+    
     try {
-      const confirmation = await signInWithPhoneNumber(auth, formattedPhone, appVerifier);
-      setConfirmationResult(confirmation);
+      await sendOTP(formattedPhone);
       setOtpSent(true);
       setErrors({});
     } catch (err) {
       console.error(err);
-      setErrors({ phone: err.message || 'Failed to send OTP. Try again.' });
-      if (window.recaptchaVerifier) {
-         window.recaptchaVerifier.clear();
-         window.recaptchaVerifier = null;
-      }
+      // specific error handling if needed
     } finally {
       setIsLoading(false);
     }
@@ -116,20 +104,12 @@ function Login() {
 
     setIsLoading(true);
     try {
-      const result = await confirmationResult.confirm(otp);
-      const idToken = await result.user.getIdToken();
-      
-      // Send execution to backend
-      await login({
-         login_type: 'firebase_phone',
-         id_token: idToken,
-         phone: result.user.phoneNumber
-      });
+      await verifyOTP(phoneNumber, otp); // Default type 'login'
       handleSuccess();
 
     } catch (err) {
       console.error(err);
-      setErrors({ otp: 'Invalid OTP. Please try again.' });
+      // Error handled by context
     } finally {
       setIsLoading(false);
     }
@@ -512,18 +492,7 @@ function Login() {
                 )}
               </button>
               
-              <div className="relative py-2">
-                 <div className="absolute inset-0 flex items-center"><span className="w-full border-t border-slate-200"></span></div>
-                 <div className="relative flex justify-center text-xs uppercase"><span className="bg-white/80 px-2 text-slate-400 font-bold tracking-widest">Or Continue With</span></div>
-              </div>
 
-               <button
-                type="button"
-                className="w-full bg-[#25D366] text-white py-4 rounded-[2rem] font-bold text-lg shadow-lg hover:bg-[#20bd5a] transition-all flex items-center justify-center gap-3 active:scale-[0.98]"
-              >
-                 <Phone size={20} />
-                 Login with WhatsApp
-              </button>
             </form>
 
 

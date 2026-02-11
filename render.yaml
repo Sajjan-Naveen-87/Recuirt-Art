@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: recruit-art-backend
+    env: python
+    region: singapore # Closest to India
+    plan: free
+    rootDir: backend
+    
+    # Build & Start
+    buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate
+    startCommand: gunicorn recruit_art.wsgi:application
+    
+    # Environment Variables (You must add these in Dashboard!)
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10.0
+      - key: WEB_CONCURRENCY
+        value: 2
+      - key: DEBUG
+        value: 'False'
+      - key: SECRET_KEY
+        sync: false
+      - key: DATABASE_URL
+        sync: false
+      - key: EMAIL_HOST_USER
+        sync: false
+      - key: EMAIL_HOST_PASSWORD
+        sync: false
+      - key: FIREBASE_SERVICE_ACCOUNT_JSON
+        sync: false

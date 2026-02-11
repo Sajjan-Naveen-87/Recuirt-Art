@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Create axios instance with Vite environment variables
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8000/api',
+  baseURL: import.meta.env.VITE_BACKEND_URL ? `${import.meta.env.VITE_BACKEND_URL}/api` : 'https://recruit-art-backend.onrender.com/api',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -35,7 +35,7 @@ api.interceptors.response.use(
         const refreshToken = localStorage.getItem('refresh_token');
         if (refreshToken) {
           const response = await axios.post(
-            `${import.meta.env.VITE_API_URL || 'http://localhost:8000/api'}/accounts/token/refresh/`,
+            `${import.meta.env.VITE_BACKEND_URL ? `${import.meta.env.VITE_BACKEND_URL}/api` : 'https://recruit-art-backend.onrender.com/api'}/accounts/token/refresh/`,
             { refresh: refreshToken }
           );
 

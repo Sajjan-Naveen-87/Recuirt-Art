@@ -115,7 +115,7 @@ function Dashboard({ activeTab, setActiveTab }) {
           >
              {user?.profile_image ? (
                 <img 
-                  src={user.profile_image.startsWith('http') ? user.profile_image : `http://localhost:8000${user.profile_image}`} 
+                  src={user.profile_image.startsWith('http') ? user.profile_image : `${import.meta.env.VITE_BACKEND_URL || 'https://recruit-art-backend.onrender.com'}${user.profile_image}`} 
                   alt="Profile" 
                   className="w-full h-full object-cover" 
                 />

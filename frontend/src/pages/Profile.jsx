@@ -100,7 +100,7 @@ const Profile = () => {
               >
                 {profile?.profile_image ? (
                    <img 
-                      src={profile.profile_image.startsWith('http') ? profile.profile_image : `http://localhost:8000${profile.profile_image}`} 
+                      src={profile.profile_image.startsWith('http') ? profile.profile_image : `${import.meta.env.VITE_BACKEND_URL || 'https://recruit-art-backend.onrender.com'}${profile.profile_image}`} 
                       alt="Profile" 
                       className="w-full h-full object-cover" 
                    />
@@ -289,7 +289,7 @@ const Profile = () => {
                   <div className="flex gap-3">
                      {profile?.resume && (
                         <a 
-                           href={profile.resume.startsWith('http') ? profile.resume : `http://localhost:8000${profile.resume}`}
+                           href={profile.resume.startsWith('http') ? profile.resume : `${import.meta.env.VITE_BACKEND_URL || 'https://recruit-art-backend.onrender.com'}${profile.resume}`}
                            target="_blank" 
                            rel="noopener noreferrer"
                            className="px-6 py-3 bg-white/20 hover:bg-white/30 rounded-xl font-bold transition-colors backdrop-blur-md"

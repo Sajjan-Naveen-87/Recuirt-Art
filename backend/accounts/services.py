@@ -25,6 +25,12 @@ def send_otp(mobile, otp_code, email=None):
         bool: True if message sent successfully, False otherwise.
     """
     if email:
+        # Check if email credentials are configured
+        if not settings.EMAIL_HOST_USER or not settings.EMAIL_HOST_PASSWORD:
+            logger.warning(f"Email credentials (EMAIL_HOST_USER/PASSWORD) not set. Skipping OTP send to {email}.")
+            # Return True so the flow continues (user created, just no email received)
+            return True
+
         try:
             send_mail(
                 'Verify your email address',

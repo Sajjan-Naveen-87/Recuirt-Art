@@ -13,6 +13,9 @@ jobs:
     defaults:
       run:
         working-directory: ./backend
+    env:
+      SECRET_KEY: 'django-insecure-test-key'
+      DEBUG: 'True'
 
     steps:
     - uses: actions/checkout@v3

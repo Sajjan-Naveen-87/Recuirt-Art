@@ -100,9 +100,10 @@ const Profile = () => {
               >
                 {profile?.profile_image ? (
                    <img 
-                      src={profile.profile_image.startsWith('http') ? profile.profile_image : `${import.meta.env.VITE_BACKEND_URL || 'https://recruit-art-backend.onrender.com'}${profile.profile_image}`} 
+                      src={profile.profile_image.startsWith('http') ? profile.profile_image : `${import.meta.env.VITE_BACKEND_URL?.replace(/\/$/, '') || 'https://recruit-art-backend.onrender.com'}${profile.profile_image}`} 
                       alt="Profile" 
-                      className="w-full h-full object-cover" 
+                      className="w-full h-full object-cover"
+                      onError={(e) => { e.target.onerror = null; e.target.src = "https://ui-avatars.com/api/?name=" + encodeURIComponent(profile.full_name || 'User'); }}
                    />
                 ) : (
                    <User size={48} className="text-slate-300" />

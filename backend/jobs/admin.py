@@ -20,15 +20,14 @@ class JobRequirementInline(admin.TabularInline):
     ]
 
 
-class ApplicationResponseInline(admin.TabularInline):
     """Inline admin for ApplicationResponse model."""
     model = ApplicationResponse
-    extra = 0
-    readonly_fields = ['requirement', 'response_value']
-    can_delete = False
+    extra = 1  # Allow adding new responses
+    # readonly_fields = ['requirement', 'response_value']  # Allow editing
+    can_delete = True  # Allow deleting
     
-    def has_add_permission(self, request, obj=None):
-        return False
+    # def has_add_permission(self, request, obj=None):
+    #     return True  # Allow adding
 
 
 @admin.register(Job)

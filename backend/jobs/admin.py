@@ -119,7 +119,13 @@ class JobApplicationAdmin(admin.ModelAdmin):
     )
     
     readonly_fields = ['applied_at', 'updated_at', 'resume']
-    inlines = [ApplicationResponseInline]
+    # inlines = [ApplicationResponseInline]  # Replaced by get_inlines logic
+    
+    def get_inlines(self, request, obj):
+        """Only show ApplicationResponse inline when editing an existing application."""
+        if obj:
+            return [ApplicationResponseInline]
+        return []
     
     def get_readonly_fields(self, request, obj=None):
         """Make certain fields read-only for existing applications."""

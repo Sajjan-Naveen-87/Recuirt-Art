@@ -20,6 +20,7 @@ class JobRequirementInline(admin.TabularInline):
     ]
 
 
+class ApplicationResponseInline(admin.TabularInline):
     """Inline admin for ApplicationResponse model."""
     model = ApplicationResponse
     extra = 1  # Allow adding new responses

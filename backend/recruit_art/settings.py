@@ -252,6 +252,10 @@ EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_TIMEOUT = 10  # Timeout in seconds to prevent worker hang
 
+# SendGrid Configuration
+SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
+SENDGRID_FROM_EMAIL = os.getenv('SENDGRID_FROM_EMAIL', 'sajjanboynaveen4@gmail.com')
+
 # Logging Configuration
 LOGGING = {
     'version': 1,

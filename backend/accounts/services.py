@@ -25,28 +25,9 @@ def send_otp(mobile, otp_code, email=None):
         bool: True if message sent successfully, False otherwise.
     """
     if email:
-        try:
-            # Use Firebase Firestore to trigger email (Extension)
-            # This bypasses Render's blocked SMTP ports
-            from firebase_admin import firestore
-            db = firestore.client()
-            
-            # Add a new document to the 'mail' collection
-            # The "Trigger Email" extension will pick this up and send it via SMTP
-            db.collection('mail').add({
-                'to': email,
-                'message': {
-                    'subject': 'Verify your email address - Recruit Art',
-                    'html': f'<p>Your verification code is: <strong>{otp_code}</strong></p>',
-                }
-            })
-            
-            logger.info(f"OTP triggered via Firebase Firestore for email: {email}")
-            return True
-        except Exception as e:
-            logger.error(f"Failed to trigger Firebase email for {email}: {str(e)}")
-            # Fallback (log only) so user creation isn't blocked
-            return True
+        # Use SendGrid API instead of SMTP/Firebase
+        from .sendgrid_service import send_otp_via_sendgrid
+        return send_otp_via_sendgrid(email, otp_code)
             
     if mobile:
         logger.warning(f"Mobile OTP requested for {mobile} but mobile service is disabled. OTP: {otp_code}")

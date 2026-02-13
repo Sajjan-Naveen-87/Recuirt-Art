@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, MapPin, Building2, Clock, Briefcase, DollarSign, CheckCircle, Loader2, ExternalLink } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
@@ -9,19 +9,34 @@ const JobDetailsModal = ({ job, isOpen, onClose, onApply }) => {
   const [showApplyModal, setShowApplyModal] = useState(false);
 
   // Handle both real API data and demo data
+  const [jobDetail, setJobDetail] = useState(null);
+  
+  useEffect(() => {
+    if (job?.id) {
+        // Fetch full details
+        import('../../services/jobs').then(module => {
+            module.jobsService.getJob(job.id).then(data => {
+                setJobDetail(data);
+            }).catch(err => console.error("Failed to fetch job details", err));
+        });
+    }
+  }, [job]);
+
+  const sourceData = jobDetail || job;
+
   const jobData = {
-    id: job?.id || 0,
-    title: job?.title || 'Unknown Position',
-    company_name: job?.company_name || job?.company || 'Unknown Company',
-    location: job?.location || 'Remote',
-    job_type: job?.job_type || 'full_time',
-    description: job?.description || 'No description available.',
-    skills_required: job?.skills_required || job?.skills_list || [],
-    salary_range: job?.salary_range || job?.salary || 'Negotiable',
-    experience_required: job?.experience_required || '',
-    apply_deadline: job?.apply_deadline || null,
-    is_active: job?.is_active !== undefined ? job.is_active : true,
-    created_at: job?.created_at || null,
+    id: sourceData?.id || 0,
+    title: sourceData?.title || 'Unknown Position',
+    company_name: sourceData?.company_name || sourceData?.company || 'Unknown Company',
+    location: sourceData?.location || 'Remote',
+    job_type: sourceData?.job_type || 'full_time',
+    description: sourceData?.description || 'No description available.',
+    skills_required: sourceData?.skills_required || sourceData?.skills_list || [],
+    salary_range: sourceData?.salary_range || sourceData?.salary || 'Negotiable',
+    experience_required: sourceData?.experience_required || '',
+    apply_deadline: sourceData?.apply_deadline || null,
+    is_active: sourceData?.is_active !== undefined ? sourceData.is_active : true,
+    created_at: sourceData?.created_at || null,
   };
 
   const formatJobType = (type) => {

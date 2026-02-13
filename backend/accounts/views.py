@@ -520,7 +520,7 @@ class PasswordResetRequestView(APIView):
                     user=user,
                     email=user.email
                 )
-                send_otp(mobile, otp.otp_code)
+                send_otp(mobile, otp.otp_code, email=user.email)
 
                 return Response({
                     'message': f'Password reset OTP sent to {mobile}.'

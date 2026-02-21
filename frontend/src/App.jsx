@@ -175,18 +175,18 @@ function Dashboard({ activeTab, setActiveTab }) {
             </div>
 
             {/* Welcome & Category Cards Section */}
-            <div className="bg-gradient-to-b from-[#eaf3f9] to-[#f2f6fa] -mx-16 px-16 py-12 mb-16 border-y border-[#dce6ef]">
+            <div className="bg-gradient-to-b from-white to-[#f8fafc] -mx-16 px-16 py-12 mb-16 border-t border-[#f1f5f9]">
               <div className="flex items-center justify-between mb-16">
-                 <div className="font-black text-[#1a5b9c] text-3xl tracking-tight flex items-center">
-                    <span className="mr-[2px]">L</span>
-                    <svg viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-[#1a5b9c]">
+                 <div className="font-black text-[#1a5b9c] text-4xl tracking-tight flex items-center">
+                    <span className="mr-1">L</span>
+                    <svg viewBox="0 0 24 24" fill="currentColor" className="w-8 h-8 text-[#1a5b9c]">
                        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
                     </svg>
                     <span>GO</span>
                  </div>
                  <h2 className="text-4xl font-bold text-[#1a5b9c]">Welcome, {user?.first_name || user?.full_name?.split(' ')[0] || '{User Name}'}</h2>
-                 <div className="border-[3px] border-[#1a5b9c] p-1 rounded-full bg-white shadow-sm">
-                    <button className="w-[4.5rem] h-[4.5rem] bg-[#1a5b9c] text-white rounded-full font-medium flex items-center justify-center">
+                 <div className="border-[3px] border-[#1a5b9c] p-1.5 rounded-full bg-white shadow-sm flex items-center justify-center">
+                    <button className="w-16 h-16 bg-[#1a5b9c] text-white rounded-full text-base flex items-center justify-center hover:bg-[#124b84] transition-colors">
                        Profile
                     </button>
                  </div>
@@ -196,43 +196,33 @@ function Dashboard({ activeTab, setActiveTab }) {
                 {/* Non Clinician Card */}
                 <motion.div 
                   whileHover={{ y: -5 }}
-                  className="bg-white rounded-[2rem] p-8 shadow-xl shadow-[#1a5b9c]/10 border border-slate-100 relative flex flex-col justify-center min-h-[260px]"
+                  className="bg-white rounded-3xl p-10 shadow-lg shadow-slate-200/50 border border-slate-100 flex flex-col text-center items-center justify-center min-h-[260px]"
                 >
-                  <div className="absolute -bottom-0 -left-6 w-64 h-[125%] z-10 pointer-events-none drop-shadow-2xl">
-                    <img src={nonClinicianImg} alt="Non Clinician" className="w-full h-full object-contain object-bottom" />
-                  </div>
-                  <div className="ml-[45%] pl-4 pr-2 py-2 flex flex-col h-full z-20">
-                    <h3 className="text-2xl font-bold text-[#1a5b9c] mb-3 leading-tight font-sans">
-                      Vacancies for Non<br/>Clinician Category
-                    </h3>
-                    <p className="text-[#333] mb-8 text-sm leading-relaxed">
-                      Explore administrative,<br/>support, and professional<br/>roles.
-                    </p>
-                    <button className="bg-[#1a5b9c] text-white px-8 py-2.5 rounded-lg font-bold w-fit hover:bg-[#124b84] transition-colors shadow-lg shadow-[#1a5b9c]/30">
-                      View Jobs
-                    </button>
-                  </div>
+                  <h3 className="text-2xl font-bold text-[#1a5b9c] mb-4 leading-tight font-sans">
+                    Vacancies for Non<br/>Clinician Category
+                  </h3>
+                  <p className="text-slate-600 mb-8 leading-relaxed max-w-sm">
+                    Explore administrative, support, and professional roles.
+                  </p>
+                  <button className="bg-[#1a5b9c] text-white px-10 py-3 rounded-xl font-bold hover:bg-[#124b84] transition-colors shadow-lg shadow-[#1a5b9c]/30">
+                    View Jobs
+                  </button>
                 </motion.div>
 
                 {/* Clinician Card */}
                 <motion.div 
                   whileHover={{ y: -5 }}
-                  className="bg-white rounded-[2rem] p-8 shadow-xl shadow-[#1a5b9c]/10 border border-slate-100 relative flex flex-col justify-center min-h-[260px]"
+                  className="bg-white rounded-3xl p-10 shadow-lg shadow-slate-200/50 border border-slate-100 flex flex-col text-center items-center justify-center min-h-[260px]"
                 >
-                  <div className="pr-[45%] pl-2 py-2 flex flex-col h-full z-20 w-full">
-                    <h3 className="text-2xl font-bold text-[#1a5b9c] mb-3 leading-tight font-sans">
-                      Vacancies for<br/>Clinician Category
-                    </h3>
-                    <p className="text-[#333] mb-8 text-sm leading-relaxed">
-                      Discover opportunities for<br/>doctors, nurses, and<br/>medical specialists.
-                    </p>
-                    <button className="bg-[#1a5b9c] text-white px-8 py-2.5 rounded-lg font-bold w-fit hover:bg-[#124b84] transition-colors shadow-lg shadow-[#1a5b9c]/30">
-                      View Jobs
-                    </button>
-                  </div>
-                  <div className="absolute -bottom-0 right-0 w-72 h-[125%] z-10 pointer-events-none drop-shadow-2xl">
-                    <img src={clinicianImg} alt="Clinician" className="w-full h-full object-contain object-bottom" />
-                  </div>
+                  <h3 className="text-2xl font-bold text-[#1a5b9c] mb-4 leading-tight font-sans">
+                    Vacancies for<br/>Clinician Category
+                  </h3>
+                  <p className="text-slate-600 mb-8 leading-relaxed max-w-sm">
+                    Discover opportunities for doctors, nurses, and medical specialists.
+                  </p>
+                  <button className="bg-[#1a5b9c] text-white px-10 py-3 rounded-xl font-bold hover:bg-[#124b84] transition-colors shadow-lg shadow-[#1a5b9c]/30">
+                    View Jobs
+                  </button>
                 </motion.div>
               </div>
             </div>

@@ -133,63 +133,10 @@ function Dashboard({ activeTab, setActiveTab }) {
       <AnimatePresence mode="wait">
         {activeTab === "Dashboard" && (
           <motion.div key="dash" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -30 }} className="px-16 pb-16">
-            <div className="grid grid-cols-12 gap-8 mb-16">
-              {/* Hero Card - Dark Tech Style */}
-              <motion.div whileHover={{ scale: 1.01 }} className="col-span-12 lg:col-span-8 bg-[#121212] p-16 rounded-[3rem] shadow-2xl relative overflow-hidden group text-white">
-                <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-600/20 rounded-full blur-3xl -mr-32 -mt-32"></div>
-                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10"></div>
-                
-                <Compass className="relative z-10 text-[#cbd5b1] mb-8" size={32} />
-                <h2 className="relative z-10 text-5xl font-serif font-medium mb-8 leading-tight text-white">
-                  Find your <br/> dream job here.
-                </h2>
-                <div className="relative z-10 flex items-center gap-10">
-                   <div>
-                      <p className="text-3xl font-bold font-serif">{jobs.length}</p>
-                      <p className="text-xs uppercase tracking-widest text-slate-400 mt-1">Open Positions</p>
-                   </div>
-                   <div className="w-px h-12 bg-white/10"></div>
-                   <div>
-                      <p className="text-3xl font-bold font-serif">98%</p>
-                      <p className="text-xs uppercase tracking-widest text-slate-400 mt-1">Match Rate</p>
-                   </div>
-                </div>
-                
-
-              </motion.div>
-
-              {/* Status Card - Sage Green */}
-              <motion.div whileHover={{ scale: 1.01 }} className="col-span-12 lg:col-span-4 bg-[#cbd5b1] rounded-[3rem] p-10 flex flex-col justify-between shadow-xl border border-[#b8c2a0]">
-                 <div className="bg-white/50 w-14 h-14 rounded-full flex items-center justify-center backdrop-blur-sm mb-4">
-                    <CheckCircle className="text-[#121212]" size={24} />
-                 </div>
-                 <div>
-                    <h3 className="text-3xl font-serif font-bold text-[#121212] mb-2">Profile Status</h3>
-                    <p className="text-[#121212]/70 font-sans font-medium">Your profile is visible to top recruiters.</p>
-                 </div>
-                 <div className="mt-8 pt-8 border-t border-[#121212]/10 flex items-center justify-between">
-                    <span className="text-xs font-black uppercase tracking-widest">Active</span>
-                    <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(34,197,94,0.6)]"></div>
-                 </div>
-              </motion.div>
-            </div>
-
             {/* Welcome & Category Cards Section */}
-            <div className="bg-gradient-to-b from-[#eaf3f9] to-[#f2f6fa] -mx-16 px-16 py-12 mb-16 border-y border-[#dce6ef]">
-              <div className="flex items-center justify-between mb-16">
-                 <div className="font-black text-[#1a5b9c] text-3xl tracking-tight flex items-center">
-                    <span className="mr-[2px]">L</span>
-                    <svg viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-[#1a5b9c]">
-                       <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-                    </svg>
-                    <span>GO</span>
-                 </div>
+            <div className="bg-gradient-to-b from-white to-[#eaf3f9] -mx-16 px-16 py-12 mb-16 border-y border-[#dce6ef]">
+              <div className="flex items-center justify-center mb-16 text-center">
                  <h2 className="text-4xl font-bold text-[#1a5b9c]">Welcome, {user?.first_name || user?.full_name?.split(' ')[0] || '{User Name}'}</h2>
-                 <div className="border-[3px] border-[#1a5b9c] p-1 rounded-full bg-white shadow-sm">
-                    <button className="w-[4.5rem] h-[4.5rem] bg-[#1a5b9c] text-white rounded-full font-medium flex items-center justify-center">
-                       Profile
-                    </button>
-                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pb-4">
@@ -236,6 +183,48 @@ function Dashboard({ activeTab, setActiveTab }) {
                 </motion.div>
               </div>
             </div>
+            <div className="grid grid-cols-12 gap-8 mb-16">
+              {/* Hero Card - Dark Tech Style */}
+              <motion.div whileHover={{ scale: 1.01 }} className="col-span-12 lg:col-span-8 bg-[#121212] p-16 rounded-[3rem] shadow-2xl relative overflow-hidden group text-white">
+                <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-600/20 rounded-full blur-3xl -mr-32 -mt-32"></div>
+                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10"></div>
+                
+                <Compass className="relative z-10 text-[#cbd5b1] mb-8" size={32} />
+                <h2 className="relative z-10 text-5xl font-serif font-medium mb-8 leading-tight text-white">
+                  Find your <br/> dream job here.
+                </h2>
+                <div className="relative z-10 flex items-center gap-10">
+                   <div>
+                      <p className="text-3xl font-bold font-serif">{jobs.length}</p>
+                      <p className="text-xs uppercase tracking-widest text-slate-400 mt-1">Open Positions</p>
+                   </div>
+                   <div className="w-px h-12 bg-white/10"></div>
+                   <div>
+                      <p className="text-3xl font-bold font-serif">98%</p>
+                      <p className="text-xs uppercase tracking-widest text-slate-400 mt-1">Match Rate</p>
+                   </div>
+                </div>
+                
+
+              </motion.div>
+
+              {/* Status Card - Sage Green */}
+              <motion.div whileHover={{ scale: 1.01 }} className="col-span-12 lg:col-span-4 bg-[#cbd5b1] rounded-[3rem] p-10 flex flex-col justify-between shadow-xl border border-[#b8c2a0]">
+                 <div className="bg-white/50 w-14 h-14 rounded-full flex items-center justify-center backdrop-blur-sm mb-4">
+                    <CheckCircle className="text-[#121212]" size={24} />
+                 </div>
+                 <div>
+                    <h3 className="text-3xl font-serif font-bold text-[#121212] mb-2">Profile Status</h3>
+                    <p className="text-[#121212]/70 font-sans font-medium">Your profile is visible to top recruiters.</p>
+                 </div>
+                 <div className="mt-8 pt-8 border-t border-[#121212]/10 flex items-center justify-between">
+                    <span className="text-xs font-black uppercase tracking-widest">Active</span>
+                    <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(34,197,94,0.6)]"></div>
+                 </div>
+              </motion.div>
+            </div>
+
+
 
           {/* Achievements Section */}
           <Achievements applicationsCount={applications.length} />

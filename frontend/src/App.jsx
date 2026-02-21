@@ -13,11 +13,13 @@ import Profile from './pages/Profile';
 import ProtectedRoute from './components/ProtectedRoute';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Bell, Plus, Search, Filter, ArrowRight, User, Camera, FileText, CheckCircle, Sparkles, Loader2 } from 'lucide-react';
+import { Bell, Plus, Search, Filter, ArrowRight, User, Camera, FileText, CheckCircle, Sparkles, Loader2, Compass } from 'lucide-react';
 import { jobsService } from './services/jobs';
 import notificationsService from './services/notifications';
 import profileService from './services/profile';
 import ApplicationsList from './components/ApplicationsList';
+import clinicianImg from './assets/clinician.png';
+import nonClinicianImg from './assets/non_clinician.png';
 import NotificationsDropdown from './components/Notifications/NotificationsDropdown';
 import Achievements from './components/Dashboard/Achievements';
 import MassHiringModal from './components/Contact/MassHiringModal';
@@ -137,9 +139,9 @@ function Dashboard({ activeTab, setActiveTab }) {
                 <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-600/20 rounded-full blur-3xl -mr-32 -mt-32"></div>
                 <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10"></div>
                 
-                <Sparkles className="relative z-10 text-indigo-400 mb-8" size={32} />
-                <h2 className="relative z-10 text-5xl font-serif font-medium mb-8 leading-tight">
-                  Your career <br/> <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400 font-bold italic">accelerated.</span>
+                <Compass className="relative z-10 text-[#cbd5b1] mb-8" size={32} />
+                <h2 className="relative z-10 text-5xl font-serif font-medium mb-8 leading-tight text-white">
+                  Find your <br/> dream job here.
                 </h2>
                 <div className="relative z-10 flex items-center gap-10">
                    <div>
@@ -169,6 +171,51 @@ function Dashboard({ activeTab, setActiveTab }) {
                     <span className="text-xs font-black uppercase tracking-widest">Active</span>
                     <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(34,197,94,0.6)]"></div>
                  </div>
+              </motion.div>
+            </div>
+
+            {/* Category Cards Section */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16 mt-8">
+              {/* Non Clinician Card */}
+              <motion.div 
+                whileHover={{ y: -5 }}
+                className="bg-white rounded-[2rem] p-8 shadow-xl shadow-slate-200/50 border border-slate-100 relative flex items-center min-h-[220px]"
+              >
+                <div className="absolute -bottom-4 -left-6 w-56 h-[120%] z-10 pointers-events-none drop-shadow-2xl">
+                  <img src={nonClinicianImg} alt="Non Clinician" className="w-full h-full object-contain object-bottom" />
+                </div>
+                <div className="ml-48 pl-4 pr-2 py-2 flex flex-col justify-center h-full z-20">
+                  <h3 className="text-2xl font-bold text-[#1a5b9c] mb-3 leading-tight font-sans">
+                    Vacancies for Non<br/>Clinician Category
+                  </h3>
+                  <p className="text-slate-600 mb-6 text-sm leading-relaxed">
+                    Explore administrative,<br/>support, and professional<br/>roles.
+                  </p>
+                  <button className="bg-[#1a5b9c] text-white px-8 py-2.5 rounded-lg font-medium w-fit hover:bg-[#124b84] transition-colors shadow-lg shadow-[#1a5b9c]/30">
+                    View Jobs
+                  </button>
+                </div>
+              </motion.div>
+
+              {/* Clinician Card */}
+              <motion.div 
+                whileHover={{ y: -5 }}
+                className="bg-white rounded-[2rem] p-8 shadow-xl shadow-slate-200/50 border border-slate-100 relative flex items-center min-h-[220px]"
+              >
+                <div className="pr-48 pl-2 py-2 flex flex-col justify-center h-full z-20 w-full">
+                  <h3 className="text-2xl font-bold text-[#1a5b9c] mb-3 leading-tight font-sans">
+                    Vacancies for<br/>Clinician Category
+                  </h3>
+                  <p className="text-slate-600 mb-6 text-sm leading-relaxed">
+                    Discover opportunities for<br/>doctors, nurses, and<br/>medical specialists.
+                  </p>
+                  <button className="bg-[#1a5b9c] text-white px-8 py-2.5 rounded-lg font-medium w-fit hover:bg-[#124b84] transition-colors shadow-lg shadow-[#1a5b9c]/30">
+                    View Jobs
+                  </button>
+                </div>
+                <div className="absolute -bottom-4 -right-12 w-64 h-[120%] z-10 pointers-events-none drop-shadow-2xl">
+                  <img src={clinicianImg} alt="Clinician" className="w-full h-full object-contain object-bottom" />
+                </div>
               </motion.div>
             </div>
 

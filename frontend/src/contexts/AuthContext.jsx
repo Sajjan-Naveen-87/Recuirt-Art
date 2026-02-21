@@ -60,7 +60,15 @@ export const AuthProvider = ({ children }) => {
       setUser(userData);
       return data;
     } catch (err) {
-      const message = err.response?.data?.error || err.message || 'Login failed. Please try again.';
+      let message = 'Login failed. Please try again.';
+      
+      if (err.response?.status >= 500) {
+        message = 'Server connectivity issue (Database might be waking up). Please wait 10 seconds and try again.';
+      } else {
+        message = err.response?.data?.error || err.response?.data?.detail || err.response?.data?.non_field_errors?.[0] || err.message || 'Login failed. Please try again.';
+        if (Array.isArray(message)) message = message[0];
+      }
+
       setError(message);
       throw new Error(message);
     }
@@ -81,13 +89,19 @@ export const AuthProvider = ({ children }) => {
       }
       return data;
     } catch (err) {
-
-      let message = err.response?.data?.error || err.message || 'Registration failed.';
-      // Handle DRF field errors
-      if (err.response?.data && typeof err.response.data === 'object' && !err.response.data.error) {
-         const values = Object.values(err.response.data).flat();
-         if (values.length > 0) message = values.join(' ');
+      let message = 'Registration failed.';
+      
+      if (err.response?.status >= 500) {
+        message = 'Server connectivity issue (Database might be waking up). Please wait 10 seconds and try again.';
+      } else {
+        message = err.response?.data?.error || err.response?.data?.detail || err.message || 'Registration failed.';
+        // Handle DRF field errors
+        if (err.response?.data && typeof err.response.data === 'object' && !err.response.data.error && !err.response.data.detail) {
+           const values = Object.values(err.response.data).flat();
+           if (values.length > 0) message = values.join(' ');
+        }
       }
+
       setError(message);
       throw new Error(message);
     }

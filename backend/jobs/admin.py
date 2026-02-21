@@ -138,6 +138,67 @@ class JobApplicationAdmin(admin.ModelAdmin):
     def has_delete_permission(self, request, obj=None):
         """Prevent deletion of applications."""
         return False
+        
+    actions = ['export_as_csv']
+    
+    def export_as_csv(self, request, queryset):
+        """Export selected applications as CSV, including custom responses."""
+        import csv
+        from django.http import HttpResponse
+        from django.db.models import Prefetch
+        
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="job_applications.csv"'
+        writer = csv.writer(response)
+        
+        # Pre-fetch job and responses to avoid N+1 queries
+        queryset = queryset.select_related('job').prefetch_related(
+            Prefetch('responses', queryset=ApplicationResponse.objects.select_related('requirement'))
+        )
+        
+        # Collect all unique requirement questions across these applications
+        all_reqs = set()
+        for app in queryset:
+            for resp in app.responses.all():
+                all_reqs.add(resp.requirement.question_text)
+        
+        req_headers = sorted(list(all_reqs))
+        
+        headers = [
+            'ID', 'Job Title', 'Job Category', 'Applicant Full Name', 'Email', 'Mobile',
+            'Status', 'Applied At', 'Expected Salary', 'Notice Period',
+            'LinkedIn', 'Portfolio', 'Resume File', 'Cover Letter'
+        ] + req_headers
+        
+        writer.writerow(headers)
+        
+        for app in queryset:
+            # Map custom responses
+            resp_map = {r.requirement.question_text: r.response_value for r in app.responses.all()}
+            req_values = [resp_map.get(req, '') for req in req_headers]
+            
+            row = [
+                app.id,
+                app.job.title,
+                app.job.get_category_display() if app.job.category else '',
+                app.full_name,
+                app.email,
+                app.mobile,
+                app.get_status_display(),
+                app.applied_at.strftime('%Y-%m-%d %H:%M:%S') if app.applied_at else '',
+                app.expected_salary,
+                app.notice_period,
+                app.linkedin_url,
+                app.portfolio_url,
+                app.resume_file_name,
+                app.cover_letter
+            ] + req_values
+            
+            writer.writerow(row)
+            
+        return response
+        
+    export_as_csv.short_description = "Export Selected to CSV (Excel)"
 
 
 @admin.register(ApplicationResponse)

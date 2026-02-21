@@ -152,12 +152,18 @@ function Dashboard({ activeTab, setActiveTab }) {
                     <h3 className="text-2xl font-bold text-[#1a5b9c] mb-3 leading-tight font-sans">
                       Vacancies for Non<br/>Clinician Category
                     </h3>
-                    <p className="text-[#333] mb-8 text-sm leading-relaxed">
-                      Explore administrative,<br/>support, and professional<br/>roles.
-                    </p>
-                    <button className="bg-[#1a5b9c] text-white px-8 py-2.5 rounded-lg font-bold w-fit hover:bg-[#124b84] transition-colors shadow-lg shadow-[#1a5b9c]/30">
-                      View Jobs
-                    </button>
+                    <p className="text-slate-600 mb-8 leading-relaxed max-w-sm">
+                    Explore administrative, support, and professional roles.
+                  </p>
+                  <button 
+                    onClick={() => {
+                      setSearchQuery('Non Clinician');
+                      setActiveTab('Explore');
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                    className="bg-[#1a5b9c] text-white px-10 py-3 rounded-xl font-bold hover:bg-[#124b84] transition-colors shadow-lg shadow-[#1a5b9c]/30">
+                    View Jobs
+                  </button>
                   </div>
                 </motion.div>
 
@@ -170,12 +176,18 @@ function Dashboard({ activeTab, setActiveTab }) {
                     <h3 className="text-2xl font-bold text-[#1a5b9c] mb-3 leading-tight font-sans">
                       Vacancies for<br/>Clinician Category
                     </h3>
-                    <p className="text-[#333] mb-8 text-sm leading-relaxed">
-                      Discover opportunities for<br/>doctors, nurses, and<br/>medical specialists.
-                    </p>
-                    <button className="bg-[#1a5b9c] text-white px-8 py-2.5 rounded-lg font-bold w-fit hover:bg-[#124b84] transition-colors shadow-lg shadow-[#1a5b9c]/30">
-                      View Jobs
-                    </button>
+                    <p className="text-slate-600 mb-8 leading-relaxed max-w-sm">
+                    Discover opportunities for doctors, nurses, and medical specialists.
+                  </p>
+                  <button 
+                    onClick={() => {
+                      setSearchQuery('Clinician');
+                      setActiveTab('Explore');
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                    className="bg-[#1a5b9c] text-white px-10 py-3 rounded-xl font-bold hover:bg-[#124b84] transition-colors shadow-lg shadow-[#1a5b9c]/30">
+                    View Jobs
+                  </button>
                   </div>
                   <div className="absolute -bottom-0 right-0 w-72 h-[125%] z-10 pointer-events-none drop-shadow-2xl">
                     <img src={clinicianImg} alt="Clinician" className="w-full h-full object-contain object-bottom" />
@@ -278,14 +290,17 @@ function Dashboard({ activeTab, setActiveTab }) {
                  .filter(job => 
                     job.title?.toLowerCase().includes(searchQuery.toLowerCase()) || 
                     job.company_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                    job.location?.toLowerCase().includes(searchQuery.toLowerCase())
+                    job.location?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    job.category?.replace('_', ' ').toLowerCase().includes(searchQuery.toLowerCase())
                  )
                  .map((job, i) => (
                  <JobCard key={job.id || i} job={job} onClick={handleJobClick} showApplyButton={true} onApply={handleApplyClick} />
                ))}
                {jobs.filter(job => 
                     job.title?.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                    job.company_name?.toLowerCase().includes(searchQuery.toLowerCase())
+                    job.company_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    job.location?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    job.category?.replace('_', ' ').toLowerCase().includes(searchQuery.toLowerCase())
                ).length === 0 && (
                   <div className="text-center py-20 opacity-50">
                      <Search size={48} className="mx-auto mb-4" />

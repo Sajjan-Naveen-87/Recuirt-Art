@@ -62,6 +62,11 @@ class JobViewSet(viewsets.ModelViewSet):
         job_type = self.request.query_params.get('job_type')
         if job_type:
             queryset = queryset.filter(job_type=job_type)
+            
+        # Filter by category
+        category = self.request.query_params.get('category')
+        if category:
+            queryset = queryset.filter(category=category)
         
         # Filter by location
         location = self.request.query_params.get('location')

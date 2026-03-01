@@ -15,7 +15,7 @@ import { AuthProvider, useAuth } from './contexts/AuthContext';
 import LandingPage from './components/Landing/LandingPage';
 import ContactUs from './pages/ContactUs';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Bell, Plus, Search, Filter, ArrowRight, User, Camera, FileText, CheckCircle, Sparkles, Loader2, Compass, Menu, X } from 'lucide-react';
+import { Bell, Plus, Search, Filter, ArrowRight, User, Camera, FileText, CheckCircle, Sparkles, Loader2, Compass, Menu, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { jobsService } from './services/jobs';
 import notificationsService from './services/notifications';
 import profileService from './services/profile';

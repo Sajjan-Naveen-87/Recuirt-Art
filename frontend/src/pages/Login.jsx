@@ -1,48 +1,20 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Mail, Lock, ArrowRight, Sparkles, Shield, Zap, Check, Eye, EyeOff, AlertCircle, Phone, Smartphone, MessageSquare } from 'lucide-react';
+import { Eye, EyeOff, AlertCircle } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
-import { auth } from '../firebase';
-import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  // Phone Auth State
-  const [loginMethod, setLoginMethod] = useState('email'); // 'email' or 'phone'
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [otp, setOtp] = useState('');
-  const [confirmationResult, setConfirmationResult] = useState(null);
-  const [otpSent, setOtpSent] = useState(false);
-
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
   const [errors, setErrors] = useState({});
-  const [success, setSuccess] = useState(false);
   
-  const { login, error, clearError, sendOTP, verifyOTP } = useAuth();
+  const { login, error, clearError } = useAuth();
   const navigate = useNavigate();
   const emailInputRef = useRef(null);
 
-  // Load remember me preference
-  useEffect(() => {
-    const savedRememberMe = localStorage.getItem('remember_me') === 'true';
-    setRememberMe(savedRememberMe);
-    if (savedRememberMe) {
-      const savedEmail = localStorage.getItem('remembered_email');
-      if (savedEmail) setEmail(savedEmail);
-    }
-  }, []);
-
-  // Clear errors when inputs change
-  useEffect(() => {
-    if (error) clearError();
-    setErrors({});
-  }, [email, password, phoneNumber, otp, error, clearError]);
-
-  const validateEmailForm = () => {
+  const validateForm = () => {
     const newErrors = {};
     if (!email) {
       newErrors.email = 'Email is required';
@@ -56,78 +28,10 @@ function Login() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const validatePhoneForm = () => {
-    const newErrors = {};
-    if (!phoneNumber) {
-      newErrors.phone = 'Phone number is required';
-    } else if (phoneNumber.length < 10) {
-      newErrors.phone = 'Please enter a valid phone number';
-    }
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const setupRecaptcha = () => {
-    // Legacy Recaptcha removed
-  };
-
-  const handleSendOtp = async (e) => {
-    e.preventDefault();
-    if (!validatePhoneForm()) return;
-
-    setIsLoading(true);
-
-    // Format phone number to ensure no prefix duplication or invalid format
-    // Backend expects existing format in DB
-    const formattedPhone = phoneNumber; 
-
-
-    
-    try {
-      await sendOTP(formattedPhone);
-      setOtpSent(true);
-      setErrors({});
-    } catch (err) {
-      console.error(err);
-      // specific error handling if needed
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleVerifyOtp = async (e) => {
-    e.preventDefault();
-    if (!otp) {
-        setErrors({ otp: 'Please enter OTP' });
-        return;
-    }
-
-    setIsLoading(true);
-    try {
-      await verifyOTP(phoneNumber, otp); // Default type 'login'
-      handleSuccess();
-
-    } catch (err) {
-      console.error(err);
-      // Error handled by context
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    if (loginMethod === 'phone') {
-        if (!otpSent) {
-            handleSendOtp(e);
-        } else {
-            handleVerifyOtp(e);
-        }
-        return;
-    }
-    
-    if (!validateEmailForm()) return;
+    if (error) clearError();
+    if (!validateForm()) return;
     
     setIsLoading(true);
     try {
@@ -136,389 +40,137 @@ function Login() {
         email: email.toLowerCase(),
         password,
       });
-      handleSuccess();
+      navigate('/dashboard');
     } catch (err) {
-      // Error is handled by AuthContext
+      console.error(err);
     } finally {
       setIsLoading(false);
     }
   };
 
-
-
-  const handleSuccess = () => {
-    setSuccess(true);
-    
-    // Handle remember me
-    if (rememberMe) {
-      localStorage.setItem('remember_me', 'true');
-      localStorage.setItem('remembered_email', email);
-    } else {
-      localStorage.removeItem('remember_me');
-      localStorage.removeItem('remembered_email');
-    }
-
-    // Navigate after success animation
-    setTimeout(() => {
-      navigate('/');
-    }, 1500);
-  };
-
-  const handleKeyDown = (e, field) => {
-    if (e.key === 'Enter') {
-      if (field === 'email' || field === 'password') {
-        handleSubmit(e);
-      }
-    }
-  };
-
   return (
-    <div className="min-h-screen flex bg-[#F0F2F5]">
-      {/* Left Panel - Branding */}
-      <div className="hidden lg:flex lg:w-1/2 bg-slate-950 relative overflow-hidden flex-col justify-between p-16">
-        <div className="absolute top-0 right-0 w-1/2 h-full bg-white/5 blur-[120px] rounded-full pointer-events-none" />
+    <div className="min-h-screen bg-[#f4f4f0] flex items-center justify-center p-6 md:p-10 font-sans">
+      <div className="w-full max-w-lg bg-white border border-slate-200/60 p-8 md:p-12 rounded-[2.5rem] md:rounded-[3.5rem] shadow-sm relative overflow-hidden">
+        {/* Decorative element */}
+        <div className="absolute top-0 right-0 w-32 h-32 bg-[#cbd5b1]/10 rounded-full blur-3xl -mr-16 -mt-16"></div>
         
         <div className="relative z-10">
-          <div className="flex items-center gap-2 mb-2">
-            <div className="h-[2px] w-8 bg-indigo-500 rounded-full" />
-            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-indigo-400">Recuirt Art</span>
+          <div className="flex justify-center mb-10 md:mb-12">
+            <Link to="/" className="w-36 md:w-40 h-10 md:h-12 overflow-hidden flex-shrink-0 flex items-center hover:opacity-90 transition-opacity">
+              <img src="/Logo.jpg" alt="Recruit Art Logo" className="w-full h-full object-contain" />
+            </Link>
           </div>
-          <h1 className="text-5xl font-black tracking-tighter text-white lowercase">Recuirt.</h1>
-        </div>
+          <h1 className="text-3xl md:text-5xl font-serif font-black text-slate-900 mb-8 md:mb-10 tracking-tight leading-none">Sign In.</h1>
 
-        <div className="relative z-10 space-y-8">
-          <h2 className="text-4xl font-black text-white leading-tight">
-            The elite pipeline <br/>
-            <span className="text-indigo-400">is waiting.</span>
-          </h2>
-          <p className="text-slate-400 font-medium max-w-sm leading-relaxed">
-            Synchronized with Recuirt Art RM protocols for seamless hiring management.
-          </p>
-          
-          <div className="flex gap-6 pt-4">
-            <div className="flex items-center gap-3 text-slate-400">
-              <div className="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center">
-                <Shield size={20} />
-              </div>
-              <span className="text-sm font-medium">Secure Auth</span>
+          {(error || errors.form) && (
+            <div className="mb-8 p-4 bg-red-50 border border-red-100 text-red-600 text-xs font-black uppercase tracking-widest flex items-center gap-2 rounded-2xl">
+              <AlertCircle size={16} />
+              {error || errors.form}
             </div>
-            <div className="flex items-center gap-3 text-slate-400">
-              <div className="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center">
-                <Zap size={20} />
-              </div>
-              <span className="text-sm font-medium">Instant Access</span>
-            </div>
-          </div>
-        </div>
+          )}
 
-        <div className="relative z-10 text-slate-500 text-sm">
-          © 2026 Recuirt Art. All rights reserved.
-        </div>
-      </div>
-
-      {/* Right Panel - Login Form */}
-      <div className="flex-1 flex items-center justify-center p-8">
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="w-full max-w-md"
-        >
-          {/* Success Animation Overlay */}
-          <AnimatePresence>
-            {success && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.8 }}
-                className="absolute inset-0 z-50 flex items-center justify-center bg-white/90 backdrop-blur-2xl rounded-[4rem]"
-              >
-                <motion.div
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{ type: "spring", stiffness: 200, damping: 15 }}
-                  className="text-center"
-                >
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ delay: 0.2, type: "spring" }}
-                    className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4"
-                  >
-                    <Check className="text-green-600" size={40} />
-                  </motion.div>
-                  <h3 className="text-2xl font-black text-slate-900">Welcome back!</h3>
-                  <p className="text-slate-500 mt-2">Redirecting to dashboard...</p>
-                </motion.div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          <div className="bg-white/80 backdrop-blur-2xl rounded-[4rem] shadow-[0_40px_100px_-20px_rgba(0,0,0,0.05)] p-12 border border-white relative">
-            <Sparkles className="absolute top-8 right-8 text-indigo-100" size={40} />
-            
-            <div className="mb-8">
-              <h2 className="text-3xl font-black tracking-tight mb-3">Welcome back</h2>
-              <p className="text-slate-500 font-medium">Enter your credentials to access your account</p>
+          <form onSubmit={handleSubmit} className="space-y-6 md:space-y-8">
+            <div className="space-y-2">
+              <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Email Address</label>
+              <input
+                ref={emailInputRef}
+                type="email"
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  if (errors.email) setErrors({ ...errors, email: '' });
+                }}
+                placeholder="name@healthcare.com"
+                className="w-full bg-[#f4f4f0] border border-transparent focus:border-[#cbd5b1] focus:bg-white outline-none px-6 py-4 rounded-2xl text-slate-900 font-bold transition-all placeholder:text-slate-300"
+                required
+              />
+              {errors.email && <p className="text-red-500 text-[10px] font-bold uppercase tracking-widest mt-1 ml-1">{errors.email}</p>}
             </div>
 
-            {error && (
-              <motion.div 
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="mb-6 p-4 bg-red-50 border border-red-100 rounded-2xl text-red-600 text-sm font-medium flex items-center gap-2"
-              >
-                <AlertCircle size={18} />
-                {error}
-              </motion.div>
-            )}
-
-            {/* Login Method Tabs */}
-            <div className="flex p-1 bg-slate-100 rounded-[1.5rem] mb-8 relative">
-                <motion.div 
-                    className="absolute top-1 bottom-1 bg-white rounded-[1.2rem] shadow-sm"
-                    initial={false}
-                    animate={{ 
-                        left: loginMethod === 'email' ? '4px' : '50%', 
-                        width: 'calc(50% - 4px)',
-                        x: loginMethod === 'email' ? 0 : 0
-                    }}
-                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            <div className="space-y-2">
+              <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Password</label>
+              <div className="relative">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    if (errors.password) setErrors({ ...errors, password: '' });
+                  }}
+                  placeholder="••••••••"
+                  className="w-full bg-[#f4f4f0] border border-transparent focus:border-[#cbd5b1] focus:bg-white outline-none pl-6 pr-14 py-4 rounded-2xl text-slate-900 font-bold transition-all placeholder:text-slate-300"
+                  required
                 />
-                <button 
-                    onClick={() => setLoginMethod('email')}
-                    className={`flex-1 relative z-10 py-3 text-sm font-bold transition-colors ${loginMethod === 'email' ? 'text-slate-900' : 'text-slate-500'}`}
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-900 transition-colors"
                 >
-                    Email + Password
+                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
-                <button 
-                    onClick={() => setLoginMethod('phone')}
-                    className={`flex-1 relative z-10 py-3 text-sm font-bold transition-colors ${loginMethod === 'phone' ? 'text-slate-900' : 'text-slate-500'}`}
-                >
-                    Mobile Number
-                </button>
-            </div>
-            
-            {/* Invisible Recaptcha */}
-            <div id="recaptcha-container"></div>
-
-            <form onSubmit={handleSubmit} className="space-y-5">
-              <AnimatePresence mode="wait">
-              {loginMethod === 'email' ? (
-                <motion.div 
-                    key="email-form"
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: 20 }}
-                    className="space-y-5"
-                >
-                  <div>
-                    <label className="block text-xs font-black uppercase tracking-widest text-slate-400 mb-3">
-                      Email Address
-                    </label>
-                    <div className="relative">
-                      <Mail className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300" size={20} />
-                      <input
-                        ref={emailInputRef}
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        onKeyDown={(e) => handleKeyDown(e, 'email')}
-                        placeholder="you@example.com"
-                        className={`w-full bg-slate-50 border-0 rounded-[2rem] py-5 pl-14 pr-6 text-lg font-medium placeholder:text-slate-300 focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all outline-none ${
-                          errors.email ? 'ring-2 ring-red-300 bg-red-50' : ''
-                        }`}
-                        required={loginMethod === 'email'}
-                      />
-                    </div>
-                    {errors.email && (
-                      <motion.p 
-                        initial={{ opacity: 0, y: -5 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="text-red-500 text-xs mt-2 ml-4 flex items-center gap-1"
-                      >
-                        <AlertCircle size={12} />
-                        {errors.email}
-                      </motion.p>
-                    )}
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-black uppercase tracking-widest text-slate-400 mb-3">
-                      Password
-                    </label>
-                    <div className="relative">
-                      <Lock className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300" size={20} />
-                      <input
-                        type={showPassword ? 'text' : 'password'}
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        onKeyDown={(e) => handleKeyDown(e, 'password')}
-                        placeholder="••••••••"
-                        className={`w-full bg-slate-50 border-0 rounded-[2rem] py-5 pl-14 pr-14 text-lg font-medium placeholder:text-slate-300 focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all outline-none ${
-                          errors.password ? 'ring-2 ring-red-300 bg-red-50' : ''
-                        }`}
-                        required={loginMethod === 'email'}
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-300 hover:text-slate-500 transition-colors"
-                        aria-label={showPassword ? 'Hide password' : 'Show password'}
-                      >
-                        {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                      </button>
-                    </div>
-                    {errors.password && (
-                      <motion.p 
-                        initial={{ opacity: 0, y: -5 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="text-red-500 text-xs mt-2 ml-4 flex items-center gap-1"
-                      >
-                        <AlertCircle size={12} />
-                        {errors.password}
-                      </motion.p>
-                    )}
-                  </div>
-                </motion.div>
-              ) : (
-                <motion.div 
-                    key="phone-form"
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    className="space-y-5"
-                >
-                    {!otpSent ? (
-                        <div>
-                            <label className="block text-xs font-black uppercase tracking-widest text-slate-400 mb-3">
-                              Mobile Number
-                            </label>
-                            <div className="relative">
-                              <Smartphone className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300" size={20} />
-                              <input
-                                type="tel"
-                                value={phoneNumber}
-                                onChange={(e) => setPhoneNumber(e.target.value)}
-                                onKeyDown={(e) => handleKeyDown(e, 'phone')}
-                                placeholder="9876543210"
-                                className={`w-full bg-slate-50 border-0 rounded-[2rem] py-5 pl-14 pr-6 text-lg font-medium placeholder:text-slate-300 focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all outline-none ${
-                                  errors.phone ? 'ring-2 ring-red-300 bg-red-50' : ''
-                                }`}
-                                required={loginMethod === 'phone' && !otpSent}
-                              />
-                            </div>
-                            {errors.phone && (
-                              <motion.p 
-                                initial={{ opacity: 0, y: -5 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                className="text-red-500 text-xs mt-2 ml-4 flex items-center gap-1"
-                              >
-                                <AlertCircle size={12} />
-                                {errors.phone}
-                              </motion.p>
-                            )}
-                            <p className="text-xs text-slate-400 mt-2 px-4">
-                                We'll send you a One Time Password (OTP) to this mobile number.
-                            </p>
-                        </div>
-                    ) : (
-                        <div>
-                            <label className="block text-xs font-black uppercase tracking-widest text-slate-400 mb-3">
-                              Enter Verification Code
-                            </label>
-                            <div className="relative">
-                              <MessageSquare className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300" size={20} />
-                              <input
-                                type="text"
-                                value={otp}
-                                onChange={(e) => setOtp(e.target.value)}
-                                placeholder="123456"
-                                className={`w-full bg-slate-50 border-0 rounded-[2rem] py-5 pl-14 pr-6 text-lg font-medium placeholder:text-slate-300 focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all outline-none ${
-                                  errors.otp ? 'ring-2 ring-red-300 bg-red-50' : ''
-                                }`}
-                                required={loginMethod === 'phone' && otpSent}
-                              />
-                            </div>
-                            {errors.otp && (
-                              <motion.p 
-                                initial={{ opacity: 0, y: -5 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                className="text-red-500 text-xs mt-2 ml-4 flex items-center gap-1"
-                              >
-                                <AlertCircle size={12} />
-                                {errors.otp}
-                              </motion.p>
-                            )}
-                            <button 
-                                type="button" 
-                                onClick={() => setOtpSent(false)} 
-                                className="text-xs font-bold text-indigo-600 mt-2 px-4 hover:underline"
-                            >
-                                Change Phone Number
-                            </button>
-                        </div>
-                    )}
-                </motion.div>
-              )}
-              </AnimatePresence>
-
-              <div className="flex items-center justify-between">
-                <label className="flex items-center gap-3 cursor-pointer group">
-                  <input 
-                    type="checkbox" 
-                    checked={rememberMe}
-                    onChange={(e) => setRememberMe(e.target.checked)}
-                    className="w-5 h-5 rounded-lg border-slate-200 text-indigo-600 focus:ring-indigo-500 cursor-pointer"
-                  />
-                  <span className="text-sm font-medium text-slate-500 group-hover:text-slate-600 transition-colors">Remember me</span>
-                </label>
-                <Link to="/forgot-password" className="text-sm font-bold text-indigo-600 hover:text-indigo-700 transition-colors">
-                  Forgot password?
-                </Link>
               </div>
+              {errors.password && <p className="text-red-500 text-[10px] font-bold uppercase tracking-widest mt-1 ml-1">{errors.password}</p>}
+            </div>
 
+            <div className="flex flex-col gap-4 pt-2">
+              <Link to="/forgot-password" size="sm" className="text-[11px] font-black text-slate-400 uppercase tracking-widest hover:text-[#121212] transition-colors inline-block w-fit">
+                Forgot password?
+              </Link>
+            </div>
+
+            <div className="space-y-4 pt-6">
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full bg-slate-950 text-white py-5 rounded-[2rem] font-bold text-lg shadow-2xl hover:bg-indigo-600 transition-all flex items-center justify-center gap-3 active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed"
+                className="w-full bg-[#121212] text-white font-black text-xs uppercase tracking-[0.2em] py-5 px-4 rounded-2xl hover:bg-[#cbd5b1] hover:text-[#121212] transition-all flex justify-center items-center shadow-xl active:scale-[0.98]"
               >
                 {isLoading ? (
-                  <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                 ) : (
-                  <>
-                    {loginMethod === 'email' ? 'Sign In' : otpSent ? 'Verify & Login' : 'Send OTP'}
-                    <ArrowRight size={20} />
-                  </>
+                  "Login"
                 )}
               </button>
               
-
-            </form>
-
-
-
-            <div className="mt-8 text-center">
-              <p className="text-slate-500 font-medium">
-                Don't have an account?{' '}
-                <Link to="/register" className="text-indigo-600 font-bold hover:text-indigo-700 transition-colors">
-                  Sign up
-                </Link>
-              </p>
+              <button
+                type="button"
+                onClick={() => navigate('/')}
+                className="w-full bg-[#f4f4f0] text-slate-500 font-black text-xs uppercase tracking-[0.2em] py-5 px-4 rounded-2xl hover:bg-white hover:text-slate-900 transition-all border border-slate-200/40"
+              >
+                Cancel
+              </button>
             </div>
-          </div>
 
-          {/* Mobile logo */}
-          <div className="lg:hidden mt-8 text-center">
-            <div className="flex items-center justify-center gap-2 mb-2">
-              <div className="h-[2px] w-8 bg-indigo-600 rounded-full" />
-              <span className="text-[10px] font-black uppercase tracking-[0.4em] text-indigo-600">Recuirt Art</span>
+            <div className="pt-8 text-center border-t border-slate-100">
+              <Link to="/register" className="text-[10px] font-black text-slate-400 uppercase tracking-widest hover:text-[#121212] transition-colors">
+                Don't have an account? <span className="text-[#121212] border-b border-[#cbd5b1] pb-0.5 ml-1">Register Now</span>
+              </Link>
             </div>
+          </form>
+        </div>
+
+        <div className="border-t border-slate-200 mt-8 pt-8">
+          <div className="flex justify-center items-center gap-10">
+            {/* Google Icon SVG */}
+            <button className="text-black hover:text-slate-700 transition-colors">
+              <svg viewBox="0 0 24 24" className="w-10 h-10" xmlns="http://www.w3.org/2000/svg">
+                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="currentColor"/>
+                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="currentColor"/>
+                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="currentColor"/>
+                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="currentColor"/>
+              </svg>
+            </button>
+            {/* LinkedIn Icon SVG */}
+            <button className="text-black hover:text-slate-700 transition-colors">
+              <svg viewBox="0 0 24 24" className="w-10 h-10" xmlns="http://www.w3.org/2000/svg">
+                 <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" fill="currentColor"/>
+              </svg>
+            </button>
           </div>
-        </motion.div>
+        </div>
+
       </div>
     </div>
   );
 }
 
 export default Login;
-

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Upload, FileText, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
+import { X, Upload, FileText, CheckCircle, AlertCircle, Loader2, ArrowRight } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { jobsService } from '../../services/jobs';
 
@@ -64,7 +64,11 @@ const JobApplyModal = ({ job, isOpen, onClose, onSuccess }) => {
     if (!formData.full_name.trim()) newErrors.full_name = 'Full name is required';
     if (!formData.email.trim()) newErrors.email = 'Email is required';
     if (!formData.mobile.trim()) newErrors.mobile = 'Mobile number is required';
-    if (!formData.resume) newErrors.resume = 'Resume is required';
+    
+    // Require resume only if not in profile and not newly uploaded
+    if (!formData.resume && !user?.resume) {
+      newErrors.resume = 'Resume is required';
+    }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -95,7 +99,11 @@ const JobApplyModal = ({ job, isOpen, onClose, onSuccess }) => {
       if (formData.expected_salary) applicationData.append('expected_salary', formData.expected_salary);
       if (formData.notice_period) applicationData.append('notice_period', formData.notice_period);
       if (formData.cover_letter) applicationData.append('cover_letter', formData.cover_letter);
-      applicationData.append('resume', formData.resume);
+      
+      // Only append if a new file was selected
+      if (formData.resume instanceof File) {
+        applicationData.append('resume', formData.resume);
+      }
 
       await jobsService.applyForJob(applicationData);
       setSuccess(true);
@@ -152,7 +160,7 @@ const JobApplyModal = ({ job, isOpen, onClose, onSuccess }) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50"
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50"
             onClick={handleClose}
           />
 
@@ -161,52 +169,52 @@ const JobApplyModal = ({ job, isOpen, onClose, onSuccess }) => {
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="fixed inset-4 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-full md:max-w-2xl md:max-h-[90vh] bg-white rounded-[3rem] shadow-2xl overflow-hidden z-50 flex flex-col"
+            className="fixed inset-0 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-full md:max-w-2xl md:max-h-[90vh] bg-[#f4f4f0] md:rounded-[3rem] shadow-2xl overflow-hidden z-50 flex flex-col border border-white/20"
           >
             {/* Header */}
-            <div className="p-8 border-b border-slate-100 flex items-center justify-between flex-shrink-0">
-              <div>
-                <h2 className="text-2xl font-bold text-slate-900">Apply for Position</h2>
-                <p className="text-slate-500 font-medium mt-1">{job.title}</p>
+            <div className="p-6 md:p-10 lg:p-12 border-b border-slate-200/60 flex items-center justify-between flex-shrink-0 bg-white/40">
+              <div className="min-w-0">
+                <h2 className="text-xl md:text-3xl font-serif font-black text-slate-900 leading-tight truncate">Apply for Position</h2>
+                <p className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] text-[#cbd5b1] mt-1 md:mt-2 truncate">{job.title}</p>
               </div>
               <button
                 onClick={handleClose}
-                className="w-12 h-12 bg-slate-50 rounded-full flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-all"
+                className="w-10 h-10 md:w-12 md:h-12 bg-white rounded-full flex items-center justify-center text-slate-400 hover:text-[#121212] transition-all border border-slate-100 shrink-0 ml-4"
               >
-                <X size={20} />
+                <X size={18} md:size={20} />
               </button>
             </div>
 
             {/* Content */}
-            <div className="flex-1 overflow-y-auto p-8">
+            <div className="flex-1 overflow-y-auto p-6 md:p-10 lg:p-12">
               {success ? (
                 <motion.div
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="text-center py-12"
+                  className="text-center py-12 md:py-20"
                 >
-                  <div className="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <CheckCircle size={40} className="text-emerald-600" />
+                  <div className="w-20 h-20 md:w-24 md:h-24 bg-[#cbd5b1]/10 rounded-full flex items-center justify-center mx-auto mb-6 md:mb-8">
+                    <CheckCircle size={40} md:size={48} className="text-[#cbd5b1]" />
                   </div>
-                  <h3 className="text-2xl font-bold text-slate-900 mb-2">Application Submitted!</h3>
-                  <p className="text-slate-500 max-w-md mx-auto">
-                    Your application for <strong>{job.title}</strong> has been submitted successfully. 
-                    We'll notify you when there's an update.
+                  <h3 className="text-2xl md:text-3xl font-serif font-black text-slate-900 mb-3 md:mb-4">Application Submitted!</h3>
+                  <p className="text-base md:text-lg font-serif text-slate-500 max-w-md mx-auto italic">
+                    Your request for <strong>{job.title}</strong> has been received. 
+                    We'll notify you soon.
                   </p>
                 </motion.div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <form onSubmit={handleSubmit} className="space-y-6 md:space-y-8">
                   {error && (
-                    <div className="p-4 bg-red-50 border border-red-100 rounded-2xl text-red-600 text-sm font-medium flex items-center gap-2">
-                      <AlertCircle size={18} />
+                    <div className="p-4 md:p-5 bg-red-50 border border-red-100 rounded-xl md:rounded-2xl text-red-600 text-[9px] md:text-[10px] font-black uppercase tracking-widest flex items-center gap-3">
+                      <AlertCircle size={16} md:size={18} />
                       {error}
                     </div>
                   )}
 
                   {/* Basic Info */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <label className="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+                    <div className="space-y-2 md:space-y-3">
+                      <label className="block text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] text-slate-400 ml-1">
                         Full Name *
                       </label>
                       <input
@@ -214,18 +222,18 @@ const JobApplyModal = ({ job, isOpen, onClose, onSuccess }) => {
                         name="full_name"
                         value={formData.full_name}
                         onChange={handleChange}
-                        className={`w-full bg-slate-50 border-0 rounded-2xl py-4 px-5 text-lg font-medium placeholder:text-slate-300 focus:ring-2 focus:ring-indigo-500 transition-all outline-none ${
-                          errors.full_name ? 'ring-2 ring-red-300 bg-red-50' : ''
+                        className={`w-full bg-white border border-slate-200 rounded-xl md:rounded-2xl py-3.5 md:py-4 px-5 md:px-6 text-base md:text-lg font-serif font-black placeholder:text-slate-300 focus:ring-2 focus:ring-[#cbd5b1] focus:border-[#cbd5b1] transition-all outline-none ${
+                          errors.full_name ? 'ring-2 ring-red-300 bg-red-50 border-red-200' : ''
                         }`}
                         placeholder="John Doe"
                       />
                       {errors.full_name && (
-                        <p className="text-red-500 text-xs mt-2 ml-2">{errors.full_name}</p>
+                        <p className="text-red-500 text-[9px] font-black uppercase tracking-widest mt-1 ml-2">{errors.full_name}</p>
                       )}
                     </div>
 
-                    <div>
-                      <label className="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">
+                    <div className="space-y-2 md:space-y-3">
+                      <label className="block text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] text-slate-400 ml-1">
                         Mobile Number *
                       </label>
                       <input
@@ -233,19 +241,19 @@ const JobApplyModal = ({ job, isOpen, onClose, onSuccess }) => {
                         name="mobile"
                         value={formData.mobile}
                         onChange={handleChange}
-                        className={`w-full bg-slate-50 border-0 rounded-2xl py-4 px-5 text-lg font-medium placeholder:text-slate-300 focus:ring-2 focus:ring-indigo-500 transition-all outline-none ${
-                          errors.mobile ? 'ring-2 ring-red-300 bg-red-50' : ''
+                        className={`w-full bg-white border border-slate-200 rounded-xl md:rounded-2xl py-3.5 md:py-4 px-5 md:px-6 text-base md:text-lg font-serif font-black placeholder:text-slate-300 focus:ring-2 focus:ring-[#cbd5b1] focus:border-[#cbd5b1] transition-all outline-none ${
+                          errors.mobile ? 'ring-2 ring-red-300 bg-red-50 border-red-200' : ''
                         }`}
                         placeholder="+1234567890"
                       />
                       {errors.mobile && (
-                        <p className="text-red-500 text-xs mt-2 ml-2">{errors.mobile}</p>
+                        <p className="text-red-500 text-[9px] font-black uppercase tracking-widest mt-1 ml-2">{errors.mobile}</p>
                       )}
                     </div>
                   </div>
 
-                  <div>
-                    <label className="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">
+                  <div className="space-y-2 md:space-y-3">
+                    <label className="block text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] text-slate-400 ml-1">
                       Email Address *
                     </label>
                     <input
@@ -253,23 +261,23 @@ const JobApplyModal = ({ job, isOpen, onClose, onSuccess }) => {
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
-                      className={`w-full bg-slate-50 border-0 rounded-2xl py-4 px-5 text-lg font-medium placeholder:text-slate-300 focus:ring-2 focus:ring-indigo-500 transition-all outline-none ${
-                        errors.email ? 'ring-2 ring-red-300 bg-red-50' : ''
+                      className={`w-full bg-white border border-slate-200 rounded-xl md:rounded-2xl py-3.5 md:py-4 px-5 md:px-6 text-base md:text-lg font-serif font-black placeholder:text-slate-300 focus:ring-2 focus:ring-[#cbd5b1] focus:border-[#cbd5b1] transition-all outline-none ${
+                        errors.email ? 'ring-2 ring-red-300 bg-red-50 border-red-200' : ''
                       }`}
                       placeholder="john@example.com"
                     />
                     {errors.email && (
-                      <p className="text-red-500 text-xs mt-2 ml-2">{errors.email}</p>
+                      <p className="text-red-500 text-[9px] font-black uppercase tracking-widest mt-1 ml-2">{errors.email}</p>
                     )}
                   </div>
 
                   {/* Resume Upload */}
-                  <div>
-                    <label className="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">
-                      Resume / CV *
+                  <div className="space-y-2 md:space-y-3">
+                    <label className="block text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] text-slate-400 ml-1">
+                      Professional Dossier (Resume) *
                     </label>
-                    <div className={`relative border-2 border-dashed rounded-2xl p-6 transition-all ${
-                      errors.resume ? 'border-red-300 bg-red-50' : 'border-slate-200 hover:border-indigo-300 bg-slate-50'
+                    <div className={`relative border-2 border-dashed rounded-2xl md:rounded-[2rem] p-6 md:p-8 transition-all group ${
+                      errors.resume ? 'border-red-300 bg-red-50' : 'border-slate-200 hover:border-[#cbd5b1] bg-white hover:bg-white transition-all'
                     }`}>
                       <input
                         type="file"
@@ -280,17 +288,42 @@ const JobApplyModal = ({ job, isOpen, onClose, onSuccess }) => {
                       />
                       <div className="text-center">
                         {formData.resume ? (
-                          <div className="flex items-center justify-center gap-3">
-                            <FileText size={24} className="text-indigo-600" />
-                            <span className="font-medium text-slate-700">{formData.resume.name}</span>
+                          <div className="flex items-center justify-center gap-4">
+                            <div className="w-10 h-10 md:w-12 md:h-12 bg-[#cbd5b1]/10 rounded-lg md:rounded-xl flex items-center justify-center text-[#cbd5b1]">
+                              <FileText size={20} md:size={24} />
+                            </div>
+                            <div className="text-left">
+                              <p className="font-serif font-black text-sm md:text-base text-[#121212] truncate max-w-[200px]">
+                                {formData.resume.name}
+                              </p>
+                              <p className="text-[8px] md:text-[9px] font-black uppercase tracking-widest text-[#cbd5b1]">
+                                New upload selected
+                              </p>
+                            </div>
+                          </div>
+                        ) : user?.resume ? (
+                          <div className="flex items-center justify-center gap-4">
+                            <div className="w-10 h-10 md:w-12 md:h-12 bg-[#cbd5b1]/20 rounded-lg md:rounded-xl flex items-center justify-center text-[#121212]">
+                              <FileText size={20} md:size={24} />
+                            </div>
+                            <div className="text-left">
+                              <p className="font-serif font-black text-sm md:text-base text-[#121212]">
+                                Using resume on file
+                              </p>
+                              <p className="text-[8px] md:text-[9px] font-black uppercase tracking-widest text-slate-400">
+                                Click or drag to replace
+                              </p>
+                            </div>
                           </div>
                         ) : (
                           <>
-                            <Upload size={24} className="mx-auto text-slate-400 mb-2" />
-                            <p className="text-slate-500 font-medium">
-                              Click to upload or drag and drop
+                            <div className="w-12 h-12 md:w-14 md:h-14 bg-[#f4f4f0] rounded-xl md:rounded-2xl flex items-center justify-center mx-auto text-slate-400 mb-3 md:mb-4 group-hover:text-[#cbd5b1] transition-colors">
+                              <Upload size={24} md:size={28} />
+                            </div>
+                            <p className="text-[#121212] font-serif font-black text-sm mb-1">
+                              Drag & Drop or Click to Upload
                             </p>
-                            <p className="text-slate-400 text-sm mt-1">
+                            <p className="text-slate-400 text-[8px] md:text-[10px] font-black uppercase tracking-widest">
                               PDF, Word, or Images (max 5MB)
                             </p>
                           </>
@@ -298,14 +331,14 @@ const JobApplyModal = ({ job, isOpen, onClose, onSuccess }) => {
                       </div>
                     </div>
                     {errors.resume && (
-                      <p className="text-red-500 text-xs mt-2 ml-2">{errors.resume}</p>
+                      <p className="text-red-500 text-[9px] font-black uppercase tracking-widest mt-1 ml-2">{errors.resume}</p>
                     )}
                   </div>
 
                   {/* Optional Fields */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <label className="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+                    <div className="space-y-2 md:space-y-3">
+                      <label className="block text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] text-slate-400 ml-1">
                         LinkedIn URL
                       </label>
                       <input
@@ -313,13 +346,13 @@ const JobApplyModal = ({ job, isOpen, onClose, onSuccess }) => {
                         name="linkedin_url"
                         value={formData.linkedin_url}
                         onChange={handleChange}
-                        className="w-full bg-slate-50 border-0 rounded-2xl py-4 px-5 text-lg font-medium placeholder:text-slate-300 focus:ring-2 focus:ring-indigo-500 transition-all outline-none"
-                        placeholder="https://linkedin.com/in/..."
+                        className="w-full bg-white border border-slate-200 rounded-xl md:rounded-2xl py-3.5 md:py-4 px-5 md:px-6 text-base md:text-lg font-serif font-black focus:ring-2 focus:ring-[#cbd5b1] focus:border-[#cbd5b1] transition-all outline-none"
+                        placeholder="linkedin.com/in/..."
                       />
                     </div>
 
-                    <div>
-                      <label className="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">
+                    <div className="space-y-2 md:space-y-3">
+                      <label className="block text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] text-slate-400 ml-1">
                         Portfolio URL
                       </label>
                       <input
@@ -327,53 +360,23 @@ const JobApplyModal = ({ job, isOpen, onClose, onSuccess }) => {
                         name="portfolio_url"
                         value={formData.portfolio_url}
                         onChange={handleChange}
-                        className="w-full bg-slate-50 border-0 rounded-2xl py-4 px-5 text-lg font-medium placeholder:text-slate-300 focus:ring-2 focus:ring-indigo-500 transition-all outline-none"
-                        placeholder="https://..."
+                        className="w-full bg-white border border-slate-200 rounded-xl md:rounded-2xl py-3.5 md:py-4 px-5 md:px-6 text-base md:text-lg font-serif font-black focus:ring-2 focus:ring-[#cbd5b1] focus:border-[#cbd5b1] transition-all outline-none"
+                        placeholder="https://yourportfolio.com"
                       />
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <label className="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">
-                        Expected Salary
-                      </label>
-                      <input
-                        type="text"
-                        name="expected_salary"
-                        value={formData.expected_salary}
-                        onChange={handleChange}
-                        className="w-full bg-slate-50 border-0 rounded-2xl py-4 px-5 text-lg font-medium placeholder:text-slate-300 focus:ring-2 focus:ring-indigo-500 transition-all outline-none"
-                        placeholder="e.g., $80,000 - $100,000"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">
-                        Notice Period
-                      </label>
-                      <input
-                        type="text"
-                        name="notice_period"
-                        value={formData.notice_period}
-                        onChange={handleChange}
-                        className="w-full bg-slate-50 border-0 rounded-2xl py-4 px-5 text-lg font-medium placeholder:text-slate-300 focus:ring-2 focus:ring-indigo-500 transition-all outline-none"
-                        placeholder="e.g., 2 weeks, 1 month"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">
-                      Cover Letter
+                  <div className="space-y-2 md:space-y-3">
+                    <label className="block text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] text-slate-400 ml-1">
+                      Brief Cover Letter
                     </label>
                     <textarea
                       name="cover_letter"
                       value={formData.cover_letter}
                       onChange={handleChange}
-                      rows="4"
-                      className="w-full bg-slate-50 border-0 rounded-2xl py-4 px-5 text-lg font-medium placeholder:text-slate-300 focus:ring-2 focus:ring-indigo-500 transition-all outline-none resize-none"
-                      placeholder="Tell us why you're a great fit for this role..."
+                      rows="3"
+                      className="w-full bg-white border border-slate-200 rounded-xl md:rounded-[1.5rem] py-3.5 md:py-4 px-5 md:px-6 text-base md:text-lg font-serif font-black focus:ring-2 focus:ring-[#cbd5b1] focus:border-[#cbd5b1] transition-all outline-none resize-none"
+                      placeholder="Why do you resonate with this role?"
                     />
                   </div>
                 </form>
@@ -382,25 +385,25 @@ const JobApplyModal = ({ job, isOpen, onClose, onSuccess }) => {
 
             {/* Footer */}
             {!success && (
-              <div className="p-8 border-t border-slate-100 flex justify-end gap-4 flex-shrink-0">
+              <div className="p-6 md:p-10 lg:p-12 border-t border-slate-200/60 flex flex-col md:flex-row md:justify-end gap-3 md:gap-6 flex-shrink-0 bg-white/40">
                 <button
                   onClick={handleClose}
-                  className="px-6 py-3 rounded-2xl font-bold text-slate-600 hover:bg-slate-50 transition-all"
+                  className="order-2 md:order-1 px-8 py-4 rounded-xl md:rounded-2xl font-black uppercase tracking-widest text-[9px] md:text-[10px] text-slate-400 hover:text-[#121212] transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleSubmit}
                   disabled={loading}
-                  className="px-8 py-3 bg-indigo-600 text-white rounded-2xl font-bold shadow-lg shadow-indigo-200 hover:bg-indigo-700 transition-all flex items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+                  className="order-1 md:order-2 px-8 md:px-10 py-4 bg-[#121212] text-white rounded-xl md:rounded-2xl font-black uppercase tracking-widest text-[9px] md:text-[10px] shadow-2xl shadow-black/20 hover:bg-[#cbd5b1] hover:text-[#121212] transition-all flex items-center justify-center gap-3 disabled:opacity-70 disabled:cursor-not-allowed group"
                 >
                   {loading ? (
                     <>
-                      <Loader2 size={20} className="animate-spin" />
-                      Submitting...
+                      <Loader2 size={16} md:size={18} className="animate-spin" />
+                      Processing...
                     </>
                   ) : (
-                    'Submit Application'
+                    <>Submit Application <ArrowRight size={16} md:size={18} className="group-hover:translate-x-1 transition-transform" /></>
                   )}
                 </button>
               </div>

@@ -63,19 +63,17 @@ class RegistrationView(APIView):
         if serializer.is_valid():
             user = serializer.save()
 
-            # Generate and send OTP for mobile verification
-            otp = OTP.generate_otp(
-                mobile=user.mobile,
-                otp_type='registration',
-                user=user,
-                email=user.email
-            )
-            send_otp(user.mobile, otp.otp_code, email=user.email)
+            # Generate tokens immediately (OTP removed for registration)
+            refresh = RefreshToken.for_user(user)
 
             return Response({
                 'message': 'User registered successfully.',
                 'user': UserSerializer(user).data,
-                'requires_otp_verification': True
+                'tokens': {
+                    'refresh': str(refresh),
+                    'access': str(refresh.access_token),
+                },
+                'requires_otp_verification': False
             }, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -616,31 +614,44 @@ class TokenRefreshView(APIView):
             }, status=status.HTTP_401_UNAUTHORIZED)
 
 
-class GoogleAuthView(APIView):
-    """
-    API view for Google OAuth authentication.
-
-    POST: Authenticate with Google access token.
-    """
-    permission_classes = [AllowAny]
-
-    def post(self, request):
-        """Authenticate with Google."""
-        serializer = GoogleAuthSerializer(data=request.data)
-
-        if serializer.is_valid():
-            access_token = serializer.validated_data['access_token']
-            id_token = serializer.validated_data['id_token']
-
-            # Here you would implement Google OAuth logic
-            # For now, return a placeholder response
-            return Response({
-                'message': 'Google authentication not yet implemented.',
-                'access_token': access_token,
-                'id_token': id_token
-            }, status=status.HTTP_200_OK)
-
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class DashboardStatsView(APIView):
+    """
+    API view for retrieving dashboard statistics.
+    """
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        """Get dashboard statistics for the current user."""
+        from jobs.models import Job, JobApplication
+        
+        # 1. Open Positions (Active jobs)
+        open_jobs_count = Job.objects.filter(status='active').count()
+        
+        # 2. Applications Sent (by current user)
+        applications_sent = JobApplication.objects.filter(applicant=request.user).count()
+        
+        # Placeholders for future implementation
+        # In a real app, these would be tracked in the database
+        profile_views = 142  # Mock or track in user profile
+        skills_verified = 8  # Mock or count verified skills
+        total_skills = 10
+        current_streak = 3   # Mock or track login streak
+        match_rate = 98      # Mock or calculate based on profile vs jobs
+        
+        return Response({
+            'open_jobs_count': open_jobs_count,
+            'applications_sent': applications_sent,
+            'profile_views': profile_views,
+            'skills_verified': skills_verified,
+            'total_skills': total_skills,
+            'current_streak': current_streak,
+            'match_rate': match_rate
+        }, status=status.HTTP_200_OK)
+
 
 class EmailVerificationRequestView(APIView):
     """

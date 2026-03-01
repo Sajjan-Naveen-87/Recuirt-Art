@@ -94,6 +94,7 @@ class JobApplicationCreateSerializer(serializers.ModelSerializer):
     """Serializer for creating job applications."""
     
     responses = ApplicationResponseSerializer(many=True, required=False)
+    resume = serializers.FileField(required=False, allow_null=True)
     
     class Meta:
         model = JobApplication
@@ -104,7 +105,10 @@ class JobApplicationCreateSerializer(serializers.ModelSerializer):
         ]
     
     def validate_resume(self, value):
-        """Validate resume file type and size."""
+        """Validate resume file type and size if provided."""
+        if value is None:
+            return value
+
         # Check file type
         allowed_types = [
             'application/pdf', 
@@ -125,9 +129,21 @@ class JobApplicationCreateSerializer(serializers.ModelSerializer):
         return value
     
     def create(self, validated_data):
-        """Create job application with responses."""
+        """Create job application with responses and optional profile resume fallback."""
         responses_data = validated_data.pop('responses', [])
-        
+        resume = validated_data.get('resume')
+        request = self.context.get('request')
+
+        # Fallback to user profile resume if not provided
+        if not resume and request and request.user.is_authenticated:
+            if request.user.resume:
+                validated_data['resume'] = request.user.resume
+            else:
+                raise serializers.ValidationError({'resume': 'Resume is required (none found in profile).'})
+        elif not resume:
+            # For anonymous users or users with no profile resume
+            raise serializers.ValidationError({'resume': 'Resume is required.'})
+
         application = JobApplication.objects.create(**validated_data)
         
         for response_data in responses_data:

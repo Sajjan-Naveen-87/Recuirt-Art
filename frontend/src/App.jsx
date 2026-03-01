@@ -12,8 +12,10 @@ import EmailVerification from './pages/EmailVerification';
 import Profile from './pages/Profile';
 import ProtectedRoute from './components/ProtectedRoute';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import LandingPage from './components/Landing/LandingPage';
+import ContactUs from './pages/ContactUs';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Bell, Plus, Search, Filter, ArrowRight, User, Camera, FileText, CheckCircle, Sparkles, Loader2, Compass } from 'lucide-react';
+import { Bell, Plus, Search, Filter, ArrowRight, User, Camera, FileText, CheckCircle, Sparkles, Loader2, Compass, Menu, X } from 'lucide-react';
 import { jobsService } from './services/jobs';
 import notificationsService from './services/notifications';
 import profileService from './services/profile';
@@ -33,25 +35,67 @@ function Dashboard({ activeTab, setActiveTab }) {
   const [showJobDetails, setShowJobDetails] = useState(false);
   const [showApplyModal, setShowApplyModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [stats, setStats] = useState(null);
   const { user } = useAuth();
 
   useEffect(() => {
     if (activeTab === "Dashboard" || activeTab === "Explore") {
       fetchJobs();
     }
+    if (activeTab === "Dashboard") {
+      fetchStats();
+    }
     if (activeTab === "Applications") {
       fetchApplications();
     }
   }, [activeTab]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
+  const pageSize = 5;
+
+  useEffect(() => {
+    // Reset to page 1 when search query changes
+    setCurrentPage(1);
+  }, [searchQuery]);
+
+  useEffect(() => {
+    if (activeTab === 'Dashboard' || activeTab === 'Explore') {
+      fetchJobs();
+    }
+  }, [activeTab, currentPage, searchQuery]);
+
+  const fetchStats = async () => {
+    try {
+      const data = await profileService.getDashboardStats();
+      setStats(data);
+    } catch (error) {
+      console.error('Error fetching dashboard stats:', error);
+    }
+  };
 
   const fetchJobs = async () => {
     try {
       setLoading(true);
-      const response = await jobsService.getJobs();
-      setJobs(response.results || []);
+      const response = await jobsService.getJobs({
+        page: currentPage,
+        page_size: pageSize,
+        search: searchQuery || ''
+      });
+      
+      if (response?.results) {
+        setJobs(response.results);
+        setTotalCount(response.count || 0);
+      } else if (Array.isArray(response)) {
+        setJobs(response);
+        setTotalCount(response.length);
+      } else {
+        setJobs([]);
+        setTotalCount(0);
+      }
     } catch (error) {
       console.error('Error fetching jobs:', error);
       setJobs([]);
+      setTotalCount(0);
     } finally {
       setLoading(false);
     }
@@ -86,44 +130,40 @@ function Dashboard({ activeTab, setActiveTab }) {
 
   return (
     <>
-      <header className="px-16 py-8 flex justify-between items-end sticky top-0 bg-[#f4f4f0]/80 backdrop-blur-md z-30 mb-8">
+      <header className="px-6 md:px-8 lg:px-16 py-6 md:py-8 flex justify-between items-end sticky top-0 bg-[#f4f4f0]/80 backdrop-blur-md z-30 border-b border-slate-200/40">
         <div>
            <motion.div 
              initial={{ opacity: 0, x: -20 }} 
              animate={{ opacity: 1, x: 0 }}
-             className="flex items-center gap-3 mb-2"
+             className="mb-3 md:mb-4 lg:hidden xl:block"
            >
-             <div className="h-px w-10 bg-indigo-600" />
-             <span className="text-[11px] font-bold uppercase tracking-[0.3em] text-indigo-600 font-sans">Recruit Art</span>
            </motion.div>
-           <h1 className="text-6xl font-black tracking-tight text-[#121212] font-serif capitalize">
+           <h1 className="text-3xl md:text-4xl lg:text-6xl font-serif font-black tracking-tight text-[#121212] capitalize">
              {activeTab === 'Dashboard' ? 'Overview.' : activeTab === 'Explore' ? 'Find Work.' : activeTab + '.'}
            </h1>
         </div>
         
-        <div className="flex items-center gap-4">
-          {/* Notifications */}
+        <div className="flex items-center gap-4 md:gap-6">
           <NotificationsDropdown onNavigate={(path) => {
              if (path.includes('applications')) setActiveTab('Applications');
              if (path.includes('profile')) setActiveTab('Profile');
           }} />
 
-          {/* Profile Avatar */}
           <motion.div 
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setActiveTab('Profile')}
-            className="w-12 h-12 rounded-full bg-[#121212] flex items-center justify-center cursor-pointer hover:shadow-lg hover:shadow-indigo-500/20 transition-shadow border border-slate-200 overflow-hidden"
+            className="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-[#121212] flex items-center justify-center cursor-pointer shadow-lg shadow-black/10 border border-white/10 overflow-hidden"
           >
              {user?.profile_image ? (
                 <img 
-                  src={user.profile_image.startsWith('http') ? user.profile_image : `${import.meta.env.VITE_BACKEND_URL || 'https://recruit-art-backend.onrender.com'}${user.profile_image}`} 
+                  src={user.profile_image.startsWith('http') ? user.profile_image : `${import.meta.env.VITE_BACKEND_URL || 'http://127.0.0.1:8000'}${user.profile_image}`} 
                   alt="Profile" 
                   className="w-full h-full object-cover" 
                 />
              ) : (
-                <span className="text-lg font-serif font-bold text-white">
-                  {user?.full_name?.[0] || user?.first_name?.[0] || <User size={20} />}
+                <span className="text-base md:text-lg font-serif font-bold text-[#cbd5b1]">
+                  {user?.full_name?.[0] || user?.first_name?.[0] || <User size={18} />}
                 </span>
              )}
           </motion.div>
@@ -132,106 +172,149 @@ function Dashboard({ activeTab, setActiveTab }) {
 
       <AnimatePresence mode="wait">
         {activeTab === "Dashboard" && (
-          <motion.div key="dash" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -30 }} className="px-16 pb-16">
-            {/* Welcome & Category Cards Section */}
-            <div className="bg-gradient-to-b from-white to-[#eaf3f9] -mx-16 px-16 py-12 mb-16 border-y border-[#dce6ef]">
-              <div className="flex items-center justify-center mb-16 text-center">
-                 <h2 className="text-4xl font-bold text-[#1a5b9c]">Welcome, {user?.first_name || user?.full_name?.split(' ')[0] || '{User Name}'}</h2>
+          <motion.div 
+            key="dash" 
+            initial={{ opacity: 0, y: 30 }} 
+            animate={{ opacity: 1, y: 0 }} 
+            exit={{ opacity: 0, y: -30 }} 
+            className="px-6 md:px-8 lg:px-16 pb-12 md:pb-16 pt-8 md:pt-12"
+          >
+            {/* Welcome & Arched Category Cards Section */}
+            <div className="mb-12 md:mb-20">
+              <div className="flex flex-col items-center justify-center mb-12 md:mb-20 text-center">
+                 <h3 className="text-4xl md:text-5xl lg:text-7xl font-black text-[#1e599b]">
+                   Welcome, {user?.first_name || user?.full_name?.split(' ')[0] || 'S'}
+                 </h3>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pb-4">
+              <div className="grid grid-cols-1 xl:grid-cols-2 gap-10 md:gap-12 px-2 md:px-4">
                 {/* Non Clinician Card */}
                 <motion.div 
-                  whileHover={{ y: -5 }}
-                  className="bg-white rounded-[2rem] p-8 shadow-xl shadow-[#1a5b9c]/10 border border-slate-100 relative flex flex-col justify-center min-h-[260px]"
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  whileHover={{ y: -10 }}
+                  className="bg-white rounded-[3rem] md:rounded-[4rem] shadow-2xl relative flex flex-col md:flex-row items-center overflow-hidden border border-slate-100 group min-h-[400px]"
                 >
-                  <div className="absolute -bottom-0 -left-6 w-64 h-[125%] z-10 pointer-events-none drop-shadow-2xl">
-                    <img src={nonClinicianImg} alt="Non Clinician" className="w-full h-full object-contain object-bottom" />
+                  {/* Image Side - Left */}
+                  <div className="w-full md:w-1/2 h-64 md:h-[450px] relative flex items-end justify-center md:justify-start pointer-events-none">
+                    <img 
+                      src={nonClinicianImg} 
+                      alt="Non Clinician" 
+                      className="h-full md:h-[110%] w-auto object-contain object-bottom transform md:translate-x-4 transition-transform duration-700 group-hover:scale-105" 
+                    />
                   </div>
-                  <div className="ml-[45%] pl-4 pr-2 py-2 flex flex-col h-full z-20">
-                    <h3 className="text-2xl font-bold text-[#1a5b9c] mb-3 leading-tight font-sans">
-                      Vacancies for Non<br/>Clinician Category
+
+                  {/* Text Side - Right */}
+                  <div className="w-full md:w-1/2 p-8 md:p-12 flex flex-col items-center justify-center text-center z-10">
+                    <h3 className="text-2xl md:text-3xl font-bold text-[#1e599b] mb-4 leading-tight">
+                      Vacancies for Non <br className="hidden md:block"/> Clinician Category
                     </h3>
-                    <p className="text-slate-600 mb-8 leading-relaxed max-w-sm">
-                    Explore administrative, support, and professional roles.
-                  </p>
-                  <button 
-                    onClick={() => {
-                      setSearchQuery('Non Clinician');
-                      setActiveTab('Explore');
-                      window.scrollTo({ top: 0, behavior: 'smooth' });
-                    }}
-                    className="bg-[#1a5b9c] text-white px-10 py-3 rounded-xl font-bold hover:bg-[#124b84] transition-colors shadow-lg shadow-[#1a5b9c]/30">
-                    View Jobs
-                  </button>
+                    <p className="text-slate-500 text-sm md:text-base font-medium mb-10 max-w-[250px]">
+                      Explore administrative, support, and professional roles.
+                    </p>
+                    <button 
+                      onClick={() => {
+                        setSearchQuery('Non Clinician');
+                        setActiveTab('Explore');
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }}
+                      className="w-full md:w-auto bg-[#1e599b] text-white px-12 py-4 rounded-xl font-bold text-lg hover:bg-[#164a82] transition-all shadow-xl shadow-blue-900/20 active:scale-95"
+                    >
+                      View Jobs
+                    </button>
                   </div>
                 </motion.div>
 
                 {/* Clinician Card */}
                 <motion.div 
-                  whileHover={{ y: -5 }}
-                  className="bg-white rounded-[2rem] p-8 shadow-xl shadow-[#1a5b9c]/10 border border-slate-100 relative flex flex-col justify-center min-h-[260px]"
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  whileHover={{ y: -10 }}
+                  className="bg-white rounded-[3rem] md:rounded-[4rem] shadow-2xl relative flex flex-col md:flex-row-reverse items-center overflow-hidden border border-slate-100 group min-h-[400px]"
                 >
-                  <div className="pr-[45%] pl-2 py-2 flex flex-col h-full z-20 w-full">
-                    <h3 className="text-2xl font-bold text-[#1a5b9c] mb-3 leading-tight font-sans">
-                      Vacancies for<br/>Clinician Category
-                    </h3>
-                    <p className="text-slate-600 mb-8 leading-relaxed max-w-sm">
-                    Discover opportunities for doctors, nurses, and medical specialists.
-                  </p>
-                  <button 
-                    onClick={() => {
-                      setSearchQuery('Clinician');
-                      setActiveTab('Explore');
-                      window.scrollTo({ top: 0, behavior: 'smooth' });
-                    }}
-                    className="bg-[#1a5b9c] text-white px-10 py-3 rounded-xl font-bold hover:bg-[#124b84] transition-colors shadow-lg shadow-[#1a5b9c]/30">
-                    View Jobs
-                  </button>
+                  {/* Image Side - Right */}
+                  <div className="w-full md:w-1/2 h-64 md:h-[450px] relative flex items-end justify-center md:justify-end pointer-events-none">
+                    <img 
+                      src={clinicianImg} 
+                      alt="Clinician" 
+                      className="h-full md:h-[110%] w-auto object-contain object-bottom transform md:-translate-x-4 transition-transform duration-700 group-hover:scale-105" 
+                    />
                   </div>
-                  <div className="absolute -bottom-0 right-0 w-72 h-[125%] z-10 pointer-events-none drop-shadow-2xl">
-                    <img src={clinicianImg} alt="Clinician" className="w-full h-full object-contain object-bottom" />
+
+                  {/* Text Side - Left */}
+                  <div className="w-full md:w-1/2 p-8 md:p-12 flex flex-col items-center justify-center text-center z-10">
+                    <h3 className="text-2xl md:text-3xl font-bold text-[#1e599b] mb-4 leading-tight">
+                      Vacancies for <br className="hidden md:block"/> Clinician Category
+                    </h3>
+                    <p className="text-slate-500 text-sm md:text-base font-medium mb-10 max-w-[250px]">
+                      Discover opportunities for doctors, nurses, and medical specialists.
+                    </p>
+                    <button 
+                      onClick={() => {
+                        setSearchQuery('Clinician');
+                        setActiveTab('Explore');
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }}
+                      className="w-full md:w-auto bg-[#1e599b] text-white px-12 py-4 rounded-xl font-bold text-lg hover:bg-[#164a82] transition-all shadow-xl shadow-blue-900/20 active:scale-95"
+                    >
+                      View Jobs
+                    </button>
                   </div>
                 </motion.div>
               </div>
             </div>
-            <div className="grid grid-cols-12 gap-8 mb-16">
+
+            <div className="grid grid-cols-12 gap-8 mb-16 md:mb-20">
               {/* Hero Card - Dark Tech Style */}
-              <motion.div whileHover={{ scale: 1.01 }} className="col-span-12 lg:col-span-8 bg-[#121212] p-16 rounded-[3rem] shadow-2xl relative overflow-hidden group text-white">
-                <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-600/20 rounded-full blur-3xl -mr-32 -mt-32"></div>
+              <motion.div 
+                whileHover={{ y: -5 }} 
+                className="col-span-12 lg:col-span-8 bg-[#121212] p-8 md:p-12 lg:p-16 rounded-[2.5rem] md:rounded-[3rem] shadow-2xl relative overflow-hidden group text-white border border-white/5"
+              >
+                <div className="absolute top-0 right-0 w-64 md:w-96 h-64 md:h-96 bg-[#cbd5b1]/10 rounded-full blur-3xl -mr-32 -mt-32"></div>
                 <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10"></div>
                 
-                <Compass className="relative z-10 text-[#cbd5b1] mb-8" size={32} />
-                <h2 className="relative z-10 text-5xl font-serif font-medium mb-8 leading-tight text-white">
-                  Find your <br/> dream job here.
-                </h2>
-                <div className="relative z-10 flex items-center gap-10">
-                   <div>
-                      <p className="text-3xl font-bold font-serif">{jobs.length}</p>
-                      <p className="text-xs uppercase tracking-widest text-slate-400 mt-1">Open Positions</p>
-                   </div>
-                   <div className="w-px h-12 bg-white/10"></div>
-                   <div>
-                      <p className="text-3xl font-bold font-serif">98%</p>
-                      <p className="text-xs uppercase tracking-widest text-slate-400 mt-1">Match Rate</p>
-                   </div>
+                <div className="relative z-10">
+                  <div className="w-10 h-10 md:w-12 md:h-12 bg-[#cbd5b1]/20 rounded-xl flex items-center justify-center text-[#cbd5b1] mb-6 md:mb-8">
+                    <Compass size={24} md:size={28} />
+                  </div>
+                  <h2 className="text-3xl md:text-4xl lg:text-6xl font-serif font-black mb-8 md:mb-10 leading-[1.1] text-white">
+                    Find your <br className="hidden md:block"/> next craft.
+                  </h2>
+                  <div className="flex items-center gap-8 md:gap-12">
+                     <div className="space-y-1">
+                        <p className="text-2xl md:text-3xl lg:text-4xl font-serif font-black text-[#cbd5b1]">{stats?.open_jobs_count ?? jobs.length}</p>
+                        <p className="text-[9px] md:text-[10px] font-black uppercase tracking-widest text-slate-500">Open Positions</p>
+                     </div>
+                     <div className="w-px h-10 md:h-12 bg-white/10"></div>
+                     <div className="space-y-1">
+                        <p className="text-2xl md:text-3xl lg:text-4xl font-serif font-black text-[#cbd5b1]">{stats?.match_rate ?? 98}%</p>
+                        <p className="text-[9px] md:text-[10px] font-black uppercase tracking-widest text-slate-500">Match Rate</p>
+                     </div>
+                  </div>
                 </div>
-                
-
               </motion.div>
 
               {/* Status Card - Sage Green */}
-              <motion.div whileHover={{ scale: 1.01 }} className="col-span-12 lg:col-span-4 bg-[#cbd5b1] rounded-[3rem] p-10 flex flex-col justify-between shadow-xl border border-[#b8c2a0]">
-                 <div className="bg-white/50 w-14 h-14 rounded-full flex items-center justify-center backdrop-blur-sm mb-4">
-                    <CheckCircle className="text-[#121212]" size={24} />
+              <motion.div 
+                whileHover={{ y: -5 }} 
+                className="col-span-12 lg:col-span-4 bg-[#cbd5b1] rounded-[2.5rem] md:rounded-[3rem] p-8 md:p-12 flex flex-col justify-between shadow-xl border border-[#b8c2a0] relative overflow-hidden"
+              >
+                 <div className="relative z-10">
+                   <div className="bg-[#121212] w-12 h-12 md:w-14 md:h-14 rounded-2xl flex items-center justify-center text-[#cbd5b1] mb-6 md:mb-8 shadow-lg">
+                      <CheckCircle size={24} md:size={28} />
+                   </div>
+                   <h3 className="text-2xl md:text-3xl font-serif font-black text-[#121212] mb-2 md:mb-3">Profile Status</h3>
+                   <p className="text-[#121212]/70 font-medium text-sm md:text-base leading-relaxed">
+                     Your profile is now highlly visible to top medical recruiters.
+                   </p>
                  </div>
-                 <div>
-                    <h3 className="text-3xl font-serif font-bold text-[#121212] mb-2">Profile Status</h3>
-                    <p className="text-[#121212]/70 font-sans font-medium">Your profile is visible to top recruiters.</p>
-                 </div>
-                 <div className="mt-8 pt-8 border-t border-[#121212]/10 flex items-center justify-between">
-                    <span className="text-xs font-black uppercase tracking-widest">Active</span>
-                    <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(34,197,94,0.6)]"></div>
+                 
+                 <div className="mt-8 md:mt-12 pt-6 md:pt-8 border-t border-[#121212]/10 flex items-center justify-between relative z-10">
+                    <span className="text-[9px] md:text-[10px] font-black uppercase tracking-widest text-[#121212]/60">Active Visibility</span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-[10px] md:text-xs font-black text-[#121212]">Online</span>
+                      <div className="w-2 h-2 bg-[#121212] rounded-full animate-pulse"></div>
+                    </div>
                  </div>
               </motion.div>
             </div>
@@ -239,80 +322,123 @@ function Dashboard({ activeTab, setActiveTab }) {
 
 
           {/* Achievements Section */}
-          <Achievements applicationsCount={applications.length} />
+          <Achievements 
+            applicationsCount={stats?.applications_sent ?? applications.length} 
+            stats={stats}
+          />
 
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="text-2xl font-bold text-[#121212] font-serif">Latest Opportunities</h2>
-            <div className="flex gap-2">
-               <button className="px-4 py-2 bg-[#121212] text-white rounded-full text-xs font-bold uppercase tracking-wider">All</button>
-               <button className="px-4 py-2 bg-white text-slate-500 hover:bg-slate-50 rounded-full text-xs font-bold uppercase tracking-wider">Recommended</button>
+          <div className="flex items-center justify-between mb-10">
+            <h2 className="text-3xl font-serif font-black text-[#121212]">Latest Opportunities</h2>
+            <div className="flex gap-3">
+               <button className="px-6 py-2.5 bg-[#121212] text-white rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-black/10">All</button>
+               <button className="px-6 py-2.5 bg-white text-slate-500 hover:bg-slate-50 rounded-2xl text-[10px] font-black uppercase tracking-widest border border-slate-200 shadow-sm">Recommended</button>
             </div>
           </div>
-            {loading ? (
-              <div className="flex items-center justify-center py-20">
-                <Loader2 className="animate-spin h-12 w-12 text-indigo-600" />
-              </div>
-            ) : jobs.length === 0 ? (
-              <div className="bg-white border border-slate-200 p-16 rounded-[3rem] text-center">
-                <p className="text-slate-400 font-serif text-xl italic">No positions available fitting your criteria.</p>
-              </div>
-            ) : (
-              <div className="flex flex-col gap-4">
-                {jobs.map((job, i) => (
-                  <JobCard
-                    key={job.id || i}
-                    job={job}
-                    onClick={handleJobClick}
-                    showApplyButton={true}
-                    onApply={handleApplyClick}
-                  />
-                ))}
-              </div>
-            )}
+
+          {loading ? (
+            <div className="flex items-center justify-center py-24">
+              <motion.div 
+                animate={{ rotate: 360 }}
+                transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                className="h-12 w-12 border-4 border-[#cbd5b1] border-t-transparent rounded-full"
+              />
+            </div>
+          ) : jobs.length === 0 ? (
+            <div className="bg-white border border-slate-200/60 p-20 rounded-[3rem] text-center shadow-sm">
+              <p className="text-slate-400 font-serif text-2xl italic">No positions available fitting your criteria.</p>
+            </div>
+          ) : (
+            <div className="flex flex-col gap-4">
+              {jobs.map((job, i) => (
+                <JobCard
+                  key={job.id || i}
+                  job={job}
+                  onClick={handleJobClick}
+                  showApplyButton={true}
+                  onApply={handleApplyClick}
+                />
+              ))}
+
+              {/* Pagination Controls */}
+              {Math.ceil(totalCount / pageSize) > 1 && (
+                <div className="flex justify-center items-center gap-6 mt-12 bg-white/40 p-6 rounded-[2rem] border border-slate-200/40">
+                  <button 
+                    onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                    disabled={currentPage === 1}
+                    className={`p-3 rounded-xl border ${currentPage === 1 ? 'text-slate-300 border-slate-100' : 'text-[#121212] border-slate-200 hover:bg-slate-50'}`}
+                  >
+                    <ChevronLeft size={20} />
+                  </button>
+                  <span className="font-serif font-black text-lg text-[#121212]">
+                    {currentPage} / {Math.ceil(totalCount / pageSize)}
+                  </span>
+                  <button 
+                    onClick={() => setCurrentPage(p => Math.min(Math.ceil(totalCount / pageSize), p + 1))}
+                    disabled={currentPage === Math.ceil(totalCount / pageSize)}
+                    className={`p-3 rounded-xl border ${currentPage === Math.ceil(totalCount / pageSize) ? 'text-slate-300 border-slate-100' : 'text-[#121212] border-slate-200 hover:bg-slate-50'}`}
+                  >
+                    <ChevronRight size={20} />
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
           </motion.div>
         )}
 
-        {/* Explore & Applications tabs handled similarly ... keeping existing logic but updated styling */}
         {activeTab === "Explore" && (
-           <motion.div key="explore" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="px-16 pb-16">
-             <div className="bg-white p-2 rounded-full mb-12 flex items-center shadow-lg shadow-indigo-900/5 max-w-3xl border border-slate-100">
-               <div className="p-4 bg-[#121212] rounded-full text-white"><Search size={20} /></div>
+           <motion.div key="explore" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="px-6 md:px-8 lg:px-16 pb-12 md:pb-16 pt-6 md:pt-8">
+             <div className="bg-white p-2 md:p-3 rounded-2xl md:rounded-3xl mb-10 md:mb-16 flex items-center shadow-sm border border-slate-200/60 max-w-4xl">
+               <div className="p-3 md:p-4 bg-[#121212] rounded-xl md:rounded-2xl text-[#cbd5b1] shadow-lg"><Search size={18} md:size={22} /></div>
                <input 
                   type="text" 
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search for roles, companies, or locations..." 
-                  className="flex-1 px-6 outline-none text-lg font-serif placeholder:text-slate-400 bg-transparent" 
+                  className="flex-1 px-4 md:px-8 outline-none text-base md:text-xl font-serif font-black placeholder:text-slate-300 bg-transparent text-[#121212]" 
                />
              </div>
+             
              <div className="flex flex-col gap-4">
-               {jobs
-                 .filter(job => 
-                    job.title?.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                    job.company_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                    job.location?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                    job.category?.replace('_', ' ').toLowerCase().includes(searchQuery.toLowerCase())
-                 )
-                 .map((job, i) => (
+               {jobs.map((job, i) => (
                  <JobCard key={job.id || i} job={job} onClick={handleJobClick} showApplyButton={true} onApply={handleApplyClick} />
                ))}
-               {jobs.filter(job => 
-                    job.title?.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                    job.company_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                    job.location?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                    job.category?.replace('_', ' ').toLowerCase().includes(searchQuery.toLowerCase())
-               ).length === 0 && (
-                  <div className="text-center py-20 opacity-50">
-                     <Search size={48} className="mx-auto mb-4" />
-                     <p className="text-xl font-serif">No results found for "{searchQuery}"</p>
+               
+               {jobs.length === 0 && (
+                  <div className="text-center py-16 md:py-24 opacity-30">
+                     <Search size={48} md:size={64} className="mx-auto mb-4 md:mb-6 text-[#121212]" />
+                     <p className="text-xl md:text-2xl font-serif font-black">No results found</p>
                   </div>
+               )}
+
+               {/* Pagination Controls */}
+               {Math.ceil(totalCount / pageSize) > 1 && (
+                 <div className="flex justify-center items-center gap-6 mt-12">
+                   <button 
+                     onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                     disabled={currentPage === 1}
+                     className={`p-3 rounded-xl border ${currentPage === 1 ? 'text-slate-300 border-slate-100' : 'text-[#121212] border-slate-200 hover:bg-slate-50'}`}
+                   >
+                     <ChevronLeft size={20} />
+                   </button>
+                   <span className="font-serif font-black text-lg">
+                     {currentPage} / {Math.ceil(totalCount / pageSize)}
+                   </span>
+                   <button 
+                     onClick={() => setCurrentPage(p => Math.min(Math.ceil(totalCount / pageSize), p + 1))}
+                     disabled={currentPage === Math.ceil(totalCount / pageSize)}
+                     className={`p-3 rounded-xl border ${currentPage === Math.ceil(totalCount / pageSize) ? 'text-slate-300 border-slate-100' : 'text-[#121212] border-slate-200 hover:bg-slate-50'}`}
+                   >
+                     <ChevronRight size={20} />
+                   </button>
+                 </div>
                )}
              </div>
            </motion.div>
         )}
 
         {activeTab === "Applications" && (
-          <motion.div key="apps" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="px-16 pb-16">
+          <motion.div key="apps" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="px-6 md:px-8 lg:px-16 pb-12 md:pb-16 pt-6 md:pt-8">
             <ApplicationsList applications={applications} isLoading={loading} />
           </motion.div>
         )}
@@ -347,24 +473,69 @@ function Dashboard({ activeTab, setActiveTab }) {
 function MainLayout() {
   const [activeTab, setActiveTab] = useState("Dashboard");
   const [showMassHiringModal, setShowMassHiringModal] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const { logout } = useAuth();
+  
   const handleLogout = async () => await logout();
 
+  // Close sidebar on small screens when tab changes
+  useEffect(() => {
+    setIsSidebarOpen(false);
+  }, [activeTab]);
+
   return (
-    <div className="flex h-screen bg-[#121212] p-4 gap-4 font-sans text-slate-900 overflow-hidden relative selection:bg-indigo-500 selection:text-white">
+    <div className="flex h-screen bg-[#121212] md:p-4 gap-0 md:gap-4 font-sans text-slate-900 overflow-hidden relative selection:bg-[#cbd5b1] selection:text-[#121212]">
       {/* Background Accent / Noise */}
       <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 pointer-events-none"></div>
       
-      {/* Sidebar - Dark on Dark */}
-      <Sidebar 
-        activeTab={activeTab} 
-        setActiveTab={setActiveTab} 
-        onLogout={handleLogout} 
-        onHireTalent={() => setShowMassHiringModal(true)}
-      />
+      {/* Mobile Header - Visible only on small screens */}
+      <div className="lg:hidden fixed top-0 left-0 right-0 h-16 bg-[#f4f4f0] border-b border-slate-200/60 flex items-center justify-between px-6 z-40 shadow-sm">
+        <div className="w-32 h-8 overflow-hidden flex items-center">
+          <img src="/Logo.jpg" alt="Logo" className="w-full h-full object-contain object-left mix-blend-multiply" />
+        </div>
+        <button 
+          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+          className="w-10 h-10 bg-[#121212] text-[#cbd5b1] rounded-xl flex items-center justify-center shadow-lg active:scale-95 transition-all"
+        >
+          {isSidebarOpen ? <X size={20} /> : <Menu size={20} />}
+        </button>
+      </div>
+
+      {/* Sidebar - Drawer for mobile, sticky for desktop */}
+      <AnimatePresence>
+        {(isSidebarOpen || window.innerWidth >= 1024) && (
+          <>
+            {/* Backdrop for mobile */}
+            {isSidebarOpen && (
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setIsSidebarOpen(false)}
+                className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden"
+              />
+            )}
+            
+            <motion.div 
+              initial={window.innerWidth < 1024 ? { x: -300 } : false}
+              animate={{ x: 0 }}
+              exit={window.innerWidth < 1024 ? { x: -300 } : false}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className="fixed lg:relative top-0 left-0 h-full z-50 lg:z-auto w-[280px] lg:w-auto shadow-2xl lg:shadow-none"
+            >
+              <Sidebar 
+                activeTab={activeTab} 
+                setActiveTab={setActiveTab} 
+                onLogout={handleLogout} 
+                onHireTalent={() => setShowMassHiringModal(true)}
+              />
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
       
       {/* Main Content - Light Card on Dark Background */}
-      <main className="flex-1 bg-[#f4f4f0] rounded-[2.5rem] overflow-y-auto flex flex-col relative z-10 shadow-[0_0_50px_rgba(0,0,0,0.5)]">
+      <main className="flex-1 bg-[#f4f4f0] md:rounded-[2.5rem] overflow-y-auto flex flex-col relative z-30 shadow-[0_0_80px_rgba(0,0,0,0.6)] border border-white/5 mt-16 lg:mt-0">
         <Dashboard activeTab={activeTab} setActiveTab={setActiveTab} />
       </main>
 
@@ -387,7 +558,9 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/verify-email" element={<EmailVerification />} />
-          <Route path="/" element={<ProtectedRoute><MainLayout /></ProtectedRoute>} />
+          <Route path="/contact" element={<ContactUs />} />
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/dashboard" element={<ProtectedRoute><MainLayout /></ProtectedRoute>} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Router>

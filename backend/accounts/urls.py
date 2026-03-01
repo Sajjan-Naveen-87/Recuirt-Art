@@ -16,9 +16,10 @@ from accounts.views import (
     PasswordResetRequestView,
     PasswordResetConfirmView,
     TokenRefreshView,
-    GoogleAuthView,
+    # GoogleAuthView, (Legacy)
     EmailVerificationRequestView,
     EmailVerificationConfirmView,
+    DashboardStatsView,
 )
 from accounts.profile_views import ProfileView
 from accounts.firebase_views import (
@@ -35,14 +36,15 @@ urlpatterns = [
     path('register/', RegistrationView.as_view(), name='register'),
     path('login/', LoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
+    path('dashboard-stats/', DashboardStatsView.as_view(), name='dashboard-stats'),
     
     # OTP endpoints
     path('otp/send/', OTPSendView.as_view(), name='otp-send'),
     path('otp/verify/', OTPVerificationView.as_view(), name='otp-verify'),
     
     # Google OAuth (legacy)
-    path('google/', GoogleAuthView.as_view(), name='google-auth'),
-    path('google/login/', GoogleAuthView.as_view(), name='google-login'),
+    # path('google/', GoogleAuthView.as_view(), name='google-auth'),
+    # path('google/login/', GoogleAuthView.as_view(), name='google-login'),
     
     # Firebase Authentication endpoints
     path('firebase/login/', FirebaseLoginView, name='firebase-login'),

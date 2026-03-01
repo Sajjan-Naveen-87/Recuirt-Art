@@ -110,7 +110,9 @@ const ContactUs = ({ isOpen, onClose, isModal = false }) => {
                   )}
                   {contactInfo.socials.twitter && (
                      <a href={contactInfo.socials.twitter} target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-black text-white rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-lg shadow-slate-200">
-                        <X size={20} /> {/* X Corp logo */}
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                           <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932 6.064-6.932zm-1.294 19.497h2.039L6.482 2.395H4.293l13.314 18.255z" />
+                        </svg>
                      </a>
                   )}
                </div>

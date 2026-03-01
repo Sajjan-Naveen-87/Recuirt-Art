@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, MapPin, Building2, Clock, Briefcase, DollarSign, CheckCircle, Loader2, ExternalLink } from 'lucide-react';
+import { X, MapPin, Building2, Clock, Briefcase, IndianRupee, CheckCircle, Loader2, ExternalLink, ArrowRight } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import JobApplyModal from './JobApplyModal';
 
@@ -104,61 +104,70 @@ const JobDetailsModal = ({ job, isOpen, onClose, onApply }) => {
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="fixed inset-4 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-full md:max-w-3xl md:max-h-[90vh] bg-white rounded-[3rem] shadow-2xl overflow-hidden z-50 flex flex-col"
+              className="fixed inset-0 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-full md:max-w-3xl md:max-h-[90vh] bg-[#f4f4f0] md:rounded-[3rem] shadow-2xl overflow-hidden z-50 flex flex-col border border-white/20"
             >
               {/* Header */}
-              <div className="p-8 border-b border-slate-100 flex items-start justify-between flex-shrink-0">
-                <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 bg-slate-50 rounded-[1.8rem] flex items-center justify-center text-2xl font-black text-indigo-600 border border-slate-100">
+              <div className="p-6 md:p-10 lg:p-12 border-b border-slate-200/60 flex items-start justify-between flex-shrink-0 bg-white/40">
+                <div className="flex items-center gap-4 md:gap-6">
+                  <div className="w-14 h-14 md:w-20 md:h-20 bg-[#121212] rounded-2xl md:rounded-[2rem] flex items-center justify-center text-2xl md:text-3xl font-serif font-black text-[#cbd5b1] shadow-xl border border-white/10 shrink-0">
                     {jobData.company_name[0]}
                   </div>
-                  <div>
-                    <h2 className="text-2xl font-bold text-slate-900">{jobData.title}</h2>
-                    <p className="text-slate-500 font-medium flex items-center gap-2 mt-1">
-                      <Building2 size={16} />
-                      {jobData.company_name}
+                  <div className="min-w-0">
+                    <h2 className="text-xl md:text-3xl lg:text-4xl font-serif font-black text-[#121212] leading-tight mb-1 md:mb-2 truncate">{jobData.title}</h2>
+                    <p className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] text-[#cbd5b1] flex items-center gap-2 truncate">
+                       <Building2 size={12} md:size={14} />
+                       {jobData.company_name}
                     </p>
                   </div>
                 </div>
                 <button
                   onClick={onClose}
-                  className="w-12 h-12 bg-slate-50 rounded-full flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-all"
+                  className="w-10 h-10 md:w-12 md:h-12 bg-white rounded-full flex items-center justify-center text-slate-400 hover:text-[#121212] hover:shadow-md transition-all border border-slate-100 shrink-0 ml-4"
                 >
-                  <X size={20} />
+                  <X size={18} md:size={20} />
                 </button>
               </div>
 
               {/* Content */}
-              <div className="flex-1 overflow-y-auto p-8">
+              <div className="flex-1 overflow-y-auto p-6 md:p-10 lg:p-12">
                 {/* Job Meta */}
-                <div className="flex flex-wrap gap-4 mb-8">
-                  <div className="flex items-center gap-2 bg-slate-50 px-4 py-2 rounded-xl">
-                    <MapPin size={18} className="text-indigo-600" />
-                    <span className="font-medium text-slate-700">{jobData.location}</span>
+                <div className="flex flex-wrap gap-2 md:gap-4 mb-8 md:mb-12">
+                  <div className="flex items-center gap-2 bg-white px-4 md:px-5 py-2 md:py-3 rounded-xl md:rounded-2xl shadow-sm border border-slate-100">
+                    <MapPin size={16} md:size={18} className="text-[#cbd5b1]" />
+                    <span className="text-[9px] md:text-[11px] font-black uppercase tracking-widest text-slate-600">{jobData.location}</span>
                   </div>
-                  <div className="flex items-center gap-2 bg-slate-50 px-4 py-2 rounded-xl">
-                    <Briefcase size={18} className="text-indigo-600" />
-                    <span className="font-medium text-slate-700">{formatJobType(jobData.job_type)}</span>
+                  <div className="flex items-center gap-2 bg-white px-4 md:px-5 py-2 md:py-3 rounded-xl md:rounded-2xl shadow-sm border border-slate-100">
+                    <Briefcase size={16} md:size={18} className="text-[#cbd5b1]" />
+                    <span className="text-[9px] md:text-[11px] font-black uppercase tracking-widest text-slate-600">{formatJobType(jobData.job_type)}</span>
                   </div>
                   {jobData.salary_range && (
-                    <div className="flex items-center gap-2 bg-slate-50 px-4 py-2 rounded-xl">
-                      <DollarSign size={18} className="text-indigo-600" />
-                      <span className="font-medium text-slate-700">{jobData.salary_range}</span>
+                    <div className="flex items-center gap-2 bg-[#121212] px-4 md:px-5 py-2 md:py-3 rounded-xl md:rounded-2xl shadow-lg border border-white/5">
+                      <IndianRupee size={16} md:size={18} className="text-[#cbd5b1]" />
+                      <span className="text-[9px] md:text-[11px] font-black uppercase tracking-widest text-[#cbd5b1]">
+                        {(() => {
+                          const s = jobData.salary_range.toString();
+                          if (s.includes('₹')) return s;
+                          if (s.includes('$') || s.includes('USD')) {
+                            return s.replace(/\$/g, '₹').replace(/USD/g, '₹');
+                          }
+                          return /\d/.test(s) ? `₹ ${s}` : s;
+                        })()}
+                      </span>
                     </div>
                   )}
                   {jobData.apply_deadline && (
-                    <div className="flex items-center gap-2 bg-amber-50 px-4 py-2 rounded-xl">
-                      <Clock size={18} className="text-amber-600" />
-                      <span className="font-medium text-amber-700">Due: {formatDate(jobData.apply_deadline)}</span>
+                    <div className="flex items-center gap-2 bg-white px-4 md:px-5 py-2 md:py-3 rounded-xl md:rounded-2xl shadow-sm border border-amber-100">
+                      <Clock size={16} md:size={18} className="text-amber-500" />
+                      <span className="text-[9px] md:text-[11px] font-black uppercase tracking-widest text-amber-600">Until {formatDate(jobData.apply_deadline)}</span>
                     </div>
                   )}
                 </div>
 
                 {/* Description */}
-                <div className="mb-8">
-                  <h3 className="text-lg font-bold text-slate-900 mb-4">Job Description</h3>
+                <div className="mb-8 md:mb-12">
+                  <h3 className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.3em] md:tracking-[0.4em] text-slate-400 mb-4 md:mb-6">Job Description</h3>
                   <div className="prose prose-slate max-w-none">
-                    <p className="text-slate-600 leading-relaxed whitespace-pre-wrap">
+                    <p className="text-lg md:text-xl font-serif text-[#121212]/80 leading-relaxed whitespace-pre-wrap">
                       {jobData.description}
                     </p>
                   </div>
@@ -166,13 +175,13 @@ const JobDetailsModal = ({ job, isOpen, onClose, onApply }) => {
 
                 {/* Skills Required */}
                 {getSkillsList().length > 0 && (
-                  <div className="mb-8">
-                    <h3 className="text-lg font-bold text-slate-900 mb-4">Skills Required</h3>
-                    <div className="flex flex-wrap gap-2">
+                  <div className="mb-8 md:mb-12">
+                    <h3 className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.3em] md:tracking-[0.4em] text-slate-400 mb-4 md:mb-6">Expertise Required</h3>
+                    <div className="flex flex-wrap gap-2 md:gap-3">
                       {getSkillsList().map((skill, index) => (
                         <span
                           key={index}
-                          className="px-4 py-2 bg-indigo-50 text-indigo-700 rounded-xl text-sm font-medium border border-indigo-100"
+                          className="px-4 md:px-5 py-2 md:py-2.5 bg-white text-[#121212] rounded-lg md:rounded-xl text-[9px] md:text-[10px] font-black uppercase tracking-widest border border-slate-200 shadow-sm hover:border-[#cbd5b1] transition-colors"
                         >
                           {skill}
                         </span>
@@ -183,40 +192,42 @@ const JobDetailsModal = ({ job, isOpen, onClose, onApply }) => {
 
                 {/* Experience */}
                 {jobData.experience_required && (
-                  <div className="mb-8">
-                    <h3 className="text-lg font-bold text-slate-900 mb-4">Experience Required</h3>
-                    <p className="text-slate-600">{jobData.experience_required}</p>
+                  <div className="mb-8 md:mb-12">
+                    <h3 className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.3em] md:tracking-[0.4em] text-slate-400 mb-3 md:mb-4">Experience</h3>
+                    <p className="text-base md:text-lg font-serif text-[#121212]/70 italic">{jobData.experience_required}</p>
                   </div>
                 )}
 
                 {/* Status Badge */}
                 <div className="flex items-center gap-2">
-                  <span className={`flex items-center gap-2 px-4 py-2 rounded-xl font-bold uppercase tracking-widest text-xs border ${
+                  <span className={`flex items-center gap-3 px-5 md:px-6 py-2.5 md:py-3 rounded-xl md:rounded-2xl font-black uppercase tracking-[0.2em] text-[9px] md:text-[10px] border shadow-sm ${
                     jobData.is_active 
-                      ? 'bg-emerald-50 text-emerald-600 border-emerald-100' 
-                      : 'bg-rose-50 text-rose-600 border-rose-100'
-                  }`}>
-                    {jobData.is_active ? <CheckCircle size={14} /> : <X size={14} />}
-                    {jobData.is_active ? 'Job Open' : 'Job Ended'}
+                      ? 'bg-[#cbd5b1]/10 text-[#121212] border-[#cbd5b1]/30' 
+                      : 'bg-rose-50 text-rose-500 border-rose-100'
+                   }`}>
+                    {jobData.is_active ? <CheckCircle size={14} className="text-[#cbd5b1]" /> : <X size={14} />}
+                    {jobData.is_active ? 'Position Open' : 'Closed'}
                   </span>
                 </div>
               </div>
 
               {/* Footer */}
-              <div className="p-8 border-t border-slate-100 flex justify-end gap-4 flex-shrink-0">
+              <div className="p-6 md:p-10 lg:p-12 border-t border-slate-200/60 flex flex-col md:flex-row md:justify-end gap-4 md:gap-6 flex-shrink-0 bg-white/40">
                 <button
                   onClick={onClose}
-                  className="px-6 py-3 rounded-2xl font-bold text-slate-600 hover:bg-slate-50 transition-all"
+                  className="order-2 md:order-1 px-8 py-4 rounded-xl md:rounded-2xl font-black uppercase tracking-widest text-[10px] text-slate-400 hover:text-[#121212] transition-colors"
                 >
-                  Close
+                  Go Back
                 </button>
                 {jobData.is_active && (
                   <button
                     onClick={handleApplyClick}
                     disabled={!isAuthenticated}
-                    className="px-8 py-3 bg-indigo-600 text-white rounded-2xl font-bold shadow-lg shadow-indigo-200 hover:bg-indigo-700 transition-all flex items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+                    className="order-1 md:order-2 px-8 md:px-10 py-4 bg-[#121212] text-white rounded-xl md:rounded-2xl font-black uppercase tracking-widest text-[10px] shadow-2xl shadow-black/20 hover:bg-[#cbd5b1] hover:text-[#121212] transition-all flex items-center justify-center gap-3 disabled:opacity-70 disabled:cursor-not-allowed group"
                   >
-                    {isAuthenticated ? 'Apply Now' : 'Login to Apply'}
+                    {isAuthenticated ? (
+                       <>Apply Now <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" /></>
+                    ) : 'Authenticate to Apply'}
                   </button>
                 )}
               </div>

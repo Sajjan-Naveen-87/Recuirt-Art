@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { LayoutGrid, Search, Briefcase, User, Users, LogOut, ShieldCheck, MessageCircle, ChevronLeft, ChevronRight } from 'lucide-react';
+import { LayoutGrid, Search, Briefcase, User, Users, LogOut, MessageCircle, ChevronLeft, ChevronRight } from 'lucide-react';
 import ContactUs from '../Contact/ContactUs';
 import { motion } from 'framer-motion';
 
@@ -44,74 +44,73 @@ const Sidebar = ({ activeTab, setActiveTab, onLogout, onHireTalent }) => {
   return (
     <>
       <motion.aside 
-        initial={{ width: 288 }}
-        animate={{ width: isCollapsed ? 80 : 288 }}
-        className="h-[calc(100vh-2rem)] sticky top-4 flex flex-col pt-8 pb-8 px-4 border-r border-white/5 bg-[#121212] z-20 relative transition-all duration-300"
+        initial={window.innerWidth < 1024 ? { width: 280 } : { width: 288 }}
+        animate={{ 
+          width: window.innerWidth < 1024 ? 280 : (isCollapsed ? 80 : 288) 
+        }}
+        className="h-full lg:h-[calc(100vh-2rem)] flex flex-col pt-8 md:pt-10 pb-8 md:pb-10 px-4 border-r border-white/5 bg-[#121212] z-40 relative shadow-2xl"
       >
-        {/* Toggle Button */}
+        {/* Toggle Button - Only Desktop */}
         <button 
           onClick={() => setIsCollapsed(!isCollapsed)}
-          className="absolute -right-3 top-10 w-6 h-6 bg-indigo-600 rounded-full flex items-center justify-center text-white shadow-lg hover:bg-indigo-500 transition-colors z-50 border border-[#121212]"
+          className="hidden lg:flex absolute -right-3 top-12 w-8 h-8 bg-[#cbd5b1] rounded-full items-center justify-center text-[#121212] shadow-xl hover:scale-110 transition-all z-50 border-4 border-[#121212]"
         >
-          {isCollapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
+          {isCollapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
         </button>
 
         <div 
           onClick={() => setActiveTab('Dashboard')}
-          className={`flex items-center gap-3 mb-12 px-2 cursor-pointer group ${isCollapsed ? 'justify-center' : ''}`}
+          className={`mb-10 md:mb-16 cursor-pointer group ${isCollapsed ? 'lg:px-2' : 'px-4'}`}
         >
-          <div className="w-10 h-10 bg-indigo-600 rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-900/20 group-hover:scale-105 transition-transform shrink-0">
-            <ShieldCheck className="text-white" size={24} />
+          <div className={`relative transition-all duration-300 overflow-hidden ${isCollapsed ? 'lg:w-10 lg:h-10 lg:rounded-xl w-40 h-12 rounded-2xl' : 'w-40 h-12 rounded-2xl'}`}>
+            <img 
+              src="/Logo.jpg" 
+              alt="Recruit Art Logo" 
+              className={`w-full h-full object-cover transition-all duration-300 ${(isCollapsed && window.innerWidth >= 1024) ? 'scale-150' : 'scale-100'}`} 
+            />
           </div>
-          {!isCollapsed && (
-             <motion.span 
-               initial={{ opacity: 0 }}
-               animate={{ opacity: 1 }}
-               className="text-2xl font-serif font-bold tracking-tight text-white group-hover:text-indigo-400 transition-colors whitespace-nowrap"
-             >
-               Recruit Art
-             </motion.span>
-          )}
         </div>
 
-        <nav className="flex-1 space-y-3">
+        <nav className="flex-1 space-y-3 md:space-y-4">
           {menu.map((item) => (
             <button 
               key={item.label}
               onClick={() => setActiveTab(item.label)} 
-              className={`w-full flex items-center ${isCollapsed ? 'justify-center px-0' : 'px-5 gap-4'} py-4 rounded-[1.5rem] transition-all duration-300 font-bold text-sm border ${
+              className={`w-full flex items-center ${(isCollapsed && window.innerWidth >= 1024) ? 'justify-center px-0' : 'px-6 gap-5'} py-3.5 md:py-4 rounded-xl md:rounded-2xl transition-all duration-300 font-bold text-[11px] md:text-[11px] uppercase tracking-widest border ${
                 activeTab === item.label 
-                ? 'bg-indigo-600 text-white border-indigo-500 shadow-xl shadow-indigo-900/20' 
+                ? 'bg-[#cbd5b1] text-[#121212] border-[#cbd5b1] shadow-xl shadow-[#cbd5b1]/10 translate-x-1' 
                 : 'text-slate-400 border-transparent hover:bg-white/5 hover:text-white'
               }`}
               title={isCollapsed ? item.label : ''}
             >
               <div className="shrink-0">{item.icon}</div>
-              {!isCollapsed && <span className="font-sans whitespace-nowrap">{item.label}</span>}
+              {(!isCollapsed || window.innerWidth < 1024) && <span className="whitespace-nowrap">{item.label}</span>}
             </button>
           ))}
         </nav>
 
-        <nav className="space-y-3 mt-auto">
+        <nav className="space-y-3 md:space-y-4 mt-auto">
           {bottomMenu.map((item) => (
             <button 
               key={item.label}
               onClick={item.action}
-              className={`w-full flex items-center ${isCollapsed ? 'justify-center px-0' : 'px-5 gap-4'} py-4 rounded-[1.5rem] transition-all duration-300 font-bold text-sm text-slate-400 hover:bg-white/5 hover:text-white border border-transparent`}
+              className={`w-full flex items-center ${(isCollapsed && window.innerWidth >= 1024) ? 'justify-center px-0' : 'px-6 gap-5'} py-3.5 md:py-4 rounded-xl md:rounded-2xl transition-all duration-300 font-black text-[11px] uppercase tracking-widest text-slate-400 hover:bg-white/5 hover:text-white border border-transparent`}
               title={isCollapsed ? item.label : ''}
             >
               <div className="shrink-0">{item.icon}</div>
-              {!isCollapsed && <span className="whitespace-nowrap">{item.label}</span>}
+              {(!isCollapsed || window.innerWidth < 1024) && <span className="whitespace-nowrap">{item.label}</span>}
             </button>
           ))}
           
+          <div className="h-px w-full bg-white/5 my-4 md:my-6"></div>
+
           <button 
             onClick={handleLogout}
-            className={`w-full flex items-center ${isCollapsed ? 'justify-center px-0' : 'px-5 gap-4'} py-4 rounded-[1.5rem] transition-all duration-300 font-bold text-sm text-slate-400 hover:bg-red-500/10 hover:text-red-500 border border-transparent`}
+            className={`w-full flex items-center ${(isCollapsed && window.innerWidth >= 1024) ? 'justify-center px-0' : 'px-6 gap-5'} py-3.5 md:py-4 rounded-xl md:rounded-2xl transition-all duration-300 font-black text-[11px] uppercase tracking-widest text-[#cbd5b1] hover:bg-[#cbd5b1]/10 border border-transparent`}
             title={isCollapsed ? "Sign Out" : ''}
           >
-            <div className="shrink-0"><LogOut size={20} /></div>
-            {!isCollapsed && <span className="whitespace-nowrap">Sign Out</span>}
+            <div className="shrink-0"><LogOut size={20} md:size={22} /></div>
+            {(!isCollapsed || window.innerWidth < 1024) && <span className="whitespace-nowrap">Sign Out</span>}
           </button>
         </nav>
       </motion.aside>

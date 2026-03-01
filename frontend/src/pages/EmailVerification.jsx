@@ -64,101 +64,115 @@ function EmailVerification() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-slate-900">
-          Verify your Email
-        </h2>
-        <p className="mt-2 text-center text-sm text-slate-600">
-          {user?.email ? `We need to verify ${user.email} before you continue.` : 'Please verify your email address.'}
-        </p>
-      </div>
+    <div className="min-h-screen bg-[#f4f4f0] flex items-center justify-center p-6 md:p-10 font-sans">
+      {/* Decorative background elements */}
+      <div className="absolute top-0 right-0 w-64 h-64 bg-[#cbd5b1]/10 rounded-full blur-3xl -mr-32 -mt-32"></div>
+      <div className="absolute bottom-0 left-0 w-64 h-64 bg-slate-200/20 rounded-full blur-3xl -ml-32 -mb-32"></div>
 
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-          
-          {error && (
-            <motion.div 
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="mb-4 p-4 bg-red-50 border border-red-100 rounded-md text-red-600 text-sm flex items-center gap-2"
-            >
-              <AlertCircle size={18} />
-              {error}
-            </motion.div>
-          )}
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="w-full max-w-lg bg-white border border-slate-200/60 p-8 md:p-12 rounded-[2.5rem] md:rounded-[3.5rem] shadow-sm relative z-10 overflow-hidden"
+      >
+        {/* Decorative element */}
+        <div className="absolute top-0 right-0 w-32 h-32 bg-[#cbd5b1]/10 rounded-full blur-3xl -mr-16 -mt-16"></div>
 
-          {success && (
-            <motion.div 
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="mb-4 p-4 bg-green-50 border border-green-100 rounded-md text-green-600 text-sm flex items-center gap-2"
-            >
-                <CheckCircle size={18} />
-                {success}
-            </motion.div>
-          )}
-
-          {!otpSent ? (
-            <div className="space-y-6">
-                <p className="text-sm text-slate-500 text-center">
-                    Click the button below to receive a verification code.
-                </p>
-                <button
-                    onClick={handleSendOtp}
-                    disabled={isLoading}
-                    className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
-                >
-                    {isLoading ? <Loader className="animate-spin" size={20} /> : 'Send Verification Code'}
-                </button>
-            </div>
-          ) : (
-            <form className="space-y-6" onSubmit={handleVerifyOtp}>
-              <div>
-                <label htmlFor="otp" className="block text-sm font-medium text-slate-700">
-                  Verification Code
-                </label>
-                <div className="mt-1 relative rounded-md shadow-sm">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Mail className="h-5 w-5 text-slate-400" aria-hidden="true" />
-                  </div>
-                  <input
-                    type="text"
-                    name="otp"
-                    id="otp"
-                    className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-slate-300 rounded-md py-3"
-                    placeholder="Enter 6-digit code"
-                    value={otp}
-                    onChange={(e) => setOtp(e.target.value)}
-                    maxLength={6}
-                  />
-                </div>
-              </div>
-
-              <div>
-                <button
-                  type="submit"
-                  disabled={isLoading}
-                  className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
-                >
-                   {isLoading ? <Loader className="animate-spin" size={20} /> : 'Verify Email'}
-                </button>
-              </div>
-              
-              <div className="text-center">
-                    <button 
-                        type="button"
-                        onClick={handleSendOtp}
-                        disabled={isLoading}
-                        className="text-xs text-indigo-600 hover:text-indigo-500 font-medium"
-                    >
-                        Resend Code
-                    </button>
-              </div>
-            </form>
-          )}
+        <div className="mb-10 text-center">
+          <div className="w-20 h-20 bg-[#f4f4f0] rounded-3xl flex items-center justify-center mx-auto mb-6 text-[#cbd5b1] shadow-inner-lg">
+            <Mail size={36} />
+          </div>
+          <h2 className="text-3xl md:text-4xl font-serif font-black text-slate-900 leading-tight mb-3">
+            Verify Email.
+          </h2>
+          <p className="text-slate-500 font-medium text-sm md:text-base italic px-4">
+            {user?.email ? `Confirming access for ${user.email}` : 'Security check required to continue.'}
+          </p>
         </div>
-      </div>
+
+        {error && (
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="mb-8 p-5 bg-rose-50 border border-rose-100 rounded-2xl text-rose-600 text-[10px] font-black uppercase tracking-widest flex items-center gap-3"
+          >
+            <AlertCircle size={18} />
+            {error}
+          </motion.div>
+        )}
+
+        {success && (
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="mb-8 p-5 bg-[#cbd5b1]/10 border border-[#cbd5b1]/20 rounded-2xl text-[#121212] text-[10px] font-black uppercase tracking-widest flex items-center gap-3"
+          >
+            <CheckCircle size={18} className="text-[#cbd5b1]" />
+            {success}
+          </motion.div>
+        )}
+
+        {!otpSent ? (
+          <div className="space-y-8">
+            <p className="text-slate-400 text-xs font-black uppercase tracking-[0.2em] text-center leading-relaxed">
+              Click below to initiate the secure verification protocol for your account.
+            </p>
+            <button
+              onClick={handleSendOtp}
+              disabled={isLoading}
+              className="w-full bg-[#121212] text-white py-5 px-6 rounded-2xl font-black text-xs uppercase tracking-[0.3em] shadow-xl hover:bg-[#cbd5b1] hover:text-[#121212] transition-all flex justify-center items-center gap-3 disabled:opacity-50 active:scale-[0.98]"
+            >
+              {isLoading ? <Loader className="animate-spin" size={18} /> : (
+                <>Send Secure Code <ArrowRight size={16} /></>
+              )}
+            </button>
+          </div>
+        ) : (
+          <form className="space-y-8" onSubmit={handleVerifyOtp}>
+            <div className="space-y-3">
+              <label htmlFor="otp" className="block text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">
+                Security Code
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none">
+                  <Mail className="h-5 w-5 text-slate-300" aria-hidden="true" />
+                </div>
+                <input
+                  type="text"
+                  name="otp"
+                  id="otp"
+                  className="w-full bg-[#f4f4f0] border border-transparent focus:border-[#cbd5b1] focus:bg-white rounded-2xl py-4 md:py-5 pl-14 pr-6 text-xl md:text-2xl font-serif font-black placeholder:text-slate-200 transition-all outline-none text-center tracking-[0.5em]"
+                  placeholder="000000"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value)}
+                  maxLength={6}
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="w-full bg-[#121212] text-white py-5 px-6 rounded-2xl font-black text-xs uppercase tracking-[0.3em] shadow-xl hover:bg-[#cbd5b1] hover:text-[#121212] transition-all flex justify-center items-center gap-3 disabled:opacity-50 active:scale-[0.98]"
+              >
+                 {isLoading ? <Loader className="animate-spin" size={18} /> : 'Finalize Verification'}
+              </button>
+              
+              <div className="text-center pt-2">
+                <button 
+                  type="button"
+                  onClick={handleSendOtp}
+                  disabled={isLoading}
+                  className="text-[10px] font-black text-slate-400 uppercase tracking-widest hover:text-[#121212] transition-colors flex items-center justify-center gap-2 mx-auto"
+                >
+                  Code not received? <span className="text-[#cbd5b1] border-b border-[#cbd5b1] pb-0.5">Resend</span>
+                </button>
+              </div>
+            </div>
+          </form>
+        )}
+      </motion.div>
     </div>
   );
 }

@@ -75,13 +75,17 @@ class JobViewSet(viewsets.ModelViewSet):
                 location__icontains=location
             )
         
-        # Search by title or company
+        # Search by multiple fields
         search = self.request.query_params.get('search')
         if search:
             queryset = queryset.filter(
                 Q(title__icontains=search) |
                 Q(company_name__icontains=search) |
-                Q(description__icontains=search)
+                Q(description__icontains=search) |
+                Q(category__icontains=search) |
+                Q(location__icontains=search) |
+                Q(job_type__icontains=search) |
+                Q(skills_required__icontains=search)
             )
         
         # Filter by featured

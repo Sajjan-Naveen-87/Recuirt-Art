@@ -119,19 +119,19 @@ const NotificationsDropdown = ({ onNavigate }) => {
       {/* Bell Icon Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="relative p-4 rounded-full bg-white border border-slate-100 hover:border-indigo-100 hover:bg-indigo-50 transition-all group"
+        className="relative w-12 h-12 rounded-2xl bg-white border border-slate-200/60 hover:border-[#cbd5b1] hover:bg-slate-50 transition-all flex items-center justify-center group shadow-sm"
       >
         <Bell 
           size={20} 
-          className="text-slate-400 group-hover:text-indigo-600 transition-colors" 
+          className="text-slate-400 group-hover:text-[#121212] transition-colors" 
         />
         {unreadCount > 0 && (
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
-            className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center"
+            className="absolute -top-1.5 -right-1.5 w-6 h-6 bg-[#121212] rounded-full flex items-center justify-center border-2 border-[#f4f4f0]"
           >
-            <span className="text-white text-xs font-bold">
+            <span className="text-[#cbd5b1] text-[9px] font-black uppercase tracking-tighter">
               {unreadCount > 9 ? '9+' : unreadCount}
             </span>
           </motion.div>
@@ -142,19 +142,19 @@ const NotificationsDropdown = ({ onNavigate }) => {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: 10, scale: 0.95 }}
+            initial={{ opacity: 0, y: 15, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 10, scale: 0.95 }}
-            transition={{ duration: 0.2 }}
-            className="absolute right-0 top-14 w-96 bg-white rounded-[2rem] shadow-2xl border border-slate-100 overflow-hidden z-50"
+            exit={{ opacity: 0, y: 15, scale: 0.98 }}
+            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+            className="absolute right-0 top-16 w-96 bg-white rounded-[2.5rem] shadow-2xl border border-slate-200/60 overflow-hidden z-50"
           >
             {/* Header */}
-            <div className="p-6 border-b border-slate-100 flex items-center justify-between">
-              <h3 className="font-bold text-slate-900">Notifications</h3>
+            <div className="p-8 border-b border-slate-100 flex items-center justify-between">
+              <h3 className="text-xl font-serif font-black text-[#121212]">Notifications</h3>
               {unreadCount > 0 && (
                 <button
                   onClick={handleMarkAllAsRead}
-                  className="text-xs font-medium text-indigo-600 hover:text-indigo-700 flex items-center gap-1"
+                  className="text-[10px] font-black uppercase tracking-widest text-[#cbd5b1] hover:text-[#121212] flex items-center gap-1.5 transition-colors"
                 >
                   <CheckCheck size={14} />
                   Mark all read
@@ -163,18 +163,22 @@ const NotificationsDropdown = ({ onNavigate }) => {
             </div>
 
             {/* Notifications List */}
-            <div className="max-h-96 overflow-y-auto">
+            <div className="max-h-96 overflow-y-auto custom-scrollbar">
               {loading ? (
-                <div className="p-8 flex justify-center">
-                  <div className="w-8 h-8 border-2 border-indigo-200 border-t-indigo-600 rounded-full animate-spin" />
+                <div className="p-12 flex justify-center">
+                   <motion.div 
+                      animate={{ rotate: 360 }}
+                      transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                      className="h-8 w-8 border-2 border-[#cbd5b1] border-t-transparent rounded-full"
+                    />
                 </div>
               ) : notifications.length === 0 ? (
-                <div className="p-8 text-center">
-                  <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="p-12 text-center">
+                  <div className="w-16 h-16 bg-[#f4f4f0] rounded-2xl flex items-center justify-center mx-auto mb-6">
                     <Bell size={24} className="text-slate-300" />
                   </div>
-                  <p className="text-slate-500 font-medium">No notifications</p>
-                  <p className="text-slate-400 text-sm mt-1">You're all caught up!</p>
+                  <p className="text-lg font-serif font-black text-[#121212]">No alerts</p>
+                  <p className="text-slate-400 text-xs font-medium mt-1">You're all caught up!</p>
                 </div>
               ) : (
                 <div className="divide-y divide-slate-50">
@@ -183,30 +187,30 @@ const NotificationsDropdown = ({ onNavigate }) => {
                       key={notification.id}
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
-                      className={`p-4 hover:bg-slate-50 cursor-pointer transition-colors ${
-                        !notification.is_read ? 'bg-indigo-50/50' : ''
+                      className={`p-6 hover:bg-slate-50 cursor-pointer transition-all ${
+                        !notification.is_read ? 'bg-[#cbd5b1]/5' : ''
                       }`}
                       onClick={() => handleNotificationClick(notification)}
                     >
                       <div className="flex gap-4">
-                        <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-sm border border-slate-100 flex-shrink-0">
+                        <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-sm border border-slate-100 flex-shrink-0">
                           {getNotificationIcon(notification.notification_type)}
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-start justify-between gap-2">
-                            <p className="font-semibold text-slate-900 text-sm truncate">
+                            <p className="font-serif font-black text-[#121212] text-sm truncate">
                               {notification.title}
                             </p>
                             {!notification.is_read && (
-                              <div className="w-2 h-2 bg-indigo-500 rounded-full flex-shrink-0 mt-2" />
+                              <div className="w-2 h-2 bg-[#cbd5b1] rounded-full flex-shrink-0 mt-2 animate-pulse" />
                             )}
                           </div>
-                          <p className="text-slate-500 text-sm mt-1 line-clamp-2">
+                          <p className="text-slate-500 text-xs font-medium mt-1 line-clamp-2 leading-relaxed">
                             {notification.message}
                           </p>
-                          <div className="flex items-center gap-2 mt-2">
-                            <Clock size={12} className="text-slate-400" />
-                            <span className="text-xs text-slate-400">
+                          <div className="flex items-center gap-2 mt-3 text-[9px] font-black uppercase tracking-widest text-slate-400">
+                            <Clock size={11} />
+                            <span>
                               {formatTimeAgo(notification.created_at)}
                             </span>
                           </div>
@@ -217,7 +221,7 @@ const NotificationsDropdown = ({ onNavigate }) => {
                               e.stopPropagation();
                               handleMarkAsRead(notification.id);
                             }}
-                            className="text-slate-400 hover:text-indigo-600 transition-colors"
+                            className="text-slate-300 hover:text-[#cbd5b1] transition-colors"
                           >
                             <Check size={16} />
                           </button>
@@ -231,15 +235,15 @@ const NotificationsDropdown = ({ onNavigate }) => {
 
             {/* Footer */}
             {notifications.length > 0 && (
-              <div className="p-4 border-t border-slate-100">
+              <div className="p-6 border-t border-slate-100 bg-[#f4f4f0]/30">
                 <button
                   onClick={() => {
                     setIsOpen(false);
                     onNavigate && onNavigate('/notifications');
                   }}
-                  className="w-full py-3 text-center text-sm font-medium text-indigo-600 hover:text-indigo-700 transition-colors"
+                  className="w-full py-3 text-center text-[10px] font-black uppercase tracking-[0.2em] text-[#121212] hover:text-[#cbd5b1] transition-colors"
                 >
-                  View all notifications
+                  View all alerts
                 </button>
               </div>
             )}

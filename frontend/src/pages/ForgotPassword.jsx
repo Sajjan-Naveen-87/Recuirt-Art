@@ -40,73 +40,74 @@ function ForgotPassword() {
   };
 
   return (
-    <div className="min-h-screen flex bg-[#F0F2F5]">
-      {/* Left Panel - Branding (Same as Login) */}
-      <div className="hidden lg:flex lg:w-1/2 bg-slate-950 relative overflow-hidden flex-col justify-between p-16">
-        <div className="absolute top-0 right-0 w-1/2 h-full bg-white/5 blur-[120px] rounded-full pointer-events-none" />
+    <div className="min-h-screen flex bg-[#f4f4f0] font-sans">
+      {/* Left Panel - Branding */}
+      <div className="hidden lg:flex lg:w-1/2 bg-[#121212] relative overflow-hidden flex-col justify-between p-16">
+        <div className="absolute top-0 right-0 w-1/2 h-full bg-[#cbd5b1]/5 blur-[120px] rounded-full pointer-events-none" />
         
         <div className="relative z-10">
-          <div className="flex items-center gap-2 mb-2">
-            <div className="h-[2px] w-8 bg-indigo-500 rounded-full" />
-            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-indigo-400">Recuirt Art</span>
-          </div>
-          <h1 className="text-5xl font-black tracking-tighter text-white lowercase">Recuirt.</h1>
+          <Link to="/" className="w-40 h-12 overflow-hidden flex-shrink-0 flex items-center hover:opacity-90 transition-opacity">
+            <img src="/Logo.jpg" alt="Recruit Art Logo" className="w-full h-full object-contain brightness-150" />
+          </Link>
         </div>
 
         <div className="relative z-10 space-y-8">
-          <h2 className="text-4xl font-black text-white leading-tight">
+          <h2 className="text-5xl font-serif font-black text-white leading-tight">
             Recover your <br/>
-            <span className="text-indigo-400">access.</span>
+            <span className="text-[#cbd5b1]">access.</span>
           </h2>
           <p className="text-slate-400 font-medium max-w-sm leading-relaxed">
-            Secure account recovery protocols to get you back on track.
+            Secure account recovery protocols to get you back into the healthcare network.
           </p>
           
           <div className="flex gap-6 pt-4">
             <div className="flex items-center gap-3 text-slate-400">
-              <div className="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center">
-                <Shield size={20} />
+              <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10">
+                <Shield size={20} className="text-[#cbd5b1]" />
               </div>
-              <span className="text-sm font-medium">Secure Recovery</span>
+              <span className="text-xs font-black uppercase tracking-widest">Secure</span>
             </div>
             <div className="flex items-center gap-3 text-slate-400">
-              <div className="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center">
-                <Zap size={20} />
+              <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10">
+                <Zap size={20} className="text-[#cbd5b1]" />
               </div>
-              <span className="text-sm font-medium">Instant OTP</span>
+              <span className="text-xs font-black uppercase tracking-widest">Instant</span>
             </div>
           </div>
         </div>
 
-        <div className="relative z-10 text-slate-500 text-sm">
-          © 2026 Recuirt Art. All rights reserved.
+        <div className="relative z-10 text-slate-500 text-[10px] font-black uppercase tracking-widest">
+          © 2026 Recruit Art. All rights reserved.
         </div>
       </div>
 
       {/* Right Panel - Form */}
-      <div className="flex-1 flex items-center justify-center p-8">
+      <div className="flex-1 flex items-center justify-center p-6 md:p-12">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="w-full max-w-md"
+          className="w-full max-w-lg"
         >
-          <div className="bg-white/80 backdrop-blur-2xl rounded-[4rem] shadow-[0_40px_100px_-20px_rgba(0,0,0,0.05)] p-12 border border-white relative">
-            <Link to="/login" className="absolute top-8 left-8 text-slate-400 hover:text-slate-600 transition-colors">
+          <div className="bg-white border border-slate-200/60 rounded-[2.5rem] md:rounded-[3.5rem] shadow-sm p-8 md:p-12 relative overflow-hidden">
+            {/* Decorative background element */}
+            <div className="absolute top-0 right-0 w-32 h-32 bg-[#cbd5b1]/10 rounded-full blur-3xl -mr-16 -mt-16"></div>
+            
+            <Link to="/login" className="absolute top-8 left-8 text-slate-300 hover:text-slate-900 transition-colors z-10">
                <ArrowLeft size={24} />
             </Link>
           
-            <div className="mb-8 mt-6">
-              <h2 className="text-3xl font-black tracking-tight mb-3">Forgot Password?</h2>
-              <p className="text-slate-500 font-medium">Enter your email or mobile number to receive a recovery code.</p>
+            <div className="mb-10 mt-8">
+              <h2 className="text-3xl md:text-4xl font-serif font-black tracking-tight mb-3 text-slate-900 leading-none">Forgot Password?</h2>
+              <p className="text-slate-500 font-medium text-sm md:text-base">Enter your credentials to receive a recovery code.</p>
             </div>
 
             {error && (
               <motion.div 
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="mb-6 p-4 bg-red-50 border border-red-100 rounded-2xl text-red-600 text-sm font-medium flex items-center gap-2"
+                className="mb-8 p-4 bg-red-50 border border-red-100 text-red-600 text-[10px] font-black uppercase tracking-widest flex items-center gap-2 rounded-2xl"
               >
-                <AlertCircle size={18} />
+                <AlertCircle size={16} />
                 {error}
               </motion.div>
             )}
@@ -115,18 +116,18 @@ function ForgotPassword() {
                <motion.div 
                  initial={{ opacity: 0, scale: 0.9 }}
                  animate={{ opacity: 1, scale: 1 }}
-                 className="p-6 bg-green-50 border border-green-100 rounded-2xl text-center mb-6"
+                 className="p-8 bg-[#cbd5b1]/10 border border-[#cbd5b1]/20 rounded-[2rem] text-center mb-6"
                >
-                 <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <CheckCircle className="text-green-600" size={24} />
+                 <div className="w-16 h-16 bg-[#cbd5b1] rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-[#cbd5b1]/20">
+                    <CheckCircle className="text-[#121212]" size={32} />
                  </div>
-                 <h3 className="text-lg font-bold text-green-800 mb-1">Code Sent!</h3>
-                 <p className="text-green-600 text-sm">Please check your email or mobile for the OTP.</p>
+                 <h3 className="text-xl font-serif font-black text-[#121212] mb-1">Code Sent!</h3>
+                 <p className="text-slate-600 font-medium italic">Please check your device for the OTP.</p>
                </motion.div>
             ) : (
-                <form onSubmit={handleSubmit} className="space-y-5">
-                  <div>
-                    <label className="block text-xs font-black uppercase tracking-widest text-slate-400 mb-3">
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div className="space-y-2">
+                    <label className="block text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">
                       Email or Mobile
                     </label>
                     <div className="relative">
@@ -135,8 +136,8 @@ function ForgotPassword() {
                         type="text"
                         value={emailOrMobile}
                         onChange={(e) => setEmailOrMobile(e.target.value)}
-                        placeholder="you@example.com or 9876543210"
-                        className="w-full bg-slate-50 border-0 rounded-[2rem] py-5 pl-14 pr-6 text-lg font-medium placeholder:text-slate-300 focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all outline-none"
+                        placeholder="healthcare@pro.com"
+                        className="w-full bg-[#f4f4f0] border border-transparent focus:border-[#cbd5b1] focus:bg-white rounded-2xl py-4 md:py-5 pl-14 pr-6 text-lg font-serif font-black placeholder:text-slate-300 transition-all outline-none"
                         required
                         autoFocus
                       />
@@ -146,25 +147,25 @@ function ForgotPassword() {
                   <button
                     type="submit"
                     disabled={isLoading}
-                    className="w-full bg-slate-950 text-white py-5 rounded-[2rem] font-bold text-lg shadow-2xl hover:bg-indigo-600 transition-all flex items-center justify-center gap-3 active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed"
+                    className="w-full bg-[#121212] text-white py-5 rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-xl hover:bg-[#cbd5b1] hover:text-[#121212] transition-all flex items-center justify-center gap-3 active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed"
                   >
                     {isLoading ? (
-                      <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                     ) : (
                       <>
                         Send Recovery Code
-                        <ArrowRight size={20} />
+                        <ArrowRight size={18} />
                       </>
                     )}
                   </button>
                 </form>
             )}
 
-            <div className="mt-8 text-center">
-              <p className="text-slate-500 font-medium">
+            <div className="mt-10 text-center pt-8 border-t border-slate-50">
+              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
                 Remember your password?{' '}
-                <Link to="/login" className="text-indigo-600 font-bold hover:text-indigo-700 transition-colors">
-                  Login
+                <Link to="/login" className="text-[#121212] border-b border-[#cbd5b1] pb-0.5 ml-1 transition-colors">
+                  Login Now
                 </Link>
               </p>
             </div>

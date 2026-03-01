@@ -28,6 +28,12 @@ export const profileService = {
     const response = await api.get(`/jobs/applications/${id}/`);
     return response.data;
   },
+
+  // Get dashboard statistics
+  getDashboardStats: async () => {
+    const response = await api.get('/accounts/dashboard-stats/');
+    return response.data;
+  },
 };
 
 export default profileService;

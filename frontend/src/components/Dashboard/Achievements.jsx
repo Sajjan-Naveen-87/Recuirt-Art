@@ -1,8 +1,8 @@
 import { motion } from 'framer-motion';
 import { Trophy, Target, TrendingUp, Zap } from 'lucide-react';
 
-const Achievements = ({ applicationsCount = 0 }) => {
-  const stats = [
+const Achievements = ({ applicationsCount = 0, stats = null }) => {
+  const statsList = [
     {
       label: 'Applications Sent',
       value: applicationsCount,
@@ -13,7 +13,7 @@ const Achievements = ({ applicationsCount = 0 }) => {
     },
     {
       label: 'Profile Views',
-      value: '142',
+      value: stats?.profile_views ?? '142',
       icon: <TrendingUp size={20} />,
       color: 'bg-emerald-600',
       textColor: 'text-emerald-600',
@@ -21,7 +21,7 @@ const Achievements = ({ applicationsCount = 0 }) => {
     },
     {
       label: 'Skills Verified',
-      value: '8/10',
+      value: stats ? `${stats.skills_verified}/${stats.total_skills}` : '8/10',
       icon: <Zap size={20} />,
       color: 'bg-amber-500', 
       textColor: 'text-amber-600',
@@ -29,7 +29,7 @@ const Achievements = ({ applicationsCount = 0 }) => {
     },
     {
       label: 'Current Streak',
-      value: '3 Days',
+      value: stats ? `${stats.current_streak} Days` : '3 Days',
       icon: <Trophy size={20} />,
       color: 'bg-rose-500',
       textColor: 'text-rose-600', 
@@ -39,7 +39,7 @@ const Achievements = ({ applicationsCount = 0 }) => {
 
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-      {stats.map((stat, index) => (
+      {statsList.map((stat, index) => (
         <motion.div
           key={stat.label}
           initial={{ opacity: 0, y: 20 }}

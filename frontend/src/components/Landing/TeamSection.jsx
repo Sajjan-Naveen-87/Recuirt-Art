@@ -18,7 +18,7 @@ function TeamSection() {
       name: "Prerana Agrawal",
       role: "Talent Acquisition Lead",
       image: "/Prerana-Agrawal.jpeg",
-      linkedin: "https://www.linkedin.com/groups/16095191/"
+      linkedin: "https://www.linkedin.com/in/prerna-agrawal-24b87b135"
     },
     {
       name: "Kratika Singh",

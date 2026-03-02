@@ -90,7 +90,7 @@ ${formData.message || 'No additional message.'}
 
       <main className="flex-1 flex flex-col items-center pt-24 pb-32 px-6 relative z-10 w-full max-w-4xl mx-auto">
         <h1 className="text-4xl md:text-5xl font-serif text-white mb-20 text-center tracking-wide">
-          Drop us a message and say hello.
+          Let us know Your Requirements
         </h1>
 
         {status.message && (
@@ -248,7 +248,7 @@ ${formData.message || 'No additional message.'}
               {isSubmitting ? (
                  <div className="w-5 h-5 border-2 border-slate-900/30 border-t-slate-900 rounded-full animate-spin" />
               ) : (
-                "Send Message"
+                "Submit"
               )}
             </button>
           </div>

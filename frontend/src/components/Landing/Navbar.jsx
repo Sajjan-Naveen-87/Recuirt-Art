@@ -10,7 +10,7 @@ function Navbar({ searchQuery, setSearchQuery, onSearchFocus }) {
     <nav className="bg-[#cbd5b1] px-6 md:px-8 py-5 flex items-center justify-between sticky top-0 z-50">
       <div className="flex items-center gap-6 lg:gap-16">
         <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="w-24 md:w-30 h-12 md:h-15 overflow-hidden flex-shrink-0 flex items-center hover:opacity-90 transition-opacity cursor-pointer">
-          <img src="/Logo.jpg" alt="Recruit Art Logo" className="w-full h-full object-contain object-left mix-blend-multiply" />
+          <img src="/Logo.jpg" href="/" alt="Recruit Art Logo" className="w-full h-full object-contain object-left mix-blend-multiply" />
         </button>
 
         {/* Search Bar - Hidden on Mobile/Tablet Navbar, shown in Menu */}

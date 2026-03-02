@@ -63,7 +63,7 @@ function AboutUs() {
       </div>
 
       {/* Stats Banner Section */}
-      <div className="w-full bg-[#121212] py-20 md:py-0 my-24 md:my-40 relative overflow-hidden flex flex-col lg:flex-row items-center justify-between shadow-2xl min-h-[600px]">
+      <div className="w-full bg-[#121212] py-20 xl:py-0 my-24 xl:my-40 relative overflow-hidden flex flex-col xl:flex-row items-center justify-between shadow-2xl min-h-[600px]">
           {/* Subtle grid background */}
           <div 
             className="absolute inset-0 opacity-[0.03]"
@@ -77,7 +77,7 @@ function AboutUs() {
           />
 
         {/* Left Arc & Image */}
-        <div className="w-full lg:w-1/3 h-[450px] md:h-[600px] lg:h-full bg-[#cbd5b1] relative z-10 lg:rounded-r-[15rem] rounded-b-[4rem] lg:rounded-b-none overflow-hidden self-stretch flex items-end justify-center order-first group">
+        <div className="w-full xl:w-1/3 h-[450px] md:h-[600px] xl:h-[600px] bg-[#cbd5b1] relative z-10 xl:rounded-r-[15rem] rounded-b-[4rem] xl:rounded-b-none overflow-hidden self-stretch flex items-end justify-center order-first group">
            <img 
                 src="/Founder-Image.jpeg" 
                 alt="Recruiter professional" 
@@ -87,7 +87,7 @@ function AboutUs() {
         </div>
 
         {/* Center Stats */}
-        <div className="w-full lg:w-1/3 flex flex-col md:flex-row lg:flex-col gap-12 md:gap-8 lg:gap-16 text-center text-white relative z-10 py-16 lg:py-0 px-8 items-center justify-center">
+        <div className="w-full xl:w-1/3 flex flex-col md:flex-row xl:flex-col gap-12 md:gap-8 xl:gap-16 text-center text-white relative z-10 py-16 xl:py-0 px-8 items-center justify-center">
             <div className="group">
               <div className="text-6xl md:text-7xl lg:text-8xl font-serif font-black mb-2 text-white group-hover:text-[#cbd5b1] transition-colors">
                 <Counter from={0} to={10} />+
@@ -109,12 +109,12 @@ function AboutUs() {
           </div>
 
         {/* Right Arc & Text */}
-        <div className="w-full lg:w-1/3 bg-[#f4f4f0] py-16 md:py-24 px-8 md:px-12 lg:pr-16 relative z-10 lg:rounded-l-[15rem] rounded-3xl lg:rounded-r-none mx-6 lg:mx-0 box-border text-center lg:text-right">
+        <div className="w-full xl:w-1/3 bg-[#f4f4f0] py-16 md:py-24 px-8 md:px-12 xl:pr-16 relative z-10 xl:rounded-l-[15rem] rounded-3xl xl:rounded-r-none mx-6 xl:mx-0 xl:mr-0 box-border text-center xl:text-right">
             <h4 className="text-[12px] font-black text-black uppercase tracking-[0.8em] mb-6">RECRUIT ART IMPACT</h4>
-            <h3 className="text-3xl md:text-4xl lg:text-5xl font-serif font-black text-slate-900 leading-[1.1] mb-8 max-w-sm mx-auto lg:mx-0">
+            <h3 className="text-3xl md:text-4xl lg:text-5xl font-serif font-black text-slate-900 leading-[1.1] mb-8 max-w-sm mx-auto xl:mx-0 xl:ml-auto">
               Connecting Talent with Purpose.
             </h3>
-            <p className="text-slate-500 font-medium text-sm md:text-base leading-relaxed max-w-sm mx-auto lg:mx-0 italic">
+            <p className="text-slate-500 font-medium text-sm md:text-base leading-relaxed max-w-sm mx-auto xl:mx-0 xl:ml-auto italic">
               We focus on building strong, lasting connections between exceptional healthcare professionals and leading institutions. Quality and integrity are at the heart of every placement.
             </p>
           </div>

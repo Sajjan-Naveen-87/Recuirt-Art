@@ -9,6 +9,7 @@ import TeamSection from './TeamSection';
 import LatestJobs from './LatestJobs';
 import Testimonials from './Testimonials';
 import InsightsSection from './InsightsSection';
+import ScrollNav from './ScrollNav';
 
 function LandingPage() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -40,6 +41,7 @@ function LandingPage() {
       </main>
 
       <Footer />
+      <ScrollNav />
     </div>
   );
 }

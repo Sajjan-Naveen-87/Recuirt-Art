@@ -34,8 +34,11 @@ elif not SECRET_KEY:
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'True').lower() == 'true'
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
+DEFAULT_ALLOWED_HOSTS = '127.0.0.1,localhost,recruit-art-backend.onrender.com'
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', DEFAULT_ALLOWED_HOSTS).split(',')
 
+# Ensure Render HTTPS proxying plays nicely with Django
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Application definition
 
@@ -270,10 +273,12 @@ SIMPLE_JWT = {
 
 # CORS Configuration
 CORS_ALLOW_ALL_ORIGINS = DEBUG
-CORS_ALLOWED_ORIGINS = os.getenv('FRONTEND_URL', 'http://localhost:5173').split(',')
+
+DEFAULT_FRONTEND_URL = 'http://localhost:5173,http://127.0.0.1:5173,https://recruit-art.web.app,https://recruit-art-backend.onrender.com'
+CORS_ALLOWED_ORIGINS = os.getenv('FRONTEND_URL', DEFAULT_FRONTEND_URL).split(',')
 
 # CSRF Configuration
-CSRF_TRUSTED_ORIGINS = os.getenv('FRONTEND_URL', 'http://localhost:5173').split(',')
+CSRF_TRUSTED_ORIGINS = os.getenv('FRONTEND_URL', DEFAULT_FRONTEND_URL).split(',')
 CORS_ALLOW_CREDENTIALS = True
 
 

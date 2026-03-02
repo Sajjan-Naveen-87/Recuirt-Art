@@ -3,38 +3,38 @@ import { Trophy, Target, TrendingUp, Zap } from 'lucide-react';
 
 const Achievements = ({ applicationsCount = 0, stats = null }) => {
   const statsList = [
-    {
-      label: 'Applications Sent',
-      value: applicationsCount,
-      icon: <Target size={20} />,
-      color: 'bg-indigo-600',
-      textColor: 'text-indigo-600',
-      bg: 'bg-indigo-50'
-    },
-    {
-      label: 'Profile Views',
-      value: stats?.profile_views ?? '142',
-      icon: <TrendingUp size={20} />,
-      color: 'bg-emerald-600',
-      textColor: 'text-emerald-600',
-      bg: 'bg-emerald-50'
-    },
-    {
-      label: 'Skills Verified',
-      value: stats ? `${stats.skills_verified}/${stats.total_skills}` : '8/10',
-      icon: <Zap size={20} />,
-      color: 'bg-amber-500', 
-      textColor: 'text-amber-600',
-      bg: 'bg-amber-50'
-    },
-    {
-      label: 'Current Streak',
-      value: stats ? `${stats.current_streak} Days` : '3 Days',
-      icon: <Trophy size={20} />,
-      color: 'bg-rose-500',
-      textColor: 'text-rose-600', 
-      bg: 'bg-rose-50'
-    }
+    // {
+    //   label: 'Applications Sent',
+    //   value: applicationsCount,
+    //   icon: <Target size={20} />,
+    //   color: 'bg-indigo-600',
+    //   textColor: 'text-indigo-600',
+    //   bg: 'bg-indigo-50'
+    // },
+    // {
+    //   label: 'Profile Views',
+    //   value: stats?.profile_views ?? '142',
+    //   icon: <TrendingUp size={20} />,
+    //   color: 'bg-emerald-600',
+    //   textColor: 'text-emerald-600',
+    //   bg: 'bg-emerald-50'
+    // },
+    // {
+    //   label: 'Skills Verified',
+    //   value: stats ? `${stats.skills_verified}/${stats.total_skills}` : '8/10',
+    //   icon: <Zap size={20} />,
+    //   color: 'bg-amber-500', 
+    //   textColor: 'text-amber-600',
+    //   bg: 'bg-amber-50'
+    // },
+    // {
+    //   label: 'Current Streak',
+    //   value: stats ? `${stats.current_streak} Days` : '3 Days',
+    //   icon: <Trophy size={20} />,
+    //   color: 'bg-rose-500',
+    //   textColor: 'text-rose-600', 
+    //   bg: 'bg-rose-50'
+    // }
   ];
 
   return (

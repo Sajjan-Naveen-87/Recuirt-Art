@@ -1,3 +1,10 @@
+# Recruit Art
+
+**Live Frontend Application:** [https://recruit-art.web.app](https://recruit-art.web.app)
+**Live Backend API & Admin:** [https://recruit-art-backend.onrender.com/admin](https://recruit-art-backend.onrender.com/admin)
+
+---
+
 # 🚀 Features
 
 - **Seamless Job Exploration**: Clean, filterable job listings with real-time "Match Rate" indicators from the live backend.

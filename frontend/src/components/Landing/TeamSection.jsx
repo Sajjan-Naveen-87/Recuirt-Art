@@ -11,19 +11,19 @@ function TeamSection() {
     {
       name: "Mansi Agrawal",
       role: "Talent Acquisition Lead",
-      image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      image: "/Mansi-Agrawal.jpeg",
       linkedin: "https://www.linkedin.com/in/mansi-agrawal-034b041b5"
     },
     {
       name: "Prerana Agrawal",
       role: "Talent Acquisition Lead",
-      image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      image: "/Prerana-Agrawal.jpeg",
       linkedin: "https://www.linkedin.com/groups/16095191/"
     },
     {
       name: "Kratika Singh",
       role: "Talent Acquisition Lead",
-      image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      image: "/Kratika-Singh.jpeg",
       linkedin: "https://www.linkedin.com/in/kratika-singh-591b0a231"
     }
   ];

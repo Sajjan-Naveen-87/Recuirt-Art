@@ -22,6 +22,9 @@ class CustomUserManager(BaseUserManager):
         if not mobile:
             raise ValueError('Users must have a mobile number')
         
+        # Ensure all new users are inherently active by default
+        extra_fields.setdefault('is_active', True)
+        
         email = self.normalize_email(email)
         user = self.model(email=email, mobile=mobile, **extra_fields)
         

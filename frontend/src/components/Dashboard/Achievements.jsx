@@ -51,11 +51,6 @@ const Achievements = ({ applicationsCount = 0, stats = null }) => {
              <div className={`w-10 h-10 ${stat.bg} rounded-xl flex items-center justify-center ${stat.textColor}`}>
                 {stat.icon}
              </div>
-             {index === 0 && (
-                <span className="text-[10px] font-bold bg-slate-900 text-white px-2 py-1 rounded-full">
-                   Top 10%
-                </span>
-             )}
           </div>
           <div>
              <h3 className="text-3xl font-bold font-serif text-slate-900">{stat.value}</h3>

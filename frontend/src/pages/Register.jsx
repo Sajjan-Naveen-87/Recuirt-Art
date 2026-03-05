@@ -70,7 +70,7 @@ function Register() {
       <div className="w-full max-w-4xl bg-white border border-slate-200/60 p-8 md:p-12 lg:p-16 rounded-[2.5rem] md:rounded-[3.5rem] shadow-sm relative z-10 overflow-hidden">
         <div className="flex justify-center mb-10 md:mb-12">
           <Link to="/" className="w-40 md:w-48 h-10 md:h-12 overflow-hidden flex-shrink-0 flex items-center hover:opacity-90 transition-opacity">
-            <img src="/Logo.jpg" alt="Recruit Art Logo" className="w-full h-full object-contain" />
+            <img src="/Logo.png" alt="Recruit Art Logo" className="w-full h-full object-contain" />
           </Link>
         </div>
 

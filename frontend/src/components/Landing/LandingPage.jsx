@@ -3,7 +3,6 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import HeroSection from './HeroSection';
 import AboutUs from './AboutUs';
-import PartnersMarquee from './PartnersMarquee';
 import Services from './Services';
 import TeamSection from './TeamSection';
 import LatestJobs from './LatestJobs';
@@ -32,7 +31,6 @@ function LandingPage() {
       <main>
         <HeroSection />
         <AboutUs />
-        <PartnersMarquee />
         <Services />
         <TeamSection />
         <LatestJobs searchQuery={searchQuery} />

@@ -281,12 +281,7 @@ class JobApplicationViewSet(viewsets.ModelViewSet):
     
     def create(self, request, *args, **kwargs):
         """Submit a new job application."""
-        # Check if user is authenticated (required for job applications)
-        if not request.user.is_authenticated:
-            return Response(
-                {'error': 'Authentication required to apply for jobs.'},
-                status=status.HTTP_401_UNAUTHORIZED
-            )
+        # Removed mandatory request.user.is_authenticated check to allow anonymous applications
 
         serializer = self.get_serializer(data=request.data)
         if not serializer.is_valid():
@@ -304,10 +299,18 @@ class JobApplicationViewSet(viewsets.ModelViewSet):
             )
 
         # Check for duplicate applications
-        existing = JobApplication.objects.filter(
-            job=job,
-            applicant=request.user
-        ).exists()
+        if request.user.is_authenticated:
+            existing = JobApplication.objects.filter(
+                job=job,
+                applicant=request.user
+            ).exists()
+        else:
+            # For anonymous users, check by email
+            existing = JobApplication.objects.filter(
+                job=job,
+                email=serializer.validated_data.get('email')
+            ).exists()
+
         if existing:
             return Response(
                 {'error': 'You have already applied for this job.'},
@@ -315,21 +318,23 @@ class JobApplicationViewSet(viewsets.ModelViewSet):
             )
 
         # Save application
-        application = serializer.save(applicant=request.user)
+        applicant = request.user if request.user.is_authenticated else None
+        application = serializer.save(applicant=applicant)
 
-        logger.info(f"Job application submitted: User {request.user.id} ({request.user.email}) applied for job '{job.title}' (ID: {job.id})")
+        logger.info(f"Job application submitted: {'User' if applicant else 'Anonymous'} {applicant.id if applicant else '(no-id)'} ({application.email}) applied for job '{job.title}' (ID: {job.id})")
 
         # Create notification for application submission
-        try:
-            from notifications.models import notify_application_submitted
-            notify_application_submitted(
-                user=request.user,
-                job_title=job.title,
-                application_id=application.id
-            )
-            logger.info(f"Application notification created for user {request.user.id}")
-        except Exception as e:
-            logger.warning(f"Failed to create notification for user {request.user.id}: {e}")
+        if applicant:
+            try:
+                from notifications.models import notify_application_submitted
+                notify_application_submitted(
+                    user=applicant,
+                    job_title=job.title,
+                    application_id=application.id
+                )
+                logger.info(f"Application notification created for user {applicant.id}")
+            except Exception as e:
+                logger.warning(f"Failed to create notification for user {applicant.id}: {e}")
 
 
 

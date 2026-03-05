@@ -5,8 +5,49 @@ This module configures the Django admin interface for user feedback.
 """
 
 from django.contrib import admin
-from feedback.models import Feedback
+from feedback.models import Feedback, Testimonial, TeamMember
 
+
+@admin.register(Testimonial)
+class TestimonialAdmin(admin.ModelAdmin):
+    """Admin for Testimonial model."""
+    
+    list_display = ['author_name', 'author_position', 'is_active', 'order', 'created_at']
+    list_editable = ['is_active', 'order']
+    list_filter = ['is_active', 'created_at']
+    search_fields = ['author_name', 'author_position', 'content']
+    ordering = ['order', '-created_at']
+    
+    fieldsets = (
+        ('Author Information', {
+            'fields': ('author_name', 'author_position')
+        }),
+        ('Testimonial Content', {
+            'fields': ('content', 'original_url')
+        }),
+        ('Display Settings', {
+            'fields': ('is_active', 'order')
+        }),
+        ('Timestamps', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
+    
+    readonly_fields = ['created_at', 'updated_at']
+
+
+@admin.register(TeamMember)
+class TeamMemberAdmin(admin.ModelAdmin):
+    """Admin for TeamMember model."""
+    
+    list_display = ['name', 'role', 'is_active', 'order', 'created_at']
+    list_editable = ['is_active', 'order']
+    list_filter = ['is_active', 'created_at']
+    search_fields = ['name', 'role']
+    ordering = ['order', 'name']
+    
+    readonly_fields = ['created_at', 'updated_at']
 
 @admin.register(Feedback)
 class FeedbackAdmin(admin.ModelAdmin):

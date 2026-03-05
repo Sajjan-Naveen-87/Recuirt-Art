@@ -13,9 +13,20 @@ export const feedbackService = {
     return response.data;
   },
 
-  // Update feedback (admin only)
   updateFeedback: async (id, feedbackData) => {
     const response = await api.put(`/feedback/feedback/${id}/`, feedbackData);
+    return response.data;
+  },
+
+  // Get active testimonials (public)
+  getTestimonials: async () => {
+    const response = await api.get('/feedback/testimonials/');
+    return response.data;
+  },
+
+  // Get active team members (public)
+  getTeamMembers: async () => {
+    const response = await api.get('/feedback/team-members/');
     return response.data;
   },
 };

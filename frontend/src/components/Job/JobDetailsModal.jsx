@@ -70,11 +70,6 @@ const JobDetailsModal = ({ job, isOpen, onClose, onApply }) => {
   };
 
   const handleApplyClick = () => {
-    if (!isAuthenticated) {
-      // Redirect to login or show message
-      alert('Please login to apply for this job.');
-      return;
-    }
     setShowApplyModal(true);
   };
 
@@ -222,12 +217,9 @@ const JobDetailsModal = ({ job, isOpen, onClose, onApply }) => {
                 {jobData.is_active && (
                   <button
                     onClick={handleApplyClick}
-                    disabled={!isAuthenticated}
-                    className="order-1 md:order-2 px-8 md:px-10 py-4 bg-[#121212] text-white rounded-xl md:rounded-2xl font-black uppercase tracking-widest text-[10px] shadow-2xl shadow-black/20 hover:bg-[#cbd5b1] hover:text-[#121212] transition-all flex items-center justify-center gap-3 disabled:opacity-70 disabled:cursor-not-allowed group"
+                    className="order-1 md:order-2 px-8 md:px-10 py-4 bg-[#121212] text-white rounded-xl md:rounded-2xl font-black uppercase tracking-widest text-[10px] shadow-2xl shadow-black/20 hover:bg-[#cbd5b1] hover:text-[#121212] transition-all flex items-center justify-center gap-3 group"
                   >
-                    {isAuthenticated ? (
-                       <>Apply Now <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" /></>
-                    ) : 'Authenticate to Apply'}
+                    Apply Now <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
                   </button>
                 )}
               </div>

@@ -12,7 +12,8 @@ function ContactUs() {
     company: '',
     location: '',
     message: '',
-    userType: 'Client' // Default to client
+    userType: 'Client', // Default to client
+    no_of_requirements: ''
   });
   const [status, setStatus] = useState({ type: '', message: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -51,6 +52,7 @@ ${formData.message || 'No additional message.'}
           hr_name: formData.name,
           hr_email: formData.email,
           hr_phone: formData.phone,
+          no_of_positions: formData.no_of_requirements || 1,
           message: combinedMessage,
           subject: formData.enquiryType || 'General Enquiry'
         }),
@@ -62,7 +64,7 @@ ${formData.message || 'No additional message.'}
 
       setStatus({ type: 'success', message: 'Thank you! Your message has been sent successfully.' });
       setFormData({ 
-        enquiryType: '', name: '', email: '', phone: '', company: '', location: '', message: '', userType: 'Client' 
+        enquiryType: '', name: '', email: '', phone: '', company: '', location: '', message: '', userType: 'Client', no_of_requirements: '' 
       });
     } catch (error) {
       console.error('Error submitting form:', error);
@@ -74,17 +76,6 @@ ${formData.message || 'No additional message.'}
 
   return (
     <div className="min-h-screen bg-[#121212] font-sans flex flex-col relative overflow-hidden">
-      {/* Background Grid Pattern matching the UI */}
-      <div 
-        className="absolute inset-0 opacity-[0.03] pointer-events-none"
-        style={{
-          backgroundImage: `
-            linear-gradient(to right, white 1px, transparent 1px),
-            linear-gradient(to bottom, white 1px, transparent 1px)
-          `,
-          backgroundSize: '40px 40px'
-        }}
-      />
 
       <Navbar />
 
@@ -122,17 +113,32 @@ ${formData.message || 'No additional message.'}
             </select>
           </div>
 
-          {/* Row 2: Name */}
-          <div className="flex flex-col gap-2">
-            <label className="text-white font-medium text-[15px]">Name *</label>
-            <input 
-              required
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              className="w-full bg-[#121212] text-white border border-white/20 rounded-full py-3.5 px-6 outline-none focus:border-white/50 transition-colors"
-            />
+          {/* Row 2: Name and Number of Requirements */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="flex flex-col gap-2">
+              <label className="text-white font-medium text-[15px]">Name *</label>
+              <input 
+                required
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                className="w-full bg-[#121212] text-white border border-white/20 rounded-full py-3.5 px-6 outline-none focus:border-white/50 transition-colors"
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label className="text-white font-medium text-[15px]">Number of requirements *</label>
+              <input 
+                required
+                type="number"
+                name="no_of_requirements"
+                value={formData.no_of_requirements}
+                onChange={handleChange}
+                min="1"
+                className="w-full bg-[#121212] text-white border border-white/20 rounded-full py-3.5 px-6 outline-none focus:border-white/50 transition-colors"
+                placeholder="e.g. 5"
+              />
+            </div>
           </div>
 
           {/* Row 3: Email and Contact */}
@@ -202,40 +208,6 @@ ${formData.message || 'No additional message.'}
               rows="4"
               className="w-full bg-[#121212] text-white border border-white/20 rounded-[2rem] py-4 px-6 outline-none focus:border-white/50 transition-colors resize-none"
             />
-          </div>
-
-          {/* Row 6: User Type Radio Buttons */}
-          <div className="flex flex-col gap-4 pt-6">
-            <label className="text-white font-medium text-[15px]">Are you a client or a candidate? *</label>
-            <div className="flex items-center gap-8">
-              <label className="flex items-center gap-3 cursor-pointer group">
-                <div className="relative flex items-center justify-center">
-                  <input 
-                    type="radio" 
-                    name="userType" 
-                    className="sr-only" 
-                    checked={formData.userType === 'Client'} 
-                    onChange={() => handleRadioChange('Client')} 
-                  />
-                  <div className={`w-5 h-5 rounded-full border ${formData.userType === 'Client' ? 'border-white bg-white' : 'border-white/40 group-hover:border-white/80'}`}></div>
-                </div>
-                <span className="text-white">Client</span>
-              </label>
-
-              <label className="flex items-center gap-3 cursor-pointer group">
-                <div className="relative flex items-center justify-center">
-                  <input 
-                    type="radio" 
-                    name="userType" 
-                    className="sr-only" 
-                    checked={formData.userType === 'Candidate'} 
-                    onChange={() => handleRadioChange('Candidate')} 
-                  />
-                  <div className={`w-5 h-5 rounded-full border ${formData.userType === 'Candidate' ? 'border-white bg-white' : 'border-white/40 group-hover:border-white/80'}`}></div>
-                </div>
-                <span className="text-white">Candidate</span>
-              </label>
-            </div>
           </div>
 
           {/* Row 7: Submit Button */}

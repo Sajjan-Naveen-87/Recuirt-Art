@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { Facebook, Linkedin, Instagram } from 'lucide-react';
 
 function Footer() {
@@ -7,10 +8,15 @@ function Footer() {
         
         {/* Logo Section */}
         <div className="w-full lg:max-w-xs text-center lg:text-left">
-          <div className="flex justify-center lg:justify-start items-center gap-4 mb-8">
-            <div className="relative flex items-center w-40 md:w-48 h-10 md:h-12 overflow-hidden flex-shrink-0">
-               <img src="/Logo.jpg" alt="Recruit Art Logo" className="w-full h-full object-contain object-left mix-blend-multiply" />
-            </div>
+          <div className="space-y-4 text-slate-700">
+            <h2 className="text-2xl md:text-3xl font-serif font-bold mb-6 md:mb-8">Contact Us</h2>
+            <a href="mailto:admin@recuruitart.in" className="block text-sm md:text-base font-medium hover:text-slate-900 transition-colors">
+              admin@recuruitart.in
+            </a>
+            <p className="text-sm md:text-base leading-relaxed">
+              Plot No. 40, Nagla Enclave Part 1, NIIT, Faridabad, Haryana 121004
+            </p>
+            
           </div>
         </div>
 
@@ -21,8 +27,8 @@ function Footer() {
           <div className="text-center sm:text-left">
             <h4 className="text-2xl md:text-3xl font-serif font-bold mb-6 md:mb-8">Quick Links</h4>
             <div className="flex flex-col items-center sm:items-start gap-4 md:gap-6 font-bold text-slate-700">
-              <a href="#" className="hover:text-slate-900 transition-colors border-b-2 border-slate-900 w-max pb-1 text-sm md:text-base">Home</a>
-              <a href="#" className="hover:text-slate-900 transition-colors text-sm md:text-base">Our Story</a>
+              <Link to="/" className="hover:text-slate-900 transition-colors border-b-2 border-slate-900 w-max pb-1 text-sm md:text-base">Home</Link>
+              <a href="/#about-us" className="hover:text-slate-900 transition-colors text-sm md:text-base">Our Story</a>
             </div>
           </div>
 
@@ -30,8 +36,8 @@ function Footer() {
           <div className="text-center sm:text-left">
             <h4 className="text-2xl md:text-3xl font-serif font-bold mb-6 md:mb-8">For Employers</h4>
             <div className="flex flex-col items-center sm:items-start gap-4 md:gap-6 font-bold text-slate-700">
-              <a href="#" className="hover:text-slate-900 transition-colors text-sm md:text-base">Services</a>
-              <a href="#" className="hover:text-slate-900 transition-colors text-sm md:text-base">Submit Vacancy</a>
+              <a href="/#services" className="hover:text-slate-900 transition-colors text-sm md:text-base">Services</a>
+              <Link to="/contact" className="hover:text-slate-900 transition-colors text-sm md:text-base">Submit Vacancy</Link>
             </div>
           </div>
 
@@ -39,9 +45,8 @@ function Footer() {
           <div className="text-center sm:text-left">
             <h4 className="text-2xl md:text-3xl font-serif font-bold mb-6 md:mb-8">For Candidates</h4>
             <div className="flex flex-col items-center sm:items-start gap-4 md:gap-6 font-bold text-slate-700">
-              <a href="#" className="hover:text-slate-900 transition-colors text-sm md:text-base">Job Results</a>
-              <a href="#" className="hover:text-slate-900 transition-colors text-sm md:text-base">Job Alerts</a>
-              <a href="#" className="hover:text-slate-900 transition-colors text-sm md:text-base">Submit Resume</a>
+              <Link to="/jobs" className="hover:text-slate-900 transition-colors text-sm md:text-base">Jobs Available</Link>
+              <Link to="/jobs" className="hover:text-slate-900 transition-colors text-sm md:text-base">Submit Resume</Link>
             </div>
           </div>
 
@@ -67,7 +72,7 @@ function Footer() {
         <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 items-center font-bold text-xs md:text-sm">
           <span>&copy; {new Date().getFullYear()} Recruit Art</span>
           <span className="hidden sm:inline opacity-30">|</span>
-          <a href="#" className="hover:text-slate-700 transition-colors">Privacy policy</a>
+          <Link to="/privacy" className="hover:text-slate-700 transition-colors">Privacy policy</Link>
         </div>
 
       </div>

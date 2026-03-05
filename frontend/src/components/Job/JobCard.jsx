@@ -10,6 +10,8 @@ const JobCard = ({ job, onClick, showApplyButton = false, onApply }) => {
     job_type: job.job_type || 'Full-time',
     salary_range: job.salary_range || job.salary || 'Negotiable',
     match: job.match || 88,
+    category: job.category || 'Other',
+    number_of_openings: job.number_of_openings || 1,
     is_active: job.is_active !== undefined ? job.is_active : true,
   };
 
@@ -29,13 +31,23 @@ const JobCard = ({ job, onClick, showApplyButton = false, onApply }) => {
           <h3 className="text-xl font-serif font-black text-[#121212] group-hover:text-[#cbd5b1] transition-colors leading-tight">
             {jobData.title.length > 40 ? jobData.title.substring(0, 40) + '..' : jobData.title}
           </h3>
-          <span className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border ${
-            jobData.is_active 
-              ? 'bg-[#cbd5b1]/10 text-[#121212] border-[#cbd5b1]/20' 
-              : 'bg-rose-50 text-rose-500 border-rose-100'
-          }`}>
-            {jobData.is_active ? 'Active' : 'Archived'}
-          </span>
+          <div className="flex gap-2 shrink-0">
+            <span className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border ${
+              jobData.category === 'clinician' ? 'bg-blue-50 text-blue-600 border-blue-100' : 
+              jobData.category === 'non_clinician' ? 'bg-orange-50 text-orange-600 border-orange-100' :
+              'bg-[#cbd5b1]/10 text-[#121212] border-[#cbd5b1]/20'
+            }`}>
+              {jobData.category === 'clinician' ? 'Clinical' : 
+               jobData.category === 'non_clinician' ? 'Non Clinician' : 'Other'}
+            </span>
+            <span className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border ${
+              jobData.is_active 
+                ? 'bg-[#cbd5b1]/10 text-[#121212] border-[#cbd5b1]/20' 
+                : 'bg-rose-50 text-rose-500 border-rose-100'
+            }`}>
+              {jobData.is_active ? 'Active' : 'Archived'}
+            </span>
+          </div>
         </div>
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[11px] font-black uppercase tracking-wider text-slate-400">
            <span className="flex items-center gap-1.5 text-slate-500"><Building2 size={13} className="text-[#cbd5b1]" /> {jobData.company_name}</span>
@@ -55,6 +67,8 @@ const JobCard = ({ job, onClick, showApplyButton = false, onApply }) => {
                })()}
              </span>
            </span>
+            <div className="w-1 h-1 bg-slate-200 rounded-full"></div>
+            <span className="flex items-center gap-1.5"><Briefcase size={13} className="text-[#cbd5b1]" /> {jobData.number_of_openings} Openings</span>
         </div>
       </div>
 

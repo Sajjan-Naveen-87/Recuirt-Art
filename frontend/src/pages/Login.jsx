@@ -57,7 +57,7 @@ function Login() {
         <div className="relative z-10">
           <div className="flex justify-center mb-10 md:mb-12">
             <Link to="/" className="w-36 md:w-40 h-10 md:h-12 overflow-hidden flex-shrink-0 flex items-center hover:opacity-90 transition-opacity">
-              <img src="/Logo.jpg" alt="Recruit Art Logo" className="w-full h-full object-contain" />
+              <img src="/Logo.png" alt="Recruit Art Logo" className="w-full h-full object-contain" />
             </Link>
           </div>
           <h1 className="text-3xl md:text-5xl font-serif font-black text-slate-900 mb-8 md:mb-10 tracking-tight leading-none">Sign In.</h1>

@@ -10,9 +10,9 @@ function Services() {
           <div className="w-full h-full absolute inset-0">
             <div className="w-full h-full relative overflow-hidden rounded-b-[4rem] md:rounded-b-[8rem] lg:rounded-b-none lg:rounded-l-[15rem]">
               <img 
-                src="https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80" 
+                src="/Our-Services.png" 
                 alt="Our Services" 
-                className="absolute inset-0 w-full h-full object-cover scale-105"
+                className="absolute inset-0 w-full h-full object-cover scale-100"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-white/20 to-transparent pointer-events-none" />
             </div>
@@ -75,7 +75,7 @@ function Services() {
       {/* Our Specialties Section */}
       <div className="flex flex-col-reverse lg:flex-row min-h-[600px] lg:min-h-[800px] bg-white">
         {/* Left side - Dark Background with curved image */}
-        <div className="w-full lg:w-1/2 bg-[#121212] relative flex items-center h-[500px] md:h-[600px] lg:h-auto overflow-hidden">
+        <div className="w-full lg:w-1/2 bg-white relative flex items-center h-[500px] md:h-[600px] lg:h-auto overflow-hidden">
           <div 
             className="absolute inset-0 opacity-[0.03]"
             style={{
@@ -87,11 +87,11 @@ function Services() {
             }}
           />
           <div className="w-full h-full absolute inset-0 lg:py-0">
-            <div className="w-full h-full relative overflow-hidden rounded-t-[4rem] md:rounded-t-[8rem] lg:rounded-t-none lg:rounded-b-[15rem]">
+            <div className="w-full h-full relative overflow-hidden rounded-t-[4rem] md:rounded-t-[8rem] lg:rounded-t-none lg:rounded-bl-[0rem]">
               <img 
-                src="https://images.unsplash.com/photo-1543269865-cbf427effbad?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80" 
+                src="./Our-Specialities.png" 
                 alt="Our Specialties" 
-                className="absolute inset-0 w-full h-full object-cover scale-105"
+                className="absolute inset-0 w-full h-full object-cover scale-100"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#121212]/30 to-transparent pointer-events-none" />
             </div>

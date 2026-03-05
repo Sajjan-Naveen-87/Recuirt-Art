@@ -2,13 +2,18 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { jobsService } from '../../services/jobs';
 import { MapPin, Clock, Briefcase, ChevronRight, ChevronLeft, Search } from 'lucide-react';
+import JobApplyModal from '../Job/JobApplyModal';
+import JobDetailsModal from '../Job/JobDetailsModal';
 
 function LatestJobs({ searchQuery }) {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
-  const pageSize = 5;
+  const [selectedJob, setSelectedJob] = useState(null);
+  const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
+  const pageSize = 20; // Increase page size to get enough for both columns
 
   useEffect(() => {
     // Reset to page 1 when search query changes
@@ -82,106 +87,174 @@ function LatestJobs({ searchQuery }) {
         </div>
 
         <div className="relative">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 md:gap-4 lg:gap-3">
-            {loading ? (
-              <div className="col-span-full flex flex-col items-center justify-center py-20 text-white">
-                <div className="w-16 h-16 border-4 border-[#cbd5b1]/20 border-t-[#cbd5b1] rounded-full animate-spin mb-6"></div>
-                <p className="font-serif italic text-xl text-slate-400">Discovering positions...</p>
-              </div>
-            ) : jobs.length > 0 ? (
-              <>
-                {jobs.map((job) => (
-                  <div 
-                    key={job.id} 
-                    className="bg-[#cbd5b1] rounded-b-[6rem] md:rounded-b-[10rem] rounded-t-3xl p-8 flex flex-col min-h-[450px] md:h-[500px] hover:-translate-y-2 transition-transform duration-300 shadow-xl group border border-white/10"
-                  >
-                    <div className="flex justify-between items-start mb-6">
-                      {job.is_new ? (
-                        <div className="bg-[#121212] text-white text-[9px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full">
-                          New
-                        </div>
-                      ) : <div />}
-                      <div className="w-8 h-8 rounded-full bg-[#121212]/5 flex items-center justify-center text-slate-900 group-hover:bg-[#121212] group-hover:text-white transition-colors">
-                        <Briefcase size={14} />
-                      </div>
-                    </div>
-                    
-                    <h3 className="text-xl md:text-2xl font-black text-slate-900 mb-6 leading-tight h-24 line-clamp-3">
-                      {truncateTitle(job.title)}
-                    </h3>
-                    
-                    <div className="flex items-center gap-3 text-slate-800 font-bold text-xs uppercase tracking-wider mb-6">
-                      <span className="bg-[#121212]/5 px-3 py-1 rounded-lg truncate">{job.category?.replace('_', ' ') || 'General'}</span>
-                    </div>
-                    
-                    <div className="h-px w-full bg-[#121212]/10 mb-6" />
-                    
-                    <div className="space-y-4 mb-auto text-slate-700">
-                      <div className="flex items-center gap-3">
-                        <MapPin size={14} className="text-[#121212]/40" />
-                        <span className="text-sm font-medium truncate">{job.location}</span>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <Clock size={14} className="text-[#121212]/40" />
-                        <span className="text-sm font-medium">{job.job_type}</span>
-                      </div>
-                    </div>
+          {loading ? (
+            <div className="flex flex-col items-center justify-center py-20 text-white">
+              <div className="w-16 h-16 border-4 border-[#cbd5b1]/20 border-t-[#cbd5b1] rounded-full animate-spin mb-6"></div>
+              <p className="font-serif italic text-xl text-slate-400">Discovering positions...</p>
+            </div>
+          ) : (
+            <div className="flex flex-col md:flex-row gap-12 md:gap-0 relative">
+              {/* Vertical Divider */}
+              <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-px bg-white/10 -translate-x-1/2" />
 
-                    <div className="text-center mt-8 pb-10">
-                      <Link to="/login" className="font-black text-slate-900 font-serif text-xl border-b-2 border-slate-900 pb-1 hover:text-slate-600 hover:border-slate-600 transition-all">
-                        Learn More
-                      </Link>
-                    </div>
-                  </div>
-                ))}
-                
-                {/* Pagination Controls */}
-                {totalPages > 1 && (
-                  <div className="col-span-full flex justify-center items-center gap-8 mt-16 md:mt-24">
-                    <button 
-                      onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                      disabled={currentPage === 1}
-                      className={`flex items-center gap-2 px-6 py-3 rounded-2xl font-black uppercase tracking-widest transition-all ${
-                        currentPage === 1 
-                          ? 'bg-white/5 text-white/20 cursor-not-allowed' 
-                          : 'bg-[#cbd5b1] text-[#121212] hover:bg-white shadow-lg'
-                      }`}
-                    >
-                      <ChevronLeft size={18} /> Prev
-                    </button>
-                    
-                    <div className="flex items-center gap-3">
-                      <span className="text-[#cbd5b1] font-serif italic text-2xl">{currentPage}</span>
-                      <span className="text-white/20 font-serif text-2xl">/</span>
-                      <span className="text-white/40 font-serif text-2xl">{totalPages}</span>
-                    </div>
-
-                    <button 
-                      onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                      disabled={currentPage === totalPages}
-                      className={`flex items-center gap-2 px-6 py-3 rounded-2xl font-black uppercase tracking-widest transition-all ${
-                        currentPage === totalPages 
-                          ? 'bg-white/5 text-white/20 cursor-not-allowed' 
-                          : 'bg-[#cbd5b1] text-[#121212] hover:bg-white shadow-lg'
-                      }`}
-                    >
-                      Next <ChevronRight size={18} />
-                    </button>
-                  </div>
-                )}
-              </>
-            ) : (
-              <div className="col-span-full py-24 text-center bg-white/5 rounded-[4rem] border border-white/10 shadow-2xl">
-                <div className="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-8">
-                  <Search size={32} className="text-[#cbd5b1] opacity-40" />
+              {/* Clinical Jobs Column */}
+              <div className="flex-1 md:pr-12">
+                <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-4 mb-8 text-center text-white font-serif text-xl md:text-2xl shadow-xl">
+                  Clinical jobs
                 </div>
-                <h3 className="text-3xl font-serif font-black text-white mb-4">No opportunities found</h3>
-                <p className="text-slate-400 max-w-md mx-auto font-medium">We couldn't find any matches for your current search criteria. Try broadening your keywords.</p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  {jobs.filter(j => j.category === 'clinician').slice(0, 6).map((job) => (
+                    <div 
+                      key={job.id}
+                      onClick={() => { setSelectedJob(job); setIsDetailsModalOpen(true); }}
+                      className="relative h-64 rounded-3xl overflow-hidden cursor-pointer group border border-white/10"
+                    >
+                      <img 
+                        src="/Clinician-Jobs.png" 
+                        alt="Clinical" 
+                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                      />
+                      <div className="absolute inset-0 bg-black/40 group-hover:bg-black/60 transition-colors duration-300" />
+                      
+                      <div className="absolute inset-0 p-6 flex flex-col justify-center items-center text-center">
+                        <h3 className="text-xl md:text-2xl font-serif font-black text-white mb-2 leading-tight">
+                          {truncateTitle(job.title)}
+                        </h3>
+                        {job.salary_range && (
+                          <p className="text-[#cbd5b1] font-black tracking-widest text-sm uppercase">
+                            {job.salary_range}
+                          </p>
+                        )}
+                      </div>
+
+                      {/* Hover Apply Button */}
+                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <button 
+                          onClick={(e) => { 
+                            e.stopPropagation(); 
+                            setSelectedJob(job); 
+                            setIsApplyModalOpen(true); 
+                          }}
+                          className="bg-[#cbd5b1] text-[#121212] px-8 py-3 rounded-full font-black uppercase tracking-widest text-xs hover:bg-white transition-colors shadow-2xl"
+                        >
+                          Apply Now
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
-            )}
-          </div>
+
+              {/* Non Clinical Jobs Column */}
+              <div className="flex-1 md:pl-12">
+                <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-4 mb-8 text-center text-white font-serif text-xl md:text-2xl shadow-xl">
+                  Non Clinical jobs
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  {jobs.filter(j => j.category === 'non_clinician').slice(0, 6).map((job) => (
+                    <div 
+                      key={job.id}
+                      onClick={() => { setSelectedJob(job); setIsDetailsModalOpen(true); }}
+                      className="relative h-64 rounded-3xl overflow-hidden cursor-pointer group border border-white/10"
+                    >
+                      <img 
+                        src="/Non-Clinician-Jobs.png" 
+                        alt="Non Clinical" 
+                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                      />
+                      <div className="absolute inset-0 bg-black/40 group-hover:bg-black/60 transition-colors duration-300" />
+                      
+                      <div className="absolute inset-0 p-6 flex flex-col justify-center items-center text-center">
+                        <h3 className="text-xl md:text-2xl font-serif font-black text-white mb-2 leading-tight">
+                          {truncateTitle(job.title)}
+                        </h3>
+                        {job.salary_range && (
+                          <p className="text-[#cbd5b1] font-black tracking-widest text-sm uppercase">
+                            {job.salary_range}
+                          </p>
+                        )}
+                      </div>
+
+                      {/* Hover Apply Button */}
+                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <button 
+                          onClick={(e) => { 
+                            e.stopPropagation(); 
+                            setSelectedJob(job); 
+                            setIsApplyModalOpen(true); 
+                          }}
+                          className="bg-[#cbd5b1] text-[#121212] px-8 py-3 rounded-full font-black uppercase tracking-widest text-xs hover:bg-white transition-colors shadow-2xl"
+                        >
+                          Apply Now
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Other Jobs Banner */}
+          {!loading && (
+            <div className="mt-12">
+              <div 
+                onClick={() => { 
+                  const otherJobRecord = jobs.find(j => j.title === 'Other Jobs');
+                  setSelectedJob(otherJobRecord || { id: 18, title: 'Other Jobs' }); 
+                  setIsApplyModalOpen(true); 
+                }}
+                className="relative h-auto md:h-32 rounded-3xl overflow-hidden cursor-pointer group border border-[#cbd5b1]/20 bg-white/5 hover:bg-white/10 transition-all p-8 md:p-0"
+              >
+                <div className="flex flex-col md:flex-row items-center justify-between md:px-12 h-full gap-6 md:gap-0">
+                  <div className="space-y-1 text-center md:text-left">
+                    <h3 className="text-2xl md:text-3xl font-serif font-black text-white">Can't find your role?</h3>
+                    <p className="text-[#cbd5b1] font-medium italic">Apply for other opportunities and let us find the right fit for you.</p>
+                  </div>
+                  <button 
+                    className="bg-[#cbd5b1] text-[#121212] px-10 py-4 rounded-full font-black uppercase tracking-widest text-xs hover:bg-white transition-colors shadow-2xl shrink-0"
+                  >
+                    Request Now
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* View All Jobs Button */}
+        <div className="mt-20 md:mt-32 text-center">
+          <Link 
+            to="/jobs" 
+            className="inline-flex items-center gap-4 bg-[#cbd5b1] text-[#121212] px-12 py-5 rounded-2xl font-black uppercase tracking-[0.2em] transform hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-black/40"
+          >
+            View All Jobs <Search size={20} />
+          </Link>
         </div>
       </div>
+      
+      {/* Anonymous Apply Modal */}
+      {selectedJob && (
+         <JobApplyModal 
+           job={selectedJob} 
+           isOpen={isApplyModalOpen} 
+           onClose={() => { setIsApplyModalOpen(false); }} 
+           onSuccess={() => { setIsApplyModalOpen(false); }}
+         />
+      )}
+
+      {/* Job Details Modal */}
+      {selectedJob && (
+        <JobDetailsModal
+          job={selectedJob}
+          isOpen={isDetailsModalOpen}
+          onClose={() => setIsDetailsModalOpen(false)}
+          onApply={() => {
+            setIsDetailsModalOpen(false);
+            setIsApplyModalOpen(true);
+          }}
+        />
+      )}
     </section>
   );
 }

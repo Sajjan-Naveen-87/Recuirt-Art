@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useSearchParams } from 'react-router-dom';
 import Sidebar from './components/Layout/Sidebar';
 import JobCard from './components/Job/JobCard';
 import JobDetailsModal from './components/Job/JobDetailsModal';
@@ -13,9 +13,12 @@ import Profile from './pages/Profile';
 import ProtectedRoute from './components/ProtectedRoute';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import LandingPage from './components/Landing/LandingPage';
+import JobsPage from './pages/JobsPage';
 import ContactUs from './pages/ContactUs';
+import Portfolio from './pages/Portfolio';
+import Testimonials from './pages/Testimonials';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Bell, Plus, Search, Filter, ArrowRight, User, Camera, FileText, CheckCircle, Sparkles, Loader2, Compass, Menu, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Bell, Plus, Search, Filter, ArrowRight, User, Camera, FileText, CheckCircle, Sparkles, Loader2, Compass, Menu, X, ChevronLeft, ChevronRight, Heart, MessageCircle } from 'lucide-react';
 import { jobsService } from './services/jobs';
 import notificationsService from './services/notifications';
 import profileService from './services/profile';
@@ -25,6 +28,7 @@ import nonClinicianImg from './assets/non_clinician.png';
 import NotificationsDropdown from './components/Notifications/NotificationsDropdown';
 import Achievements from './components/Dashboard/Achievements';
 import MassHiringModal from './components/Contact/MassHiringModal';
+import TestimonialsList from './components/Dashboard/TestimonialsList';
 
 
 function Dashboard({ activeTab, setActiveTab }) {
@@ -443,6 +447,12 @@ function Dashboard({ activeTab, setActiveTab }) {
           </motion.div>
         )}
 
+        {activeTab === "Testimonials" && (
+          <motion.div key="testimonials" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="px-6 md:px-8 lg:px-16 pb-12 md:pb-16 pt-6 md:pt-8">
+            <TestimonialsList />
+          </motion.div>
+        )}
+
         {activeTab === "Profile" && <Profile />}
       </AnimatePresence>
 
@@ -474,9 +484,21 @@ function MainLayout() {
   const [activeTab, setActiveTab] = useState("Dashboard");
   const [showMassHiringModal, setShowMassHiringModal] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
   const { logout } = useAuth();
   
   const handleLogout = async () => await logout();
+
+  // Handle URL tab parameter
+  useEffect(() => {
+    const tab = searchParams.get('tab');
+    if (tab && ["Dashboard", "Explore", "Applications", "Testimonials", "Profile"].includes(tab)) {
+      setActiveTab(tab);
+      // Optional: Clear the param after switching
+      // searchParams.delete('tab');
+      // setSearchParams(searchParams);
+    }
+  }, [searchParams]);
 
   // Close sidebar on small screens when tab changes
   useEffect(() => {
@@ -491,7 +513,7 @@ function MainLayout() {
       {/* Mobile Header - Visible only on small screens */}
       <div className="lg:hidden fixed top-0 left-0 right-0 h-16 bg-[#f4f4f0] border-b border-slate-200/60 flex items-center justify-between px-6 z-40 shadow-sm">
         <div className="w-32 h-8 overflow-hidden flex items-center">
-          <img src="/Logo.jpg" alt="Logo" className="w-full h-full object-contain object-left mix-blend-multiply" />
+          <img src="/Logo.png" alt="Logo" className="w-full h-full object-contain object-left mix-blend-multiply" />
         </div>
         <button 
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
@@ -559,7 +581,10 @@ function App() {
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/verify-email" element={<EmailVerification />} />
           <Route path="/contact" element={<ContactUs />} />
+          <Route path="/portfolio" element={<Portfolio />} />
+          <Route path="/testimonials" element={<Testimonials />} />
           <Route path="/" element={<LandingPage />} />
+          <Route path="/jobs" element={<JobsPage />} />
           <Route path="/dashboard" element={<ProtectedRoute><MainLayout /></ProtectedRoute>} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { LayoutGrid, Search, Briefcase, User, Users, LogOut, MessageCircle, ChevronLeft, ChevronRight } from 'lucide-react';
+import { LayoutGrid, Search, Briefcase, User, Users, LogOut, MessageCircle, ChevronLeft, ChevronRight, Heart } from 'lucide-react';
 import ContactUs from '../Contact/ContactUs';
 import { motion } from 'framer-motion';
 
@@ -27,6 +27,7 @@ const Sidebar = ({ activeTab, setActiveTab, onLogout, onHireTalent }) => {
     { icon: <LayoutGrid size={22} />, label: "Dashboard" },
     { icon: <Search size={22} />, label: "Explore" },
     { icon: <Briefcase size={22} />, label: "Applications" },
+    { icon: <Heart size={22} />, label: "Testimonials" },
     // Removed Profile as requested
   ];
 
@@ -64,7 +65,7 @@ const Sidebar = ({ activeTab, setActiveTab, onLogout, onHireTalent }) => {
         >
           <div className={`relative transition-all duration-300 overflow-hidden ${isCollapsed ? 'lg:w-10 lg:h-10 lg:rounded-xl w-40 h-12 rounded-2xl' : 'w-40 h-12 rounded-2xl'}`}>
             <img 
-              src="/Logo.jpg" 
+              src="/Logo.png" 
               alt="Recruit Art Logo" 
               className={`w-full h-full object-cover transition-all duration-300 ${(isCollapsed && window.innerWidth >= 1024) ? 'scale-150' : 'scale-100'}`} 
             />

@@ -57,6 +57,10 @@ class Job(models.Model):
         choices=JOB_CATEGORY_CHOICES,
         default='other'
     )
+    number_of_openings = models.PositiveIntegerField(
+        'Number of Openings',
+        default=1
+    )
     
     # Additional Information
     salary_range = models.CharField('Salary Range', max_length=100, blank=True)
@@ -224,10 +228,33 @@ class JobApplication(models.Model):
     )
     
     # Additional Information
-    linkedin_url = models.URLField('LinkedIn URL', blank=True)
-    portfolio_url = models.URLField('Portfolio URL', blank=True)
+    alternative_mobile = models.CharField(
+        'Alternative Mobile Number',
+        max_length=15,
+        blank=True
+    )
+    preferred_job_designation = models.CharField(
+        'Preferred Job Designation',
+        max_length=255,
+        blank=True
+    )
+    preferred_job_location = models.CharField(
+        'Preferred Job Location',
+        max_length=255,
+        blank=True
+    )
     expected_salary = models.CharField(
         'Expected Salary',
+        max_length=100,
+        blank=True
+    )
+    join_after = models.CharField(
+        'Can join after',
+        max_length=100,
+        blank=True
+    )
+    total_experience = models.CharField(
+        'Total Experience',
         max_length=100,
         blank=True
     )

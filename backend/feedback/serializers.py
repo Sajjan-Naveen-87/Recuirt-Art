@@ -5,7 +5,7 @@ This module contains serializers for user feedback.
 """
 
 from rest_framework import serializers
-from feedback.models import Feedback
+from feedback.models import Feedback, Testimonial, TeamMember
 
 
 class FeedbackSerializer(serializers.ModelSerializer):
@@ -69,3 +69,28 @@ class FeedbackAdminSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ['created_at', 'updated_at']
 
+
+
+class TestimonialSerializer(serializers.ModelSerializer):
+    """Serializer for Testimonial model."""
+    
+    class Meta:
+        model = Testimonial
+        fields = [
+            'id', 'author_name', 'author_position', 
+            'content', 'original_url', 'is_active', 
+            'order', 'created_at', 'updated_at'
+        ]
+        read_only_fields = ['id', 'created_at', 'updated_at']
+
+
+class TeamMemberSerializer(serializers.ModelSerializer):
+    """Serializer for TeamMember model."""
+    
+    class Meta:
+        model = TeamMember
+        fields = [
+            'id', 'name', 'role', 'image', 
+            'linkedin_url', 'order', 'is_active'
+        ]
+        read_only_fields = ['id']

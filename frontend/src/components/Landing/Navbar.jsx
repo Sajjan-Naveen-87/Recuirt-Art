@@ -9,9 +9,9 @@ function Navbar({ searchQuery, setSearchQuery, onSearchFocus }) {
   return (
     <nav className="bg-[#cbd5b1] px-6 md:px-8 py-5 flex items-center justify-between sticky top-0 z-50">
       <div className="flex items-center gap-6 lg:gap-16">
-        <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="w-24 md:w-30 h-12 md:h-15 overflow-hidden flex-shrink-0 flex items-center hover:opacity-90 transition-opacity cursor-pointer">
-          <img src="/Logo.jpg" href="/" alt="Recruit Art Logo" className="w-full h-full object-contain object-left mix-blend-multiply" />
-        </button>
+        <Link to="/" className="w-24 md:w-30 h-12 md:h-15 overflow-hidden flex-shrink-0 flex items-center hover:opacity-90 transition-opacity cursor-pointer">
+          <img src="/Logo.png" alt="Recruit Art Logo" className="w-full h-full object-contain object-left mix-blend-multiply" />
+        </Link>
 
         {/* Search Bar - Hidden on Mobile/Tablet Navbar, shown in Menu */}
         {setSearchQuery && (
@@ -38,7 +38,9 @@ function Navbar({ searchQuery, setSearchQuery, onSearchFocus }) {
           <span className="flex items-center gap-1">About Us <ChevronDown size={16} strokeWidth={3} className="transition-transform group-hover:rotate-180" /></span>
           <div className="absolute top-full left-0 w-48 opacity-0 invisible group-hover:visible group-hover:opacity-100 transition-all duration-200 shadow-xl border border-slate-900/10 flex flex-col z-50">
             <a href="/#about-us" className="bg-[#e7e3d5] text-slate-900 hover:bg-[#dcd7c4] px-6 py-4 transition-colors">Our Story</a>
-            <a href="/#team" className="bg-[#41424b] text-white hover:bg-[#34353d] px-6 py-4 transition-colors">Meet the team</a>
+            <a href="/#team" className="bg-[#e7e3d5] text-slate-900 hover:bg-[#dcd7c4] px-6 py-4 transition-colors">Meet the Team</a>
+            <Link to="/portfolio" className="bg-[#e7e3d5] text-slate-900 hover:bg-[#dcd7c4] px-6 py-4 transition-colors">Portfolio</Link>
+            <a href="/#testimonials" className="bg-[#41424b] text-white hover:bg-[#34353d] px-6 py-4 transition-colors">Testimonials</a>
           </div>
         </div>
 
@@ -46,23 +48,19 @@ function Navbar({ searchQuery, setSearchQuery, onSearchFocus }) {
           <span className="flex items-center gap-1">Employers <ChevronDown size={16} strokeWidth={3} className="transition-transform group-hover:rotate-180" /></span>
           <div className="absolute top-full left-0 w-56 opacity-0 invisible group-hover:visible group-hover:opacity-100 transition-all duration-200 shadow-xl bg-[#e7e3d5] border border-slate-900/10 flex flex-col z-50">
             <a href="/#services" className="text-slate-900 hover:bg-[#dcd7c4] px-6 py-4 transition-colors">Services</a>
-            <a href="/#services" className="text-slate-900 hover:bg-[#dcd7c4] px-6 py-4 transition-colors">Sector-1 Recruitment</a>
-            <Link to="/contact" className="text-slate-900 hover:bg-[#dcd7c4] px-6 py-4 transition-colors">Submit Vacancy</Link>
+            <Link to="/contact" className="text-slate-900 hover:bg-[#dcd7c4] px-6 py-4 transition-colors">Submit Requests</Link>
           </div>
         </div>
 
         <div className="group relative flex items-center h-full px-4 cursor-pointer hover:text-slate-700 transition-colors py-4">
           <span className="flex items-center gap-1">Job Seekers <ChevronDown size={16} strokeWidth={3} className="transition-transform group-hover:rotate-180" /></span>
           <div className="absolute top-full left-0 w-48 opacity-0 invisible group-hover:visible group-hover:opacity-100 transition-all duration-200 shadow-xl bg-[#e7e3d5] border border-slate-900/10 flex flex-col z-50">
-            <a href="/#jobs" className="text-slate-900 hover:bg-[#dcd7c4] px-6 py-4 transition-colors">Search Jobs</a>
-            <a href="/#jobs" className="text-slate-900 hover:bg-[#dcd7c4] px-6 py-4 transition-colors">Sector-1 Jobs</a>
-            <Link to="/login" className="text-slate-900 hover:bg-[#dcd7c4] px-6 py-4 transition-colors">Create Job Alerts</Link>
-            <Link to="/register" className="text-slate-900 hover:bg-[#dcd7c4] px-6 py-4 transition-colors">Submit Resume</Link>
+            <a href="/#jobs" className="text-slate-900 hover:bg-[#dcd7c4] px-6 py-4 transition-colors">View All Jobs</a>
           </div>
         </div>
 
         <a href="/#insights" className="px-4 py-4 cursor-pointer hover:text-slate-700 transition-colors">
-          Blogs
+          News and Insights
         </a>
         <Link to="/contact" className="px-4 py-4 cursor-pointer hover:text-slate-700 transition-colors">
           Contact
@@ -77,16 +75,6 @@ function Navbar({ searchQuery, setSearchQuery, onSearchFocus }) {
         >
           {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
-
-        <div className="hidden sm:flex items-center bg-[#121212] rounded-full px-6 py-3 gap-4">
-          <Link to="/login" className="text-white font-bold text-sm hover:text-slate-300 transition-colors">
-            Login
-          </Link>
-          <div className="w-px h-4 bg-white/30"></div>
-          <Link to="/register" className="text-white font-bold text-sm hover:text-slate-300 transition-colors">
-            Register
-          </Link>
-        </div>
       </div>
 
       {/* Mobile Menu Drawer */}
@@ -109,7 +97,7 @@ function Navbar({ searchQuery, setSearchQuery, onSearchFocus }) {
             >
               <div className="flex justify-between items-center mb-12">
                 <Link to="/" onClick={() => setIsMobileMenuOpen(false)} className="h-10">
-                  <img src="/Logo.jpg" alt="Logo" className="h-full object-contain mix-blend-multiply brightness-90" />
+                  <img src="/Logo.png" alt="Logo" className="h-full object-contain mix-blend-multiply brightness-90" />
                 </Link>
                 <button 
                   onClick={() => setIsMobileMenuOpen(false)} 
@@ -143,26 +131,13 @@ function Navbar({ searchQuery, setSearchQuery, onSearchFocus }) {
                   <a href="/#about-us" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-[#cbd5b1] transition-colors">About</a>
                   <a href="/#services" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-[#cbd5b1] transition-colors">Services</a>
                   <a href="/#jobs" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-[#cbd5b1] transition-colors">Jobs</a>
+                  <Link to="/portfolio" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-[#cbd5b1] transition-colors">Portfolio</Link>
+                  <a href="/#testimonials" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-[#cbd5b1] transition-colors">Testimonials</a>
                   <Link to="/contact" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-[#cbd5b1] transition-colors">Contact</Link>
                 </div>
               </div>
 
               <div className="mt-auto pt-12 flex flex-col gap-4">
-                <Link 
-                  to="/login" 
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="w-full bg-[#121212] text-white py-5 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] flex items-center justify-center shadow-xl shadow-black/10"
-                >
-                  Login Member
-                </Link>
-                <Link 
-                  to="/register" 
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="w-full bg-white text-[#121212] border border-slate-200 py-5 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] flex items-center justify-center hover:bg-slate-50 transition-colors"
-                >
-                  Create Account
-                </Link>
-                
                 <p className="text-center text-slate-400 text-[9px] font-black uppercase tracking-widest mt-6">
                   © 2026 RECRUIT ART
                 </p>

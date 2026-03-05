@@ -39,7 +39,7 @@ class JobSerializer(serializers.ModelSerializer):
         model = Job
         fields = [
             'id', 'title', 'company_name', 'location', 'category', 'job_type',
-            'description', 'skills_required', 'skills_list',
+            'number_of_openings', 'description', 'skills_required', 'skills_list',
             'salary_range', 'experience_required', 'status',
             'apply_deadline', 'is_featured', 'is_active', 'is_expired',
             'created_at', 'updated_at', 'requirements', 'applications_count'
@@ -99,9 +99,10 @@ class JobApplicationCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = JobApplication
         fields = [
-            'job', 'full_name', 'email', 'mobile',
-            'resume', 'linkedin_url', 'portfolio_url',
-            'expected_salary', 'notice_period', 'cover_letter', 'responses'
+            'job', 'full_name', 'email', 'mobile', 'alternative_mobile',
+            'preferred_job_designation', 'preferred_job_location',
+            'resume', 'expected_salary', 'join_after', 'total_experience',
+            'notice_period', 'cover_letter', 'responses'
         ]
     
     def validate_resume(self, value):
@@ -134,14 +135,14 @@ class JobApplicationCreateSerializer(serializers.ModelSerializer):
         resume = validated_data.get('resume')
         request = self.context.get('request')
 
-        # Fallback to user profile resume if not provided
+        # Fallback to user profile resume if not provided and user is logged in
         if not resume and request and request.user.is_authenticated:
-            if request.user.resume:
+            if hasattr(request.user, 'resume') and request.user.resume:
                 validated_data['resume'] = request.user.resume
             else:
-                raise serializers.ValidationError({'resume': 'Resume is required (none found in profile).'})
+                raise serializers.ValidationError({'resume': 'Resume is required.'})
         elif not resume:
-            # For anonymous users or users with no profile resume
+            # Mandatory for all, especially anonymous
             raise serializers.ValidationError({'resume': 'Resume is required.'})
 
         application = JobApplication.objects.create(**validated_data)
@@ -177,10 +178,11 @@ class JobApplicationSerializer(serializers.ModelSerializer):
         model = JobApplication
         fields = [
             'id', 'job', 'job_title', 'company_name',
-            'full_name', 'email', 'mobile', 'resume', 'resume_file_name',
-            'linkedin_url', 'portfolio_url', 'expected_salary',
-            'notice_period', 'cover_letter', 'status',
-            'applied_at', 'updated_at', 'responses'
+            'full_name', 'email', 'mobile', 'alternative_mobile',
+            'preferred_job_designation', 'preferred_job_location',
+            'resume', 'resume_file_name', 'expected_salary',
+            'join_after', 'total_experience', 'notice_period',
+            'cover_letter', 'status', 'applied_at', 'updated_at', 'responses'
         ]
         read_only_fields = ['job', 'applied_at', 'updated_at', 'resume']
 

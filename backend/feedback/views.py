@@ -8,12 +8,14 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAdminUser
-from feedback.models import Feedback
+from feedback.models import Feedback, Testimonial, TeamMember
 from feedback.serializers import (
     FeedbackSerializer,
     FeedbackCreateSerializer,
     FeedbackStatusUpdateSerializer,
     FeedbackAdminSerializer,
+    TestimonialSerializer,
+    TeamMemberSerializer,
 )
 
 
@@ -146,3 +148,49 @@ class FeedbackViewSet(viewsets.ModelViewSet):
             }
         )
 
+
+class TestimonialViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet for managing testimonials.
+    
+    GET: List active testimonials (public)
+    Others: Admin only
+    """
+    queryset = Testimonial.objects.all()
+    serializer_class = TestimonialSerializer
+    
+    def get_queryset(self):
+        """Filterimonials based on user role."""
+        if self.request.user.is_staff:
+            return Testimonial.objects.all()
+        return Testimonial.objects.filter(is_active=True)
+    
+    def get_permissions(self):
+        """Set permissions based on action."""
+        if self.action in ['list', 'retrieve']:
+            return [AllowAny()]
+        return [IsAdminUser()]
+
+
+
+class TeamMemberViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet for managing team members.
+    
+    GET: List active team members (public)
+    Others: Admin only
+    """
+    queryset = TeamMember.objects.all()
+    serializer_class = TeamMemberSerializer
+    
+    def get_queryset(self):
+        """Filter team members based on user role."""
+        if self.request.user.is_staff:
+            return TeamMember.objects.all()
+        return TeamMember.objects.filter(is_active=True)
+    
+    def get_permissions(self):
+        """Set permissions based on action."""
+        if self.action in ['list', 'retrieve']:
+            return [AllowAny()]
+        return [IsAdminUser()]

@@ -98,3 +98,51 @@ class Feedback(models.Model):
     def __str__(self):
         return f"{self.feedback_type} - {self.name or 'Anonymous'} ({self.created_at.date()})"
 
+
+class Testimonial(models.Model):
+    """
+    Model for storing client and candidate testimonials.
+    """
+    author_name = models.CharField('Author Name', max_length=255)
+    author_position = models.CharField('Position/Company', max_length=255, help_text='e.g., CEO, Apple or Candidate')
+    content = models.TextField('Testimonial Content')
+    original_url = models.URLField('Original Post URL', blank=True, null=True, help_text='Link to the original testimonial post')
+    is_active = models.BooleanField('Is Active', default=True)
+    order = models.PositiveIntegerField('Display Order', default=0)
+    
+    # Timestamps
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'feedback_testimonial'
+        verbose_name = 'Testimonial'
+        verbose_name_plural = 'Testimonials'
+        ordering = ['order', '-created_at']
+
+    def __str__(self):
+        return f"{self.author_name} - {self.author_position}"
+
+class TeamMember(models.Model):
+    """
+    Model for storing team member information for the Leadership section.
+    """
+    name = models.CharField('Name', max_length=255)
+    role = models.CharField('Role', max_length=255)
+    image = models.ImageField('Image', upload_to='team/', help_text='Arched profile image')
+    linkedin_url = models.URLField('LinkedIn URL', blank=True, null=True)
+    order = models.PositiveIntegerField('Display Order', default=0)
+    is_active = models.BooleanField('Is Active', default=True)
+    
+    # Timestamps
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'feedback_teammember'
+        verbose_name = 'Team Member'
+        verbose_name_plural = 'Team Members'
+        ordering = ['order', 'name']
+
+    def __str__(self):
+        return f"{self.name} - {self.role}"

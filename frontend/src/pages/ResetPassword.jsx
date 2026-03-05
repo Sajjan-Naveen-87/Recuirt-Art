@@ -69,7 +69,7 @@ function ResetPassword() {
         
         <div className="relative z-10">
           <Link to="/" className="w-40 h-12 overflow-hidden flex-shrink-0 flex items-center hover:opacity-90 transition-opacity">
-            <img src="/Logo.jpg" alt="Recruit Art Logo" className="w-full h-full object-contain brightness-150" />
+            <img src="/Logo.png" alt="Recruit Art Logo" className="w-full h-full object-contain brightness-150" />
           </Link>
         </div>
 

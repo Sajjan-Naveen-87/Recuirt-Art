@@ -167,7 +167,6 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Google Cloud Storage Configuration (Firebase Storage Backend)
 import json
@@ -187,14 +186,30 @@ if USE_CLOUD_STORAGE and os.getenv('FIREBASE_SERVICE_ACCOUNT_JSON'):
         # Try to infer it from the project ID if not explicitly set
         GS_BUCKET_NAME = f"{creds_dict.get('project_id')}.appspot.com"
         
-    DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
     GS_DEFAULT_ACL = 'publicRead'
+    
+    STORAGES = {
+        "default": {
+            "BACKEND": "storages.backends.gcloud.GoogleCloudStorage",
+        },
+        "staticfiles": {
+            "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        },
+    }
     
     # When using GCS, MEDIA_URL is handled automatically by the storage backend
 else:
     # Fallback to local storage (only for local dev without firebase keys set)
     MEDIA_URL = '/media/'
     MEDIA_ROOT = BASE_DIR / 'media'
+    STORAGES = {
+        "default": {
+            "BACKEND": "django.core.files.storage.FileSystemStorage",
+        },
+        "staticfiles": {
+            "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        },
+    }
 
 
 # Default primary key field type

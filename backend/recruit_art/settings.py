@@ -49,7 +49,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
+    'storages',
+
     # Third-party apps
     'rest_framework',
     'rest_framework_simplejwt',
@@ -168,9 +169,32 @@ STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# Media files (Uploads)
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+# Google Cloud Storage Configuration (Firebase Storage Backend)
+import json
+from google.oauth2 import service_account
+
+# Determine if we should use local or cloud storage for media
+USE_CLOUD_STORAGE = os.getenv('USE_CLOUD_STORAGE', 'True').lower() == 'true'
+
+if USE_CLOUD_STORAGE and os.getenv('FIREBASE_SERVICE_ACCOUNT_JSON'):
+    firebase_creds_json = os.getenv('FIREBASE_SERVICE_ACCOUNT_JSON')
+    creds_dict = json.loads(firebase_creds_json)
+    GS_CREDENTIALS = service_account.Credentials.from_service_account_info(creds_dict)
+    
+    # E.g., 'your-project-id.appspot.com'
+    GS_BUCKET_NAME = os.getenv('GS_BUCKET_NAME')
+    if not GS_BUCKET_NAME:
+        # Try to infer it from the project ID if not explicitly set
+        GS_BUCKET_NAME = f"{creds_dict.get('project_id')}.appspot.com"
+        
+    DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+    GS_DEFAULT_ACL = 'publicRead'
+    
+    # When using GCS, MEDIA_URL is handled automatically by the storage backend
+else:
+    # Fallback to local storage (only for local dev without firebase keys set)
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = BASE_DIR / 'media'
 
 
 # Default primary key field type

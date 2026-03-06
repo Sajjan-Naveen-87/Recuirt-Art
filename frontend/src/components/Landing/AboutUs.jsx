@@ -133,7 +133,7 @@ function AboutUs() {
       </div>
 
       {/* Stats Banner Section */}
-      <div className="w-full bg-[#121212] py-20 xl:py-16 relative overflow-hidden flex flex-col xl:flex-row items-center justify-between shadow-2xl min-h-[650px] border-t border-slate-800">
+      <div id="portfolio" className="w-full bg-[#121212] py-20 xl:py-16 relative overflow-hidden flex flex-col xl:flex-row items-center justify-between shadow-2xl min-h-[650px] border-t border-slate-800">
           {/* Subtle grid background */}
           <div 
             className="absolute inset-0 opacity-[0.03]"
@@ -191,7 +191,7 @@ function AboutUs() {
         <div className="w-full xl:w-1/3 bg-[#f4f4f0] h-[400px] md:h-[500px] xl:h-[520px] relative z-10 rounded-[4rem] xl:rounded-none xl:rounded-l-full mx-6 xl:mx-0 box-border text-center xl:text-right flex flex-col justify-center p-12 lg:p-20 lg:pr-24">
             <h4 className="text-[12px] font-black text-black uppercase tracking-[0.8em] mb-6">RECRUIT ART IMPACT</h4>
             <h3 className="text-3xl md:text-4xl lg:text-5xl font-serif font-black text-slate-900 leading-[1.1] mb-8 max-w-sm mx-auto xl:mx-0 xl:ml-auto">
-              Connecting Talent with Purpose.
+                Our Portfolio.
             </h3>
             <p className="text-slate-500 font-medium text-sm md:text-base leading-relaxed max-w-sm mx-auto xl:mx-0 xl:ml-auto italic">
               We focus on building strong, lasting connections between exceptional healthcare professionals and leading institutions. Quality and integrity are at the heart of every placement.

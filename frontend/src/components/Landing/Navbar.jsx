@@ -39,7 +39,7 @@ function Navbar({ searchQuery, setSearchQuery, onSearchFocus }) {
           <div className="absolute top-full left-0 w-48 opacity-0 invisible group-hover:visible group-hover:opacity-100 transition-all duration-200 shadow-xl border border-slate-900/10 flex flex-col z-50">
             <a href="/#about-us" className="bg-[#e7e3d5] text-slate-900 hover:bg-[#dcd7c4] px-6 py-4 transition-colors">Our Story</a>
             <a href="/#team" className="bg-[#e7e3d5] text-slate-900 hover:bg-[#dcd7c4] px-6 py-4 transition-colors">Meet the Team</a>
-            <Link to="/portfolio" className="bg-[#e7e3d5] text-slate-900 hover:bg-[#dcd7c4] px-6 py-4 transition-colors">Portfolio</Link>
+            <a href="/#portfolio" className="bg-[#e7e3d5] text-slate-900 hover:bg-[#dcd7c4] px-6 py-4 transition-colors">Portfolio</a>
             <a href="/#testimonials" className="bg-[#41424b] text-white hover:bg-[#34353d] px-6 py-4 transition-colors">Testimonials</a>
           </div>
         </div>
@@ -131,7 +131,7 @@ function Navbar({ searchQuery, setSearchQuery, onSearchFocus }) {
                   <a href="/#about-us" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-[#cbd5b1] transition-colors">About</a>
                   <a href="/#services" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-[#cbd5b1] transition-colors">Services</a>
                   <a href="/#jobs" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-[#cbd5b1] transition-colors">Jobs</a>
-                  <Link to="/portfolio" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-[#cbd5b1] transition-colors">Portfolio</Link>
+                  <a href="/#portfolio" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-[#cbd5b1] transition-colors">Portfolio</a>
                   <a href="/#testimonials" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-[#cbd5b1] transition-colors">Testimonials</a>
                   <Link to="/contact" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-[#cbd5b1] transition-colors">Contact</Link>
                 </div>

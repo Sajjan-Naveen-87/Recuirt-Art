@@ -8,7 +8,7 @@ function Services() {
         {/* Left side - Image with curved edge */}
         <div className="w-full lg:w-1/2 bg-white relative flex items-center h-[500px] md:h-[600px] lg:h-auto overflow-hidden">
           <div className="w-full h-full absolute inset-0">
-            <div className="w-full h-full relative overflow-hidden rounded-b-[4rem] md:rounded-b-[8rem] lg:rounded-b-none lg:rounded-l-[15rem]">
+            <div className="w-full h-full relative overflow-hidden rounded-t-[4rem] rounded-b-[4rem] md:rounded-t-none md:rounded-b-[8rem] lg:rounded-b-none lg:rounded-l-[15rem]">
               <img 
                 src="/Our-Services.png" 
                 alt="Our Services" 
@@ -87,7 +87,7 @@ function Services() {
             }}
           />
           <div className="w-full h-full absolute inset-0 lg:py-0">
-            <div className="w-full h-full relative overflow-hidden rounded-t-[4rem] md:rounded-t-[8rem] lg:rounded-t-none lg:rounded-bl-[0rem]">
+            <div className="w-full h-full relative overflow-hidden rounded-t-[4rem] md:rounded-t-[8rem] lg:rounded-t-none lg:rounded-bl-[15rem]">
               <img 
                 src="./Our-Specialities.png" 
                 alt="Our Specialties" 

@@ -182,19 +182,15 @@ ${formData.message || 'No additional message.'}
             </div>
             <div className="flex flex-col gap-2">
               <label className="text-white font-medium text-[15px]">Location *</label>
-              <select 
+              <input 
                 required
+                type="text"
                 name="location"
                 value={formData.location}
                 onChange={handleChange}
-                className="w-full bg-[#121212] text-white border border-white/20 rounded-full py-3.5 px-6 appearance-none outline-none focus:border-white/50 transition-colors"
-              >
-                <option value="" disabled>Select a location</option>
-                <option value="North America">North America</option>
-                <option value="Europe">Europe</option>
-                <option value="Asia Pacific">Asia Pacific</option>
-                <option value="Global / Other">Global / Other</option>
-              </select>
+                placeholder="e.g. Bengaluru,Karnataka,India"
+                className="w-full bg-[#121212] text-white border border-white/20 rounded-full py-3.5 px-6 outline-none focus:border-white/50 transition-colors"
+              />
             </div>
           </div>
 

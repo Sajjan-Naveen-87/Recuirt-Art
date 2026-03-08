@@ -4,9 +4,9 @@ function HeroSection() {
       {/* Left side - Image with curved edge */}
       <div className="w-full lg:w-1/2 bg-white relative flex items-center h-[500px] md:h-[600px] lg:h-auto">
         <div className="w-full h-full absolute inset-0">
-          <div className="w-full h-full relative overflow-hidden rounded-b-[4rem] md:rounded-b-[8rem] lg:rounded-r-[0rem] lg:rounded-l-[10rem]">
+          <div className="w-full h-full relative overflow-hidden rounded-b-[4rem] md:rounded-b-[8rem] lg:rounded-r-[0rem] lg:rounded-l-[0rem]">
             <img 
-              src="/Female1.png" 
+              src="/Female.jpg" 
               alt="Healthcare professional smiling" 
               className="absolute inset-0 w-full h-full object-cover object-center lg:object-left scale-105"
             />

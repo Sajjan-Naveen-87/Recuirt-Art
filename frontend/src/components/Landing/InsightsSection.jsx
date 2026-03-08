@@ -6,7 +6,7 @@ function InsightsSection() {
       id: 1,
       title: "The Future of Remote Work in 2026",
       category: "Workplace",
-      date: "Oct 24, 2026",
+      date: "Jan 24, 2026",
       image: "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
       excerpt: "Explore the evolving landscape of remote work and discover how top companies are maintaining culture and productivity."
     },
@@ -14,7 +14,7 @@ function InsightsSection() {
       id: 2,
       title: "How to Build a World-Class Engineering Team",
       category: "Leadership",
-      date: "Oct 20, 2026",
+      date: "Feb 15, 2026",
       image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
       excerpt: "Learn proven strategies for attracting, evaluating, and retaining top-tier engineering talent in a competitive market."
     },
@@ -22,7 +22,7 @@ function InsightsSection() {
       id: 3,
       title: "Navigating Global Talent Acquisition",
       category: "Recruitment",
-      date: "Oct 15, 2026",
+      date: "Feb 20, 2026",
       image: "https://images.unsplash.com/photo-1558402529-d2638a7023e9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
       excerpt: "Insights into the challenges and opportunities of hiring talent across borders, and how to stay compliant while scaling."
     }

@@ -49,7 +49,7 @@ function AboutUs() {
         {/* Left side - Image */}
         <div className="w-full lg:w-1/2 xl:w-[60%] bg-white relative flex items-center h-[500px] md:h-[600px] lg:h-auto overflow-hidden">
           <div className="w-full h-full absolute inset-0">
-            <div className="w-full h-full relative overflow-hidden rounded-b-[4rem] md:rounded-b-[8rem] lg:rounded-b-none lg:rounded-l-[10rem]">
+            <div className="w-full h-full relative overflow-hidden rounded-b-[4rem] md:rounded-b-[8rem] lg:rounded-b-none lg:rounded-l-[0rem]">
               <img 
                 src="/Our-Story-1.png" 
                 alt="Our Story" 
@@ -120,7 +120,7 @@ function AboutUs() {
         {/* Right side - Image with curved edge */}
         <div className="w-full lg:w-1/2 xl:w-[60%] bg-white relative flex items-center h-[500px] md:h-[600px] lg:h-auto overflow-hidden">
           <div className="w-full h-full absolute inset-0 lg:py-0">
-              <div className="w-full h-full relative overflow-hidden rounded-t-[4rem] md:rounded-t-[8rem] lg:rounded-t-none lg:rounded-br-[15rem]">
+              <div className="w-full h-full relative overflow-hidden rounded-t-[4rem] md:rounded-t-[8rem] lg:rounded-t-none lg:rounded-br-[0rem]">
               <img 
                 src="/Our-Focus.png" 
                 alt="Our Focus" 

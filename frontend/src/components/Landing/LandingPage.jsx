@@ -9,6 +9,7 @@ import LatestJobs from './LatestJobs';
 import Testimonials from './Testimonials';
 import InsightsSection from './InsightsSection';
 import ScrollNav from './ScrollNav';
+import ContactSection from './ContactSection';
 
 function LandingPage() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -21,7 +22,7 @@ function LandingPage() {
   };
 
   return (
-    <div className="font-sans min-h-screen bg-white scroll-smooth" style={{ scrollPaddingTop: '100px' }}>
+    <div className="font-sans min-h-screen bg-[#121212] scroll-smooth" style={{ scrollPaddingTop: '100px' }}>
       <Navbar 
         searchQuery={searchQuery} 
         setSearchQuery={setSearchQuery} 
@@ -36,6 +37,7 @@ function LandingPage() {
         <LatestJobs searchQuery={searchQuery} />
         <Testimonials />
         <InsightsSection />
+        <ContactSection />
       </main>
 
       <Footer />

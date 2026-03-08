@@ -281,73 +281,82 @@ class JobApplicationViewSet(viewsets.ModelViewSet):
     
     def create(self, request, *args, **kwargs):
         """Submit a new job application."""
-        # Removed mandatory request.user.is_authenticated check to allow anonymous applications
+        try:
+            # Validate serializer
+            serializer = self.get_serializer(data=request.data)
+            if not serializer.is_valid():
+                logger.error(f"Job application validation failed: {serializer.errors}")
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        serializer = self.get_serializer(data=request.data)
-        if not serializer.is_valid():
-            logger.error(f"Job application validation failed: {serializer.errors}")
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            # Get the job
+            job = serializer.validated_data.get('job')
 
-        # Get the job
-        job = serializer.validated_data.get('job')
-
-        # Check if job is active and not expired
-        if not job.is_active:
-            return Response(
-                {'error': 'This job is no longer accepting applications.'},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-
-        # Check for duplicate applications
-        if request.user.is_authenticated:
-            existing = JobApplication.objects.filter(
-                job=job,
-                applicant=request.user
-            ).exists()
-        else:
-            # For anonymous users, check by email
-            existing = JobApplication.objects.filter(
-                job=job,
-                email=serializer.validated_data.get('email')
-            ).exists()
-
-        if existing:
-            return Response(
-                {'error': 'You have already applied for this job.'},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-
-        # Save application
-        applicant = request.user if request.user.is_authenticated else None
-        application = serializer.save(applicant=applicant)
-
-        logger.info(f"Job application submitted: {'User' if applicant else 'Anonymous'} {applicant.id if applicant else '(no-id)'} ({application.email}) applied for job '{job.title}' (ID: {job.id})")
-
-        # Create notification for application submission
-        if applicant:
-            try:
-                from notifications.models import notify_application_submitted
-                notify_application_submitted(
-                    user=applicant,
-                    job_title=job.title,
-                    application_id=application.id
+            # Check if job is active and not expired
+            if not job.is_active:
+                return Response(
+                    {'error': 'This job is no longer accepting applications.'},
+                    status=status.HTTP_400_BAD_REQUEST
                 )
-                logger.info(f"Application notification created for user {applicant.id}")
-            except Exception as e:
-                logger.warning(f"Failed to create notification for user {applicant.id}: {e}")
 
+            # Check for duplicate applications
+            if request.user.is_authenticated:
+                existing = JobApplication.objects.filter(
+                    job=job,
+                    applicant=request.user
+                ).exists()
+            else:
+                # For anonymous users, check by email
+                existing = JobApplication.objects.filter(
+                    job=job,
+                    email=serializer.validated_data.get('email')
+                ).exists()
 
+            if existing:
+                return Response(
+                    {'error': 'You have already applied for this job.'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
 
-        # Return full application details
-        output_serializer = JobApplicationSerializer(application)
+            # Save application
+            applicant = request.user if request.user.is_authenticated else None
+            application = serializer.save(applicant=applicant)
 
-        return Response(
-            {
-                'message': 'Application submitted successfully.',
-                'application': output_serializer.data
-            },
-            status=status.HTTP_201_CREATED
-        )
+            # Safe logging for both auth and anonymous users
+            user_info = f"User {applicant.id}" if applicant else "Anonymous"
+            logger.info(f"Job application submitted: {user_info} ({application.email}) applied for job '{job.title}' (ID: {job.id})")
+
+            # Create notification for application submission
+            if applicant:
+                try:
+                    from notifications.models import notify_application_submitted
+                    notify_application_submitted(
+                        user=applicant,
+                        job_title=job.title,
+                        application_id=application.id
+                    )
+                    logger.info(f"Application notification created for user {applicant.id}")
+                except Exception as e:
+                    logger.warning(f"Failed to create notification for user {applicant.id}: {e}")
+
+            # Return full application details
+            output_serializer = JobApplicationSerializer(application)
+
+            return Response(
+                {
+                    'message': 'Application submitted successfully.',
+                    'application': output_serializer.data
+                },
+                status=status.HTTP_201_CREATED
+            )
+        except Exception as e:
+            logger.error(f"Unexpected error in job application submission: {e}", exc_info=True)
+            return Response(
+                {
+                    'error': 'An unexpected server error occurred while processing your application.',
+                    'detail': str(e) if settings.DEBUG else 'Please contact support.'
+                },
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
     
     def update(self, request, *args, **kwargs):
         """Update application status (admin only)."""

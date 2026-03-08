@@ -87,7 +87,6 @@ class ApplicationResponseSerializer(serializers.ModelSerializer):
     class Meta:
         model = ApplicationResponse
         fields = ['id', 'requirement', 'response_value']
-        read_only_fields = ['requirement']
 
 
 class JobApplicationCreateSerializer(serializers.ModelSerializer):

@@ -13,11 +13,11 @@ function TeamSection() {
   ];
 
   return (
-    <section id="team" className="py-20 md:py-40 bg-white scroll-mt-32">
+    <section id="team" className="py-16 lg:py-24 bg-[#121212] scroll-mt-32">
       <div className="max-w-7xl mx-auto px-6 md:px-12 text-center">
-        <div className="space-y-4 mb-20 md:mb-32">
+        <div className="space-y-4 mb-16 md:mb-20">
           <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-[#cbd5b1]">The Leadership</h4>
-          <h2 className="text-4xl md:text-6xl lg:text-8xl font-serif font-black text-slate-900 tracking-tight leading-none">
+          <h2 className="text-4xl md:text-6xl lg:text-8xl font-serif font-black text-white tracking-tight leading-none">
             Meet <span className="text-[#cbd5b1]">The Team.</span>
           </h2>
         </div>
@@ -40,15 +40,15 @@ function TeamSection() {
                   />
                   
                   {/* LinkedIn Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#121212]/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end justify-center pb-8">
-                     <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-[#0077b5] transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 shadow-xl">
-                        <Linkedin size={24} fill="currentColor" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-10 z-20">
+                     <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-[#0077b5] transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 shadow-2xl ring-4 ring-white/20">
+                        <Linkedin size={24} strokeWidth={2.5} />
                      </div>
                   </div>
                   <div className="absolute inset-0 border border-[#cbd5b1]/10 rounded-t-[10rem] pointer-events-none" />
                 </div>
                 
-                <h3 className="text-2xl md:text-3xl font-serif font-black text-slate-900 mb-2 group-hover:text-[#cbd5b1] transition-colors leading-tight">
+                <h3 className="text-2xl md:text-3xl font-serif font-black text-white mb-2 group-hover:text-[#cbd5b1] transition-colors leading-tight whitespace-nowrap">
                   {member.name}
                 </h3>
                 <p className="text-slate-400 text-sm md:text-base font-black uppercase tracking-[0.2em]">

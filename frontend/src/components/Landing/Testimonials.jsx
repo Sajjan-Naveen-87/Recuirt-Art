@@ -31,9 +31,9 @@ function Testimonials() {
   if (testimonials.length === 0) return null;
 
   return (
-    <section id="testimonials" className="py-24 bg-white overflow-hidden scroll-mt-32">
+    <section id="testimonials" className="py-24 bg-[#121212] overflow-hidden scroll-mt-32">
       <div className="max-w-6xl mx-auto px-8">
-        <h2 className="text-5xl lg:text-7xl font-serif font-black text-slate-900 text-center mb-16 tracking-tight">
+        <h2 className="text-5xl lg:text-7xl font-serif font-black text-white text-center mb-16 tracking-tight">
           Testimonials
         </h2>
 
@@ -48,13 +48,13 @@ function Testimonials() {
               className="flex flex-col items-center"
             >
               {/* Giant Quote Marks */}
-              <div className="text-[8rem] md:text-[10rem] font-serif font-black text-slate-900 leading-none h-[100px] md:h-[120px] mb-2 md:mb-4 select-none flex self-start lg:translate-x-[-15%] opacity-5">
+              <div className="text-[8rem] md:text-[10rem] font-serif font-black text-white leading-none h-[100px] md:h-[120px] mb-2 md:mb-4 select-none flex self-start lg:translate-x-[-15%] opacity-5">
                 &ldquo;
               </div>
 
               <div className="text-center space-y-6 max-w-3xl md:-mt-10 relative z-10 px-4">
                 <div className="space-y-1">
-                  <h3 className="text-3xl md:text-4xl font-black text-slate-900 font-serif">
+                  <h3 className="text-3xl md:text-4xl font-black text-white font-serif">
                     {testimonials[activeIndex].original_url ? (
                       <a 
                         href={testimonials[activeIndex].original_url}
@@ -69,14 +69,28 @@ function Testimonials() {
                     )}
                   </h3>
                   
-                  <p className="text-lg md:text-xl font-serif font-bold text-slate-500 italic">
+                  <p className="text-lg md:text-xl font-serif font-bold text-slate-400 italic">
                     {testimonials[activeIndex].author_position}
                   </p>
                 </div>
                 
-                <p className="text-slate-800 text-xl md:text-3xl leading-relaxed italic font-serif">
+                <p className="text-slate-300 text-xl md:text-3xl leading-relaxed italic font-serif">
                   "{testimonials[activeIndex].content}"
                 </p>
+
+                {testimonials[activeIndex].original_url && (
+                  <div className="pt-4">
+                    <a 
+                      href={testimonials[activeIndex].original_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[#cbd5b1] text-sm md:text-base font-black uppercase tracking-widest hover:text-white transition-colors flex items-center justify-center gap-2 group"
+                    >
+                      See more 
+                      <span className="group-hover:translate-x-1 transition-transform">→</span>
+                    </a>
+                  </div>
+                )}
 
                 {/* Dots to track progress */}
                 <div className="flex justify-center gap-2 pt-12">
@@ -85,7 +99,7 @@ function Testimonials() {
                       key={i}
                       onClick={() => setActiveIndex(i)}
                       className={`h-1.5 transition-all duration-500 rounded-full ${
-                        i === activeIndex ? 'w-10 bg-slate-900' : 'w-2 bg-slate-200'
+                        i === activeIndex ? 'w-10 bg-white' : 'w-2 bg-white/20'
                       }`}
                     />
                   ))}

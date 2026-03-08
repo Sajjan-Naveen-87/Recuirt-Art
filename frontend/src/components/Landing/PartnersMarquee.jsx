@@ -17,7 +17,7 @@ function PartnersMarquee() {
   const displayClients = [...clients, ...clients];
 
   return (
-    <div className="bg-white py-16 lg:py-24 overflow-hidden border-b border-slate-100">
+    <div className="bg-[#1a1a1a] py-16 lg:py-24 overflow-hidden border-b border-white/10">
       <div className="relative flex overflow-x-hidden group">
         <div className="animate-marquee group-hover:[animation-play-state:paused] whitespace-nowrap flex items-center gap-16 lg:gap-24 px-12">
           {displayClients.map((client, index) => (

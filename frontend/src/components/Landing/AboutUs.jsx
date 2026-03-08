@@ -43,11 +43,11 @@ function AboutUs() {
   }, []);
 
   return (
-    <section id="about-us" className="py-24 md:py-32 bg-white relative overflow-hidden scroll-mt-32">
+    <section id="about-us" className="bg-[#121212] relative overflow-hidden scroll-mt-32">
       {/* Our Story Section */}
       <div className="flex flex-col lg:flex-row min-h-[600px] lg:min-h-[800px]">
         {/* Left side - Image */}
-        <div className="w-full lg:w-1/2 xl:w-[60%] bg-white relative flex items-center h-[500px] md:h-[600px] lg:h-auto overflow-hidden">
+        <div className="w-full lg:w-1/2 bg-[#121212] relative flex items-center h-[500px] md:h-[600px] lg:h-auto overflow-hidden">
           <div className="w-full h-full absolute inset-0">
             <div className="w-full h-full relative overflow-hidden rounded-b-[4rem] md:rounded-b-[8rem] lg:rounded-b-none lg:rounded-l-[0rem]">
               <img 
@@ -60,26 +60,26 @@ function AboutUs() {
           </div>
         </div>
 
-        {/* Right side - White with Text */}
-        <div className="w-full lg:w-1/2 xl:w-[40%] bg-white flex items-center justify-center p-10 md:p-20 lg:p-24 relative overflow-hidden">
+        {/* Right side - Text */}
+        <div className="w-full lg:w-1/2 bg-[#121212] flex items-center justify-center p-10 md:p-20 lg:p-24 relative overflow-hidden text-white">
           <div className="max-w-xl relative z-10 w-full space-y-10 md:space-y-16 py-8 md:py-12">
             <div>
-              <h4 className="text-[14px] font-black uppercase tracking-[0.8em] text-black mb-6">Established 2019</h4>
-              <h2 className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-serif font-black text-slate-900 leading-[1.1] tracking-tight">
+              <h4 className="text-[14px] font-black uppercase tracking-[0.8em] text-[#cbd5b1] mb-6">Established in 2019</h4>
+              <h2 className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-serif font-black text-white leading-[1.1] tracking-tight">
                 Our <br className="hidden md:block" /> Story.
               </h2>
             </div>
 
             <div className="space-y-6 md:space-y-8">
-              <p className="text-slate-600 text-base md:text-lg leading-relaxed font-medium">
-                Recruit Art was founded by <strong className="text-slate-900">Sahitya Saini</strong>, a healthcare recruitment specialist with over a decade of experience. His journey began with structured workforce planning within healthcare institutions, leading campus drives and setup recruitments across India.
+              <p className="text-slate-400 text-base md:text-lg leading-relaxed font-medium">
+                Recruit Art was founded by <strong className="text-white">Sahitya Saini</strong>, a healthcare recruitment specialist with over a decade of experience. His journey began with structured workforce planning within healthcare institutions, leading campus drives and setup recruitments across India.
               </p>
-              <p className="text-slate-600 text-base md:text-lg leading-relaxed font-medium">
+              <p className="text-slate-400 text-base md:text-lg leading-relaxed font-medium">
                 Over 2000 healthcare professionals have been successfully placed, building a focused, reliable, and quality-driven firm dedicated exclusively to the healthcare sector.
               </p>
             </div>
 
-            <a href="#services" className="inline-block bg-[#121212] text-white px-10 py-5 rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-xl hover:bg-[#cbd5b1] hover:text-[#121212] transition-all">
+            <a href="#services" className="inline-block bg-[#cbd5b1] text-[#121212] px-10 py-5 rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-xl hover:bg-[#b8c2a0] transition-all">
               Learn More
             </a>
           </div>
@@ -87,40 +87,11 @@ function AboutUs() {
       </div>
 
       {/* Our Focus Section */}
-      <div className="flex flex-col-reverse lg:flex-row min-h-[600px] lg:min-h-[800px] bg-white">
-        {/* Left side - White Background with Text */}
-        <div className="w-full lg:w-1/2 xl:w-[40%] bg-white flex items-center justify-center p-10 md:p-20 lg:p-24 relative">
-          <div className="max-w-xl relative z-10 w-full space-y-8 md:space-y-12 py-8 md:py-12">
-            <div>
-              <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-black mb-6">Sector Strategy</h4>
-              <h2 className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-serif font-black text-slate-900 leading-[1.1] tracking-tight">
-                Our <br className="hidden md:block" /> Focus.
-              </h2>
-            </div>
-            
-            <div className="space-y-6 md:space-y-8">
-              <p className="text-slate-600 text-base md:text-lg leading-relaxed font-medium">
-                Today, Recruit Art is strategically aligned toward comprehensive hospital hiring solutions. Our primary focus is on Clinicians, Super-Specialists, Nursing Professionals, and Hospital Operations leadership.
-              </p>
-              <p className="text-slate-600 text-base md:text-lg leading-relaxed font-medium">
-                We work closely with multi-speciality hospitals and diagnostic chains to close critical, time-sensitive roles with precision and confidentiality.
-              </p>
-              <p className="text-slate-600 text-base leading-relaxed font-medium">
-                Under <strong className="text-slate-900">Sahitya Saini's</strong> leadership, Recruit Art continues to position itself as a premium healthcare recruitment partner — ethical, performance-focused, and committed to organizational excellence.
-              </p>
-            </div>
-
-            <Link to="/contact" className="inline-block bg-[#cbd5b1] text-[#121212] px-10 py-4 md:py-5 rounded-2xl font-black text-[10px] md:text-xs uppercase tracking-[0.2em] shadow-xl shadow-[#cbd5b1]/20 hover:bg-[#b8c2a0] transition-colors whitespace-nowrap">
-              Work With Us
-            </Link>
-
-          </div>
-        </div>
-
-        {/* Right side - Image with curved edge */}
-        <div className="w-full lg:w-1/2 xl:w-[60%] bg-white relative flex items-center h-[500px] md:h-[600px] lg:h-auto overflow-hidden">
+      <div className="flex flex-col lg:flex-row min-h-[600px] lg:min-h-[800px] bg-[#121212]">
+        {/* Left side - Image with curved edge */}
+        <div className="w-full lg:w-1/2 bg-[#121212] relative flex items-center h-[500px] md:h-[600px] lg:h-auto overflow-hidden">
           <div className="w-full h-full absolute inset-0 lg:py-0">
-              <div className="w-full h-full relative overflow-hidden rounded-t-[4rem] md:rounded-t-[8rem] lg:rounded-t-none lg:rounded-br-[0rem]">
+              <div className="w-full h-full relative overflow-hidden rounded-b-[4rem] md:rounded-b-[8rem] lg:rounded-b-none lg:rounded-l-[0rem]">
               <img 
                 src="/Our-Focus.png" 
                 alt="Our Focus" 
@@ -128,6 +99,35 @@ function AboutUs() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-white/20 to-transparent pointer-events-none" />
             </div>
+          </div>
+        </div>
+
+        {/* Right side - Text */}
+        <div className="w-full lg:w-1/2 bg-[#121212] flex items-center justify-center p-10 md:p-20 lg:p-24 relative text-white">
+          <div className="max-w-xl relative z-10 w-full space-y-8 md:space-y-12 py-8 md:py-12">
+            <div>
+              <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-[#cbd5b1] mb-6">Sector Strategy</h4>
+              <h2 className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-serif font-black text-white leading-[1.1] tracking-tight">
+                Our <br className="hidden md:block" /> Focus.
+              </h2>
+            </div>
+            
+            <div className="space-y-6 md:space-y-8">
+              <p className="text-slate-400 text-base md:text-lg leading-relaxed font-medium">
+                Today, Recruit Art is strategically aligned toward comprehensive hospital hiring solutions. Our primary focus is on Clinicians, Super-Specialists, Nursing Professionals, and Hospital Operations leadership.
+              </p>
+              <p className="text-slate-400 text-base md:text-lg leading-relaxed font-medium">
+                We work closely with multi-speciality hospitals and diagnostic chains to close critical, time-sensitive roles with precision and confidentiality.
+              </p>
+              <p className="text-slate-400 text-base leading-relaxed font-medium">
+                Under <strong className="text-white">Sahitya Saini's</strong> leadership, Recruit Art continues to position itself as a premium healthcare recruitment partner — ethical, performance-focused, and committed to organizational excellence.
+              </p>
+            </div>
+
+            <a href="/#footer" className="inline-block bg-[#cbd5b1] text-[#121212] px-10 py-4 md:py-5 rounded-2xl font-black text-[10px] md:text-xs uppercase tracking-[0.2em] shadow-xl shadow-[#cbd5b1]/20 hover:bg-[#b8c2a0] transition-colors whitespace-nowrap">
+              Work With Us
+            </a>
+
           </div>
         </div>
       </div>

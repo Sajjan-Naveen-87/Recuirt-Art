@@ -29,18 +29,18 @@ function InsightsSection() {
   ];
 
   return (
-    <section id="insights" className="py-24 bg-[#cbd5b1]/20 scroll-mt-32">
+    <section id="insights" className="py-24 bg-[#1a1a1a] scroll-mt-32">
       <div className="max-w-7xl mx-auto px-8">
         <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
           <div className="max-w-2xl">
-            <h2 className="text-5xl lg:text-6xl font-serif font-black text-slate-900 mb-6 tracking-tight">
+            <h2 className="text-5xl lg:text-6xl font-serif font-black text-white mb-6 tracking-tight">
               News and Insights
             </h2>
-            <p className="text-slate-600 text-lg">
+            <p className="text-slate-400 text-lg lg:text-xl font-medium">
               Stay updated with the latest trends, strategies, and insights from our team of industry experts.
             </p>
           </div>
-          <button className="flex items-center gap-2 font-bold text-slate-900 pb-1 border-b-2 border-slate-900 hover:text-slate-600 hover:border-slate-600 transition-colors shrink-0">
+          <button className="flex items-center gap-2 font-bold text-white pb-1 border-b-2 border-white hover:text-[#cbd5b1] hover:border-[#cbd5b1] transition-colors shrink-0">
             View All Articles <ArrowRight size={20} />
           </button>
         </div>
@@ -54,23 +54,23 @@ function InsightsSection() {
                   alt={article.title}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
                 />
-                <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-4 py-1.5 rounded-full text-sm font-bold text-slate-900">
+                <div className="absolute top-4 left-4 bg-[#121212]/90 backdrop-blur-sm px-4 py-1.5 rounded-full text-sm font-bold text-white">
                   {article.category}
                 </div>
               </div>
               
               <div className="space-y-4 pr-6">
-                <div className="text-slate-500 font-medium text-sm">
+                <div className="text-[#cbd5b1] font-medium text-sm">
                   {article.date}
                 </div>
-                <h3 className="text-2xl font-serif font-bold text-slate-900 group-hover:text-[#8a986c] transition-colors leading-tight">
+                <h3 className="text-2xl font-serif font-bold text-white group-hover:text-[#cbd5b1] transition-colors leading-tight">
                   {article.title}
                 </h3>
-                <p className="text-slate-600 line-clamp-2">
+                <p className="text-slate-400 line-clamp-2">
                   {article.excerpt}
                 </p>
-                <div className="pt-2 font-bold text-slate-900 uppercase tracking-widest text-xs flex items-center gap-2 group-hover:translate-x-2 transition-transform">
-                  Read More <ArrowRight size={14} />
+                <div className="pt-2 font-bold text-white uppercase tracking-widest text-xs flex items-center gap-2 group-hover:translate-x-2 transition-transform">
+                  Read More <ArrowRight size={14} className="text-[#cbd5b1]" />
                 </div>
               </div>
             </div>

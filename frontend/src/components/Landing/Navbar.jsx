@@ -44,7 +44,7 @@ function Navbar({ searchQuery, setSearchQuery, onSearchFocus }) {
             <a href="/#about-us" className="bg-[#e7e3d5] text-slate-900 hover:bg-[#dcd7c4] px-6 py-4 transition-colors">Our Story</a>
             <a href="/#team" className="bg-[#e7e3d5] text-slate-900 hover:bg-[#dcd7c4] px-6 py-4 transition-colors">Meet the Team</a>
             <a href="/#portfolio" className="bg-[#e7e3d5] text-slate-900 hover:bg-[#dcd7c4] px-6 py-4 transition-colors">Portfolio</a>
-            <a href="/#testimonials" className="bg-[#41424b] text-white hover:bg-[#34353d] px-6 py-4 transition-colors">Testimonials</a>
+            <a href="/#testimonials" className="bg-[#e7e3d5] text-slate-900 hover:bg-[#dcd7c4] px-6 py-4 transition-colors">Testimonials</a>
           </div>
         </div>
 
@@ -52,7 +52,7 @@ function Navbar({ searchQuery, setSearchQuery, onSearchFocus }) {
           <span className="flex items-center gap-1">Employers <ChevronDown size={16} strokeWidth={3} className="transition-transform group-hover:rotate-180" /></span>
           <div className="absolute top-full left-0 w-56 opacity-0 invisible group-hover:visible group-hover:opacity-100 transition-all duration-200 shadow-xl bg-[#e7e3d5] border border-slate-900/10 flex flex-col z-50">
             <a href="/#services" className="text-slate-900 hover:bg-[#dcd7c4] px-6 py-4 transition-colors">Services</a>
-            <Link to="/contact" className="text-slate-900 hover:bg-[#dcd7c4] px-6 py-4 transition-colors">Submit Requirements</Link>
+            <a href="/#contact" className="text-slate-900 hover:bg-[#dcd7c4] px-6 py-4 transition-colors">Submit Requirements</a>
           </div>
         </div>
 
@@ -73,9 +73,9 @@ function Navbar({ searchQuery, setSearchQuery, onSearchFocus }) {
         <a href="/#insights" className="px-4 py-4 cursor-pointer hover:text-slate-700 transition-colors">
           News and Insights
         </a>
-        <Link to="/contact" className="px-4 py-4 cursor-pointer hover:text-slate-700 transition-colors">
+        <a href="/#footer" className="px-4 py-4 cursor-pointer hover:text-slate-700 transition-colors">
           Contact
-        </Link>
+        </a>
       </div>
 
       <div className="flex items-center gap-4">
@@ -144,8 +144,7 @@ function Navbar({ searchQuery, setSearchQuery, onSearchFocus }) {
                   <a href="/#jobs" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-[#cbd5b1] transition-colors">Jobs</a>
                   <a href="/#portfolio" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-[#cbd5b1] transition-colors">Portfolio</a>
                   <a href="/#testimonials" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-[#cbd5b1] transition-colors">Testimonials</a>
-                   <a 
-                    href="/#submit-resume" 
+                  <a href="/#submit-resume" 
                     onClick={() => {
                       setIsMobileMenuOpen(false);
                       window.dispatchEvent(new CustomEvent('open-submit-resume-modal'));
@@ -154,7 +153,7 @@ function Navbar({ searchQuery, setSearchQuery, onSearchFocus }) {
                   >
                     Submit Resume
                    </a>
-                  <Link to="/contact" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-[#cbd5b1] transition-colors">Contact</Link>
+                  <a href="/#contact" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-[#cbd5b1] transition-colors">Contact</a>
                 </div>
               </div>
 

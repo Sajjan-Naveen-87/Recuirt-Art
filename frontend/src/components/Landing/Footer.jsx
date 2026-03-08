@@ -3,7 +3,7 @@ import { Facebook, Linkedin, Instagram } from 'lucide-react';
 
 function Footer() {
   return (
-    <footer className="bg-[#cbd5b1] text-slate-900 py-12 md:py-20 px-6 md:px-8">
+    <footer id="footer" className="bg-[#cbd5b1] text-slate-900 py-12 md:py-20 px-6 md:px-8">
       <div className="max-w-7xl mx-auto flex flex-col lg:flex-row justify-between gap-12 border-b border-slate-900/10 pb-12 md:pb-16">
         
         {/* Logo Section */}
@@ -27,7 +27,13 @@ function Footer() {
           <div className="text-center sm:text-left">
             <h4 className="text-2xl md:text-3xl font-serif font-bold mb-6 md:mb-8">Quick Links</h4>
             <div className="flex flex-col items-center sm:items-start gap-4 md:gap-6 font-bold text-slate-700">
-              <Link to="/" className="hover:text-slate-900 transition-colors border-b-2 border-slate-900 w-max pb-1 text-sm md:text-base">Home</Link>
+              <Link 
+                to="/" 
+                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                className="hover:text-slate-900 transition-colors border-b-2 border-slate-900 w-max pb-1 text-sm md:text-base"
+              >
+                Home
+              </Link>
               <a href="/#about-us" className="hover:text-slate-900 transition-colors text-sm md:text-base">Our Story</a>
             </div>
           </div>
@@ -37,7 +43,7 @@ function Footer() {
             <h4 className="text-2xl md:text-3xl font-serif font-bold mb-6 md:mb-8">For Employers</h4>
             <div className="flex flex-col items-center sm:items-start gap-4 md:gap-6 font-bold text-slate-700">
               <a href="/#services" className="hover:text-slate-900 transition-colors text-sm md:text-base">Services</a>
-              <Link to="/contact" className="hover:text-slate-900 transition-colors text-sm md:text-base">Submit Vacancy</Link>
+              <a href="/#contact" className="hover:text-slate-900 transition-colors text-sm md:text-base">Submit Vacancy</a>
             </div>
           </div>
 
@@ -46,7 +52,16 @@ function Footer() {
             <h4 className="text-2xl md:text-3xl font-serif font-bold mb-6 md:mb-8">For Candidates</h4>
             <div className="flex flex-col items-center sm:items-start gap-4 md:gap-6 font-bold text-slate-700">
               <Link to="/jobs" className="hover:text-slate-900 transition-colors text-sm md:text-base">Jobs Available</Link>
-              <Link to="/jobs" className="hover:text-slate-900 transition-colors text-sm md:text-base">Submit Resume</Link>
+              <a 
+                href="/#submit-resume" 
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.dispatchEvent(new CustomEvent('open-submit-resume-modal'));
+                }}
+                className="hover:text-slate-900 transition-colors text-sm md:text-base cursor-pointer"
+              >
+                Submit Resume
+              </a>
             </div>
           </div>
 

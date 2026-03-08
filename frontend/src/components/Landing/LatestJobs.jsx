@@ -111,181 +111,174 @@ function LatestJobs({ searchQuery }) {
   };
 
   return (
-    <section id="jobs" className="py-20 md:py-40 bg-[#121212] relative overflow-hidden scroll-mt-32">
-      {/* Subtle grid background */}
-      <div 
-        className="absolute inset-0 opacity-[0.03]"
-        style={{
-          backgroundImage: `
-            linear-gradient(to right, white 1px, transparent 1px),
-            linear-gradient(to bottom, white 1px, transparent 1px)
-          `,
-          backgroundSize: '40px 40px'
-        }}
-      />
+    <section id="jobs" className="bg-[#121212] relative overflow-hidden scroll-mt-32">
+      <div className="relative min-h-[800px] w-full flex flex-col lg:flex-row shadow-2xl">
+        {/* Background Images Layer */}
+        <div className="absolute inset-0 z-0 flex flex-col lg:flex-row">
+          {/* Left/Top Half: Clinical Background */}
+          <div className="flex-1 relative overflow-hidden">
+            <img 
+              src="/Clinician-Jobs.png" 
+              alt="Clinical Opportunities" 
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+            {/* Dark gradient overlay to make text readable */}
+            <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/80 lg:to-black/40" />
+            
+            {/* Very large subtle background text */}
+            <div className="absolute inset-y-0 left-0 flex items-center pl-8 lg:pl-16 opacity-[0.03] pointer-events-none overflow-hidden">
+              <span className="text-[10rem] lg:text-[15rem] font-serif font-black text-white whitespace-nowrap leading-none select-none">
+                CLINICAL
+              </span>
+            </div>
+          </div>
 
-      <div className="max-w-[95rem] mx-auto px-6 md:px-12 relative z-10">
-        <div className="text-center mb-16 md:mb-24 space-y-4">
-          <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-[#cbd5b1]">Career Opportunities</h4>
-          <h2 className="text-4xl md:text-6xl lg:text-8xl font-serif font-black text-white tracking-tight leading-none">
-            Latest <span className="text-[#cbd5b1]">Jobs.</span>
-          </h2>
+          {/* Right/Bottom Half: Non-Clinical Background */}
+          <div className="flex-1 relative overflow-hidden">
+            <img 
+              src="/Non-Clinician-Jobs.png" 
+              alt="Non-Clinical Opportunities" 
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+            {/* Dark gradient overlay to make text readable */}
+            <div className="absolute inset-0 bg-gradient-to-l from-black/80 via-black/60 to-black/80 lg:to-black/40" />
+            
+            {/* Very large subtle background text */}
+            <div className="absolute inset-y-0 right-0 flex items-center pr-8 lg:pr-16 opacity-[0.03] pointer-events-none overflow-hidden">
+              <span className="text-[10rem] lg:text-[15rem] font-serif font-black text-white whitespace-nowrap leading-none select-none">
+                NON CLINICAL
+              </span>
+            </div>
+          </div>
         </div>
 
-        <div className="relative">
+        {/* Content Layer */}
+        <div className="relative z-10 w-full h-full flex flex-col p-8 md:p-12 lg:p-20">
+          
+          <div className="text-center mb-16">
+            <h4 className="text-[10px] md:text-sm font-black uppercase tracking-[0.6em] text-[#cbd5b1] mb-4">Career Opportunities</h4>
+            <h2 className="text-5xl md:text-7xl font-serif font-black text-white tracking-tight drop-shadow-lg">
+              Latest Jobs.
+            </h2>
+          </div>
+
           {loading ? (
-            <div className="flex flex-col items-center justify-center py-20 text-white">
-              <div className="w-16 h-16 border-4 border-[#cbd5b1]/20 border-t-[#cbd5b1] rounded-full animate-spin mb-6"></div>
-              <p className="font-serif italic text-xl text-slate-400">Discovering positions...</p>
+            <div className="flex flex-col items-center justify-center py-20 text-white flex-1 min-h-[400px]">
+              <div className="w-16 h-16 border-4 border-[#cbd5b1]/20 border-t-[#cbd5b1] rounded-full animate-spin mb-6 shadow-lg"></div>
+              <p className="font-serif italic text-xl drop-shadow-md">Discovering positions...</p>
             </div>
           ) : (
-            <div className="flex flex-col md:flex-row gap-12 md:gap-0 relative">
-              {/* Vertical Divider */}
-              <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-px bg-white/10 -translate-x-1/2" />
-
-              {/* Clinical Jobs Column */}
-              <div className="flex-1 md:pr-12 relative rounded-[2.5rem] overflow-hidden p-4 md:p-8">
-                {/* Column Background */}
-                <div className="absolute inset-0 z-0 scale-105">
-                  <img 
-                    src="/Clinician-Jobs.png" 
-                    alt="Clinical Background" 
-                    className="w-full h-full object-cover opacity-50"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-b from-[#121212] via-[#121212]/40 to-[#121212]" />
+            <div className="flex-1 w-full max-w-7xl mx-auto flex flex-col lg:flex-row gap-12 lg:gap-24">
+              
+              {/* Clinical Column */}
+              <div className="flex-1">
+                <div className="flex items-center gap-4 mb-8 pb-4 border-b border-white/20">
+                  <h3 className="text-[#cbd5b1] font-serif font-black text-4xl drop-shadow-md">Clinician Jobs</h3>
                 </div>
-
-                <div className="relative z-10">
-                  <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-4 mb-8 text-center text-white font-serif text-xl md:text-2xl shadow-xl">
-                    Clinical jobs
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    {jobs.filter(j => j.category === 'clinician').slice(0, 6).map((job) => (
-                      <div 
-                        key={job.id}
-                        onClick={() => { setSelectedJob(job); setIsDetailsModalOpen(true); }}
-                        className="relative h-64 rounded-3xl overflow-hidden cursor-pointer group border border-white/10 bg-white/5 backdrop-blur-md hover:bg-white/10 transition-all duration-500"
-                      >
-                        <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-300" />
-                        
-                        <div className="absolute inset-0 p-6 flex flex-col justify-center items-center text-center">
-                          <h3 className="text-xl md:text-2xl font-serif font-black text-white mb-2 leading-tight group-hover:scale-105 transition-transform duration-500 line-clamp-2">
-                            {job.title}
-                          </h3>
-                          <p className="text-[#cbd5b1] font-black tracking-widest text-sm uppercase">
-                            {formatSalary(job.salary_range)}
-                          </p>
-                        </div>
-
-                        {/* Hover Apply Button */}
-                        <div className="absolute inset-x-0 bottom-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
-                          <button 
-                            onClick={(e) => { 
-                              e.stopPropagation(); 
-                              setSelectedJob(job); 
-                              setIsApplyModalOpen(true); 
-                            }}
-                            className="bg-[#cbd5b1] text-[#121212] px-8 py-3 rounded-full font-black uppercase tracking-widest text-xs hover:bg-white transition-colors shadow-2xl"
-                          >
-                            Apply Now
-                          </button>
-                        </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-4 auto-rows-min max-h-[600px] overflow-y-auto pr-4 custom-scrollbar">
+                  {jobs.filter(j => j.category === 'clinician').slice(0, 8).map((job) => (
+                    <div 
+                      key={job.id}
+                      onClick={() => { setSelectedJob(job); setIsDetailsModalOpen(true); }}
+                      className="relative h-48 rounded-2xl overflow-hidden cursor-pointer group border border-white/20 bg-black/40 backdrop-blur-md hover:bg-black/60 transition-all duration-500 shadow-xl"
+                    >
+                      <div className="absolute inset-0 p-6 flex flex-col justify-center items-center text-center z-10">
+                        <h3 className="text-lg md:text-xl font-serif font-black text-white mb-2 leading-tight group-hover:text-[#cbd5b1] transition-colors duration-300 line-clamp-2 drop-shadow-md">
+                          {job.title}
+                        </h3>
+                        <p className="text-white/80 font-black tracking-widest text-xs uppercase">
+                          {formatSalary(job.salary_range)}
+                        </p>
                       </div>
-                    ))}
-                  </div>
+                      <div className="absolute inset-x-0 bottom-4 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
+                        <button 
+                          onClick={(e) => { 
+                            e.stopPropagation(); 
+                            setSelectedJob(job); 
+                            setIsApplyModalOpen(true); 
+                          }}
+                          className="bg-[#cbd5b1] text-[#121212] px-6 py-2 rounded-full font-black uppercase tracking-widest text-[10px] hover:bg-white transition-colors shadow-lg"
+                        >
+                          Apply Now
+                        </button>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
 
-              {/* Non Clinical Jobs Column */}
-              <div className="flex-1 md:pl-12 relative rounded-[2.5rem] overflow-hidden p-4 md:p-8">
-                {/* Column Background */}
-                <div className="absolute inset-0 z-0 scale-105">
-                  <img 
-                    src="/Non-Clinician-Jobs.png" 
-                    alt="Non Clinical Background" 
-                    className="w-full h-full object-cover opacity-50"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-b from-[#121212] via-[#121212]/40 to-[#121212]" />
+              {/* Dotted Divider for large screens */}
+              <div className="hidden lg:block w-px bg-gradient-to-b from-transparent via-white/20 to-transparent" />
+
+              {/* Non-Clinical Column */}
+              <div className="flex-1">
+                <div className="flex items-center gap-4 mb-8 pb-4 border-b border-white/20">
+                  <h3 className="text-[#cbd5b1] font-serif font-black text-4xl drop-shadow-md">Non-Clinician Jobs</h3>
                 </div>
-
-                <div className="relative z-10">
-                  <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-4 mb-8 text-center text-white font-serif text-xl md:text-2xl shadow-xl">
-                    Non Clinical jobs
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    {jobs.filter(j => j.category === 'non_clinician').slice(0, 6).map((job) => (
-                      <div 
-                        key={job.id}
-                        onClick={() => { setSelectedJob(job); setIsDetailsModalOpen(true); }}
-                        className="relative h-64 rounded-3xl overflow-hidden cursor-pointer group border border-white/10 bg-white/5 backdrop-blur-md hover:bg-white/10 transition-all duration-500"
-                      >
-                        <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-300" />
-                        
-                        <div className="absolute inset-0 p-6 flex flex-col justify-center items-center text-center">
-                          <h3 className="text-xl md:text-2xl font-serif font-black text-white mb-2 leading-tight group-hover:scale-105 transition-transform duration-500 line-clamp-2">
-                            {job.title}
-                          </h3>
-                          <p className="text-[#cbd5b1] font-black tracking-widest text-sm uppercase">
-                            {formatSalary(job.salary_range)}
-                          </p>
-                        </div>
-
-                        {/* Hover Apply Button */}
-                        <div className="absolute inset-x-0 bottom-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
-                          <button 
-                            onClick={(e) => { 
-                              e.stopPropagation(); 
-                              setSelectedJob(job); 
-                              setIsApplyModalOpen(true); 
-                            }}
-                            className="bg-[#cbd5b1] text-[#121212] px-8 py-3 rounded-full font-black uppercase tracking-widest text-xs hover:bg-white transition-colors shadow-2xl"
-                          >
-                            Apply Now
-                          </button>
-                        </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-4 auto-rows-min max-h-[600px] overflow-y-auto pr-4 custom-scrollbar">
+                  {jobs.filter(j => j.category === 'non_clinician').slice(0, 8).map((job) => (
+                    <div 
+                      key={job.id}
+                      onClick={() => { setSelectedJob(job); setIsDetailsModalOpen(true); }}
+                      className="relative h-48 rounded-2xl overflow-hidden cursor-pointer group border border-white/20 bg-black/40 backdrop-blur-md hover:bg-black/60 transition-all duration-500 shadow-xl"
+                    >
+                      <div className="absolute inset-0 p-6 flex flex-col justify-center items-center text-center z-10">
+                        <h3 className="text-lg md:text-xl font-serif font-black text-white mb-2 leading-tight group-hover:text-[#cbd5b1] transition-colors duration-300 line-clamp-2 drop-shadow-md">
+                          {job.title}
+                        </h3>
+                        <p className="text-white/80 font-black tracking-widest text-xs uppercase">
+                          {formatSalary(job.salary_range)}
+                        </p>
                       </div>
-                    ))}
-                  </div>
+                      <div className="absolute inset-x-0 bottom-4 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
+                        <button 
+                          onClick={(e) => { 
+                            e.stopPropagation(); 
+                            setSelectedJob(job); 
+                            setIsApplyModalOpen(true); 
+                          }}
+                          className="bg-[#cbd5b1] text-[#121212] px-6 py-2 rounded-full font-black uppercase tracking-widest text-[10px] hover:bg-white transition-colors shadow-lg"
+                        >
+                          Apply Now
+                        </button>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
+
             </div>
           )}
 
-          {/* Other Jobs Banner */}
+          {/* Bottom Call to Actions */}
           {!loading && (
-            <div id="submit-resume" className="mt-12 scroll-mt-32">
+            <div className="w-full max-w-5xl mx-auto mt-16 pt-12 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-8">
               <div 
+                id="submit-resume"
                 onClick={() => { 
                   const otherJobRecord = jobs.find(j => j.title === 'Other Jobs');
                   setSelectedJob(otherJobRecord || { id: 18, title: 'Other Jobs' }); 
                   setIsApplyModalOpen(true); 
                 }}
-                className="relative h-auto md:h-32 rounded-3xl overflow-hidden cursor-pointer group border border-[#cbd5b1]/20 bg-white/5 hover:bg-white/10 transition-all p-8 md:p-0"
+                className="group cursor-pointer flex items-center gap-6 text-left"
               >
-                <div className="flex flex-col md:flex-row items-center justify-between md:px-12 h-full gap-6 md:gap-0">
-                  <div className="space-y-1 text-center md:text-left">
-                    <h3 className="text-2xl md:text-3xl font-serif font-black text-white">Can't find your role?</h3>
-                    <p className="text-[#cbd5b1] font-medium italic">Apply for other opportunities and let us find the right fit for you.</p>
-                  </div>
-                  <button 
-                    className="bg-[#cbd5b1] text-[#121212] px-10 py-4 rounded-full font-black uppercase tracking-widest text-xs hover:bg-white transition-colors shadow-2xl shrink-0"
-                  >
-                    Request Now
-                  </button>
+                <div className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center text-white group-hover:border-[#cbd5b1] group-hover:text-[#cbd5b1] transition-colors bg-black/50 backdrop-blur-sm">
+                  <Briefcase size={20} />
+                </div>
+                <div>
+                  <h3 className="text-lg font-serif font-black text-white group-hover:text-[#cbd5b1] transition-colors drop-shadow-sm">Can't find your role?</h3>
+                  <p className="text-white/60 text-sm font-medium italic group-hover:text-white/80">Submit your resume for future fits.</p>
                 </div>
               </div>
+
+              <Link 
+                to="/jobs" 
+                className="bg-[#cbd5b1] text-[#121212] px-10 py-4 rounded-full font-black uppercase tracking-[0.2em] text-xs hover:bg-white transition-colors shadow-xl shadow-black/50 flex items-center gap-3 shrink-0"
+              >
+                Explore All Jobs <Search size={16} />
+              </Link>
             </div>
           )}
-        </div>
-
-        {/* View All Jobs Button */}
-        <div className="mt-20 md:mt-32 text-center">
-          <Link 
-            to="/jobs" 
-            className="inline-flex items-center gap-4 bg-[#cbd5b1] text-[#121212] px-12 py-5 rounded-2xl font-black uppercase tracking-[0.2em] transform hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-black/40"
-          >
-            View All Jobs <Search size={20} />
-          </Link>
         </div>
       </div>
       

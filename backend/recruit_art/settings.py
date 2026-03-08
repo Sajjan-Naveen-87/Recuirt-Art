@@ -186,7 +186,7 @@ if USE_CLOUD_STORAGE and os.getenv('FIREBASE_SERVICE_ACCOUNT_JSON'):
         # Try to infer it from the project ID if not explicitly set
         GS_BUCKET_NAME = f"{creds_dict.get('project_id')}.appspot.com"
         
-    GS_DEFAULT_ACL = 'publicRead'
+    GS_DEFAULT_ACL = None
     
     STORAGES = {
         "default": {

@@ -2,7 +2,7 @@ function HeroSection() {
   return (
     <div className="flex flex-col lg:flex-row min-h-[600px] lg:min-h-[800px] bg-[#121212]">
       {/* Left side - Image with curved edge */}
-      <div className="w-full lg:w-1/2 bg-white relative flex items-center h-[500px] md:h-[600px] lg:h-auto">
+      <div className="w-full lg:w-1/2 bg-[#121212] relative flex items-center h-[500px] md:h-[600px] lg:h-auto">
         <div className="w-full h-full absolute inset-0">
           <div className="w-full h-full relative overflow-hidden rounded-b-[4rem] md:rounded-b-[8rem] lg:rounded-r-[0rem] lg:rounded-l-[0rem]">
             <img 
@@ -32,8 +32,8 @@ function HeroSection() {
         
         <div className="max-w-xl relative z-10 w-full space-y-8 md:space-y-10">
           <h1 className="text-5xl md:text-6xl lg:text-8xl font-serif font-black text-white leading-[1.1] tracking-tight">
-            Find Your <br className="hidden md:block" />
-            <span className="text-[#cbd5b1]">Next Career</span> Move.
+            Explore<br className="hidden md:block" />
+            <span className="text-[#cbd5b1]">New Career</span> Opportunities.
           </h1>
           <p className="text-slate-400 text-base md:text-lg lg:text-xl leading-relaxed max-w-md font-medium italic">
             Connect with top employers and discover opportunities that match your precise healthcare skills.

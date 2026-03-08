@@ -58,7 +58,7 @@ const JobCard = ({ job, onClick, showApplyButton = false, onApply }) => {
              <IndianRupee size={12} className="text-[#cbd5b1]" />
              <span className="font-bold">
                 {(() => {
-                   const s = jobData.salary_range.toString();
+                   const s = (jobData.salary_range || 'Negotiable').toString();
                    const cleanS = s.replace(/,/g, '');
                    return cleanS.replace(/([$₹])?\s?(\d+)/g, (match, symbol, num) => {
                      const n = parseInt(num);

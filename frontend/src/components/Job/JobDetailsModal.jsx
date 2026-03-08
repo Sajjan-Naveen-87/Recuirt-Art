@@ -133,12 +133,11 @@ const JobDetailsModal = ({ job, isOpen, onClose, onApply }) => {
                     <Briefcase size={16} md:size={18} className="text-[#cbd5b1]" />
                     <span className="text-[9px] md:text-[11px] font-black uppercase tracking-widest text-slate-600">{formatJobType(jobData.job_type)}</span>
                   </div>
-                  {jobData.salary_range && (
                     <div className="flex items-center gap-2 bg-[#121212] px-4 md:px-5 py-2 md:py-3 rounded-xl md:rounded-2xl shadow-lg border border-white/5">
                       <IndianRupee size={16} md:size={18} className="text-[#cbd5b1]" />
                       <span className="text-[9px] md:text-[11px] font-black uppercase tracking-widest text-[#cbd5b1]">
                         {(() => {
-                          const s = jobData.salary_range.toString();
+                          const s = (jobData.salary_range || 'Negotiable').toString();
                           const cleanS = s.replace(/,/g, '');
                           return cleanS.replace(/([$₹])?\s?(\d+)/g, (match, symbol, num) => {
                             const n = parseInt(num);
@@ -148,7 +147,6 @@ const JobDetailsModal = ({ job, isOpen, onClose, onApply }) => {
                         })()}
                       </span>
                     </div>
-                  )}
                   {jobData.apply_deadline && (
                     <div className="flex items-center gap-2 bg-white px-4 md:px-5 py-2 md:py-3 rounded-xl md:rounded-2xl shadow-sm border border-amber-100">
                       <Clock size={16} md:size={18} className="text-amber-500" />

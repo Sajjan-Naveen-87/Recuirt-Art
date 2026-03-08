@@ -91,7 +91,7 @@ function LatestJobs({ searchQuery }) {
   };
 
   const formatSalary = (salary) => {
-    if (!salary) return '';
+    if (!salary || salary === "") return 'Negotiable';
     let s = salary.toString();
     
     // Replace numbers with K format (e.g. 12,00,000 -> 1200K)
@@ -172,11 +172,9 @@ function LatestJobs({ searchQuery }) {
                           <h3 className="text-xl md:text-2xl font-serif font-black text-white mb-2 leading-tight group-hover:scale-105 transition-transform duration-500 line-clamp-2">
                             {job.title}
                           </h3>
-                          {job.salary_range && (
-                            <p className="text-[#cbd5b1] font-black tracking-widest text-sm uppercase">
-                              {formatSalary(job.salary_range)}
-                            </p>
-                          )}
+                          <p className="text-[#cbd5b1] font-black tracking-widest text-sm uppercase">
+                            {formatSalary(job.salary_range)}
+                          </p>
                         </div>
 
                         {/* Hover Apply Button */}
@@ -227,11 +225,9 @@ function LatestJobs({ searchQuery }) {
                           <h3 className="text-xl md:text-2xl font-serif font-black text-white mb-2 leading-tight group-hover:scale-105 transition-transform duration-500 line-clamp-2">
                             {job.title}
                           </h3>
-                          {job.salary_range && (
-                            <p className="text-[#cbd5b1] font-black tracking-widest text-sm uppercase">
-                              {formatSalary(job.salary_range)}
-                            </p>
-                          )}
+                          <p className="text-[#cbd5b1] font-black tracking-widest text-sm uppercase">
+                            {formatSalary(job.salary_range)}
+                          </p>
                         </div>
 
                         {/* Hover Apply Button */}

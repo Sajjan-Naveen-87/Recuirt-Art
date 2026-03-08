@@ -105,9 +105,17 @@ const JobsPage = () => {
                         <MapPin size={14} />
                         <span className="text-[10px] font-black uppercase tracking-widest">{job.location}</span>
                      </div>
-                     <p className="text-[#121212] font-black text-sm">
-                        {job.salary_range || 'Negotiable'}
-                     </p>
+                      <p className="text-[#121212] font-black text-sm">
+                        {(() => {
+                          const s = (job.salary_range || 'Negotiable').toString();
+                          const cleanS = s.replace(/,/g, '');
+                          return cleanS.replace(/([$₹])?\s?(\d+)/g, (match, symbol, num) => {
+                            const n = parseInt(num);
+                            const curSymbol = symbol === '$' ? '₹' : (symbol || '₹');
+                            return n >= 1000 ? `${curSymbol}${Math.floor(n / 1000)}K` : `${curSymbol}${n}`;
+                          }).replace(/\s?-\s?/g, ' - ');
+                        })()}
+                      </p>
                   </div>
                   
                   <button 

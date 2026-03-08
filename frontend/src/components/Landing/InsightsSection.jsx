@@ -29,7 +29,7 @@ function InsightsSection() {
   ];
 
   return (
-    <section id="insights" className="py-24 bg-[#cbd5b1]/20">
+    <section id="insights" className="py-24 bg-[#cbd5b1]/20 scroll-mt-32">
       <div className="max-w-7xl mx-auto px-8">
         <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
           <div className="max-w-2xl">

@@ -1,11 +1,9 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, MapPin, Building2, Clock, Briefcase, IndianRupee, CheckCircle, Loader2, ExternalLink, ArrowRight } from 'lucide-react';
-import { useAuth } from '../../contexts/AuthContext';
 import JobApplyModal from './JobApplyModal';
 
 const JobDetailsModal = ({ job, isOpen, onClose, onApply }) => {
-  const { isAuthenticated } = useAuth();
   const [showApplyModal, setShowApplyModal] = useState(false);
 
   // Handle both real API data and demo data
@@ -107,11 +105,11 @@ const JobDetailsModal = ({ job, isOpen, onClose, onApply }) => {
                   <div className="w-14 h-14 md:w-20 md:h-20 bg-[#121212] rounded-2xl md:rounded-[2rem] flex items-center justify-center text-2xl md:text-3xl font-serif font-black text-[#cbd5b1] shadow-xl border border-white/10 shrink-0">
                     {jobData.company_name[0]}
                   </div>
-                  <div className="min-w-0">
-                    <h2 className="text-xl md:text-3xl lg:text-4xl font-serif font-black text-[#121212] leading-tight mb-1 md:mb-2 truncate">{jobData.title}</h2>
-                    <p className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] text-[#cbd5b1] flex items-center gap-2 truncate">
+                  <div className="flex-1 min-w-0">
+                    <h2 className="text-xl md:text-3xl lg:text-4xl font-serif font-black text-[#121212] leading-tight mb-1 md:mb-2">{jobData.title}</h2>
+                    <p className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] text-[#cbd5b1] flex items-center gap-2">
                        <Building2 size={12} md:size={14} />
-                       {jobData.company_name}
+                       <span className="truncate">{jobData.company_name}</span>
                     </p>
                   </div>
                 </div>
@@ -141,11 +139,12 @@ const JobDetailsModal = ({ job, isOpen, onClose, onApply }) => {
                       <span className="text-[9px] md:text-[11px] font-black uppercase tracking-widest text-[#cbd5b1]">
                         {(() => {
                           const s = jobData.salary_range.toString();
-                          if (s.includes('₹')) return s;
-                          if (s.includes('$') || s.includes('USD')) {
-                            return s.replace(/\$/g, '₹').replace(/USD/g, '₹');
-                          }
-                          return /\d/.test(s) ? `₹ ${s}` : s;
+                          const cleanS = s.replace(/,/g, '');
+                          return cleanS.replace(/([$₹])?\s?(\d+)/g, (match, symbol, num) => {
+                            const n = parseInt(num);
+                            const curSymbol = symbol === '$' ? '₹' : (symbol || '₹');
+                            return n >= 1000 ? `${curSymbol}${Math.floor(n / 1000)}K` : `${curSymbol}${n}`;
+                          }).replace(/\s?-\s?/g, ' - ');
                         })()}
                       </span>
                     </div>

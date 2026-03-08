@@ -43,13 +43,13 @@ function AboutUs() {
   }, []);
 
   return (
-    <section id="about-us" className="bg-white overflow-hidden">
+    <section id="about-us" className="py-24 md:py-32 bg-white relative overflow-hidden scroll-mt-32">
       {/* Our Story Section */}
       <div className="flex flex-col lg:flex-row min-h-[600px] lg:min-h-[800px]">
         {/* Left side - Image */}
-        <div className="w-full lg:w-1/2 bg-white relative flex items-center h-[500px] md:h-[600px] lg:h-auto overflow-hidden">
+        <div className="w-full lg:w-1/2 xl:w-[60%] bg-white relative flex items-center h-[500px] md:h-[600px] lg:h-auto overflow-hidden">
           <div className="w-full h-full absolute inset-0">
-            <div className="w-full h-full relative overflow-hidden rounded-b-[4rem] md:rounded-b-[8rem] lg:rounded-b-none lg:rounded-l-[15rem]">
+            <div className="w-full h-full relative overflow-hidden rounded-b-[4rem] md:rounded-b-[8rem] lg:rounded-b-none lg:rounded-l-[10rem]">
               <img 
                 src="/Our-Story-1.png" 
                 alt="Our Story" 
@@ -61,7 +61,7 @@ function AboutUs() {
         </div>
 
         {/* Right side - White with Text */}
-        <div className="w-full lg:w-1/2 bg-white flex items-center justify-center p-10 md:p-20 lg:p-24 relative overflow-hidden">
+        <div className="w-full lg:w-1/2 xl:w-[40%] bg-white flex items-center justify-center p-10 md:p-20 lg:p-24 relative overflow-hidden">
           <div className="max-w-xl relative z-10 w-full space-y-10 md:space-y-16 py-8 md:py-12">
             <div>
               <h4 className="text-[14px] font-black uppercase tracking-[0.8em] text-black mb-6">Established 2019</h4>
@@ -74,7 +74,7 @@ function AboutUs() {
               <p className="text-slate-600 text-base md:text-lg leading-relaxed font-medium">
                 Recruit Art was founded by <strong className="text-slate-900">Sahitya Saini</strong>, a healthcare recruitment specialist with over a decade of experience. His journey began with structured workforce planning within healthcare institutions, leading campus drives and setup recruitments across India.
               </p>
-              <p className="text-slate-500 text-sm md:text-base leading-relaxed font-medium italic border-l-4 border-[#cbd5b1] pl-6 py-2">
+              <p className="text-slate-600 text-base md:text-lg leading-relaxed font-medium">
                 Over 2000 healthcare professionals have been successfully placed, building a focused, reliable, and quality-driven firm dedicated exclusively to the healthcare sector.
               </p>
             </div>
@@ -89,7 +89,7 @@ function AboutUs() {
       {/* Our Focus Section */}
       <div className="flex flex-col-reverse lg:flex-row min-h-[600px] lg:min-h-[800px] bg-white">
         {/* Left side - White Background with Text */}
-        <div className="w-full lg:w-1/2 bg-white flex items-center justify-center p-10 md:p-20 lg:p-24 relative">
+        <div className="w-full lg:w-1/2 xl:w-[40%] bg-white flex items-center justify-center p-10 md:p-20 lg:p-24 relative">
           <div className="max-w-xl relative z-10 w-full space-y-8 md:space-y-12 py-8 md:py-12">
             <div>
               <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-black mb-6">Sector Strategy</h4>
@@ -102,7 +102,7 @@ function AboutUs() {
               <p className="text-slate-600 text-base md:text-lg leading-relaxed font-medium">
                 Today, Recruit Art is strategically aligned toward comprehensive hospital hiring solutions. Our primary focus is on Clinicians, Super-Specialists, Nursing Professionals, and Hospital Operations leadership.
               </p>
-              <p className="text-slate-500 text-sm md:text-base leading-relaxed font-medium italic border-l-4 border-[#cbd5b1] pl-6 py-2">
+              <p className="text-slate-600 text-base md:text-lg leading-relaxed font-medium">
                 We work closely with multi-speciality hospitals and diagnostic chains to close critical, time-sensitive roles with precision and confidentiality.
               </p>
               <p className="text-slate-600 text-base leading-relaxed font-medium">
@@ -118,7 +118,7 @@ function AboutUs() {
         </div>
 
         {/* Right side - Image with curved edge */}
-        <div className="w-full lg:w-1/2 bg-white relative flex items-center h-[500px] md:h-[600px] lg:h-auto overflow-hidden">
+        <div className="w-full lg:w-1/2 xl:w-[60%] bg-white relative flex items-center h-[500px] md:h-[600px] lg:h-auto overflow-hidden">
           <div className="w-full h-full absolute inset-0 lg:py-0">
               <div className="w-full h-full relative overflow-hidden rounded-t-[4rem] md:rounded-t-[8rem] lg:rounded-t-none lg:rounded-br-[15rem]">
               <img 
@@ -133,7 +133,7 @@ function AboutUs() {
       </div>
 
       {/* Stats Banner Section */}
-      <div id="portfolio" className="w-full bg-[#121212] py-20 xl:py-16 relative overflow-hidden flex flex-col xl:flex-row items-center justify-between shadow-2xl min-h-[650px] border-t border-slate-800">
+      <div id="portfolio" className="w-full bg-[#121212] py-20 xl:py-16 relative overflow-hidden flex flex-col xl:flex-row items-center justify-between shadow-2xl min-h-[650px] border-t border-slate-800 scroll-mt-32">
           {/* Subtle grid background */}
           <div 
             className="absolute inset-0 opacity-[0.03]"
@@ -171,19 +171,19 @@ function AboutUs() {
               <div className="text-6xl md:text-7xl lg:text-8xl font-serif font-black mb-2 text-white group-hover:text-[#cbd5b1] transition-colors">
                 <Counter from={0} to={10} />+
               </div>
-              <div className="font-black uppercase tracking-[0.3em] text-slate-500 text-[10px]">Strategic Clients</div>
+              <div className="font-black uppercase tracking-[0.3em] text-slate-500 text-[15px]">Strategic Clients</div>
             </div>
             <div className="group">
               <div className="text-6xl md:text-7xl lg:text-8xl font-serif font-black mb-2 text-white group-hover:text-[#cbd5b1] transition-colors">
                 <Counter from={0} to={10} />+
               </div>
-              <div className="font-black uppercase tracking-[0.3em] text-slate-500 text-[10px]">Expert Recruiters</div>
+              <div className="font-black uppercase tracking-[0.3em] text-slate-500 text-[15px]">Expert Recruiters</div>
             </div>
             <div className="group">
               <div className="text-6xl md:text-7xl lg:text-8xl font-serif font-black mb-2 text-white group-hover:text-[#cbd5b1] transition-colors">
-                <Counter from={0} to={800} />+
+                <Counter from={0} to={2000} />+
               </div>
-              <div className="font-black uppercase tracking-[0.3em] text-slate-500 text-[10px]">Placed Candidates</div>
+              <div className="font-black uppercase tracking-[0.3em] text-slate-500 text-[15px]">Placed Candidates</div>
             </div>
           </div>
 

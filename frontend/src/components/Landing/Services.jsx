@@ -2,13 +2,13 @@ import { Link } from 'react-router-dom';
 
 function Services() {
   return (
-    <div id="services" className="flex flex-col bg-white overflow-hidden">
+    <section id="services" className="py-20 md:py-40 bg-[#121212] relative overflow-hidden scroll-mt-32">
       {/* Our Services Section */}
       <div className="flex flex-col lg:flex-row min-h-[600px] lg:min-h-[800px]">
         {/* Left side - Image with curved edge */}
-        <div className="w-full lg:w-1/2 bg-white relative flex items-center h-[500px] md:h-[600px] lg:h-auto overflow-hidden">
+        <div className="w-full lg:w-1/2 xl:w-[60%] bg-white relative flex items-center h-[500px] md:h-[600px] lg:h-auto overflow-hidden">
           <div className="w-full h-full absolute inset-0">
-            <div className="w-full h-full relative overflow-hidden rounded-t-[4rem] rounded-b-[4rem] md:rounded-t-none md:rounded-b-[8rem] lg:rounded-b-none lg:rounded-l-[15rem]">
+            <div className="w-full h-full relative overflow-hidden rounded-t-[4rem] rounded-b-[4rem] md:rounded-t-none md:rounded-b-[8rem] lg:rounded-b-none lg:rounded-l-[0rem]">
               <img 
                 src="/Our-Services.png" 
                 alt="Our Services" 
@@ -20,7 +20,7 @@ function Services() {
         </div>
 
         {/* Right side - Dark with grid */}
-        <div className="w-full lg:w-1/2 bg-[#121212] flex items-center justify-center p-10 md:p-20 lg:p-24 relative overflow-hidden">
+        <div className="w-full lg:w-1/2 xl:w-[40%] bg-[#121212] flex items-center justify-center p-10 md:p-20 lg:p-24 relative overflow-hidden">
           <div 
             className="absolute inset-0 opacity-[0.03]"
             style={{
@@ -75,7 +75,7 @@ function Services() {
       {/* Our Specialties Section */}
       <div className="flex flex-col-reverse lg:flex-row min-h-[600px] lg:min-h-[800px] bg-white">
         {/* Left side - Dark Background with curved image */}
-        <div className="w-full lg:w-1/2 bg-white relative flex items-center h-[500px] md:h-[600px] lg:h-auto overflow-hidden">
+        <div className="w-full lg:w-1/2 xl:w-[60%] bg-white relative flex items-center h-[500px] md:h-[600px] lg:h-auto overflow-hidden">
           <div 
             className="absolute inset-0 opacity-[0.03]"
             style={{
@@ -87,7 +87,7 @@ function Services() {
             }}
           />
           <div className="w-full h-full absolute inset-0 lg:py-0">
-            <div className="w-full h-full relative overflow-hidden rounded-t-[4rem] md:rounded-t-[8rem] lg:rounded-t-none lg:rounded-bl-[15rem]">
+            <div className="w-full h-full relative overflow-hidden rounded-t-[4rem] md:rounded-t-[8rem] lg:rounded-t-none lg:rounded-bl-[0rem]">
               <img 
                 src="./Our-Specialities.png" 
                 alt="Our Specialties" 
@@ -99,7 +99,7 @@ function Services() {
         </div>
 
         {/* Right side - White with Text */}
-        <div className="w-full lg:w-1/2 bg-white flex items-center justify-center p-10 md:p-20 lg:p-24 relative">
+        <div className="w-full lg:w-1/2 xl:w-[40%] bg-white flex items-center justify-center p-10 md:p-20 lg:p-24 relative">
           <div className="max-w-xl relative z-10 w-full space-y-10 md:space-y-16 py-8 md:py-12">
             <div>
               <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-[#cbd5b1] mb-6">Healthcare Mastery</h4>
@@ -136,7 +136,7 @@ function Services() {
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }
 

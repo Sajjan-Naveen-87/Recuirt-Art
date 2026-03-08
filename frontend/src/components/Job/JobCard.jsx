@@ -28,8 +28,8 @@ const JobCard = ({ job, onClick, showApplyButton = false, onApply }) => {
       {/* Primary Info: Title as a Link */}
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-4 mb-2">
-          <h3 className="text-xl font-serif font-black text-[#121212] group-hover:text-[#cbd5b1] transition-colors leading-tight">
-            {jobData.title.length > 40 ? jobData.title.substring(0, 40) + '..' : jobData.title}
+          <h3 className="text-xl font-serif font-black text-[#121212] group-hover:text-[#cbd5b1] transition-colors leading-tight line-clamp-2">
+            {jobData.title}
           </h3>
           <div className="flex gap-2 shrink-0">
             <span className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border ${
@@ -57,14 +57,15 @@ const JobCard = ({ job, onClick, showApplyButton = false, onApply }) => {
            <span className="flex items-center gap-1.5 text-[#121212] bg-[#f4f4f0] px-3 py-1 rounded-lg shadow-sm border border-slate-200/50">
              <IndianRupee size={12} className="text-[#cbd5b1]" />
              <span className="font-bold">
-               {(() => {
-                  const s = jobData.salary_range.toString();
-                  if (s.includes('₹')) return s;
-                  if (s.includes('$') || s.includes('USD')) {
-                     return s.replace(/\$/g, '₹').replace(/USD/g, '₹');
-                  }
-                  return /\d/.test(s) ? `₹ ${s}` : s;
-               })()}
+                {(() => {
+                   const s = jobData.salary_range.toString();
+                   const cleanS = s.replace(/,/g, '');
+                   return cleanS.replace(/([$₹])?\s?(\d+)/g, (match, symbol, num) => {
+                     const n = parseInt(num);
+                     const curSymbol = symbol === '$' ? '₹' : (symbol || '₹');
+                     return n >= 1000 ? `${curSymbol}${Math.floor(n / 1000)}K` : `${curSymbol}${n}`;
+                   }).replace(/\s?-\s?/g, ' - ');
+                })()}
              </span>
            </span>
             <div className="w-1 h-1 bg-slate-200 rounded-full"></div>

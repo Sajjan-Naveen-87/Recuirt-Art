@@ -56,16 +56,62 @@ function LatestJobs({ searchQuery }) {
 
   const totalPages = Math.ceil(totalCount / pageSize);
 
-  const truncateTitle = (title) => {
-    const maxLength = 40; // Align with JobCard.jsx
-    if (title?.length > maxLength) {
-      return title.substring(0, maxLength) + '..';
+  useEffect(() => {
+    const openOtherJobsModal = () => {
+      const otherJobRecord = jobs.find(j => 
+        j.title?.toLowerCase() === 'other jobs' || 
+        j.title?.toLowerCase() === 'other'
+      ) || { id: 18, title: 'Other Jobs' };
+      setSelectedJob(otherJobRecord);
+      setIsApplyModalOpen(true);
+    };
+
+    const handleHash = () => {
+      if (window.location.hash === '#submit-resume') {
+        openOtherJobsModal();
+      }
+    };
+
+    // Handle initial load and hash changes
+    if (!loading && jobs.length >= 0) {
+      handleHash();
     }
+
+    window.addEventListener('hashchange', handleHash);
+    window.addEventListener('open-submit-resume-modal', openOtherJobsModal);
+    
+    return () => {
+      window.removeEventListener('hashchange', handleHash);
+      window.removeEventListener('open-submit-resume-modal', openOtherJobsModal);
+    };
+  }, [loading, jobs]);
+
+  const truncateTitle = (title) => {
     return title || '';
   };
 
+  const formatSalary = (salary) => {
+    if (!salary) return '';
+    let s = salary.toString();
+    
+    // Replace numbers with K format (e.g. 12,00,000 -> 1200K)
+    // First remove commas for consistent parsing
+    const cleanS = s.replace(/,/g, '');
+    
+    // Find numbers and convert to K if >= 1000
+    // This regex looks for digits possibly with $ or ₹
+    return cleanS.replace(/([$₹])?\s?(\d+)/g, (match, symbol, num) => {
+      const n = parseInt(num);
+      const curSymbol = symbol === '$' ? '₹' : (symbol || '₹');
+      if (n >= 1000) {
+        return `${curSymbol}${Math.floor(n / 1000)}K`;
+      }
+      return `${curSymbol}${n}`;
+    }).replace(/\s?-\s?/g, ' - '); // Standardize range spacing
+  };
+
   return (
-    <section id="jobs" className="py-20 md:py-40 bg-[#121212] relative overflow-hidden">
+    <section id="jobs" className="py-20 md:py-40 bg-[#121212] relative overflow-hidden scroll-mt-32">
       {/* Subtle grid background */}
       <div 
         className="absolute inset-0 opacity-[0.03]"
@@ -98,98 +144,112 @@ function LatestJobs({ searchQuery }) {
               <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-px bg-white/10 -translate-x-1/2" />
 
               {/* Clinical Jobs Column */}
-              <div className="flex-1 md:pr-12">
-                <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-4 mb-8 text-center text-white font-serif text-xl md:text-2xl shadow-xl">
-                  Clinical jobs
+              <div className="flex-1 md:pr-12 relative rounded-[2.5rem] overflow-hidden p-4 md:p-8">
+                {/* Column Background */}
+                <div className="absolute inset-0 z-0 scale-105">
+                  <img 
+                    src="/Clinician-Jobs.png" 
+                    alt="Clinical Background" 
+                    className="w-full h-full object-cover opacity-50"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-b from-[#121212] via-[#121212]/40 to-[#121212]" />
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  {jobs.filter(j => j.category === 'clinician').slice(0, 6).map((job) => (
-                    <div 
-                      key={job.id}
-                      onClick={() => { setSelectedJob(job); setIsDetailsModalOpen(true); }}
-                      className="relative h-64 rounded-3xl overflow-hidden cursor-pointer group border border-white/10"
-                    >
-                      <img 
-                        src="/Clinician-Jobs.png" 
-                        alt="Clinical" 
-                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                      />
-                      <div className="absolute inset-0 bg-black/40 group-hover:bg-black/60 transition-colors duration-300" />
-                      
-                      <div className="absolute inset-0 p-6 flex flex-col justify-center items-center text-center">
-                        <h3 className="text-xl md:text-2xl font-serif font-black text-white mb-2 leading-tight">
-                          {truncateTitle(job.title)}
-                        </h3>
-                        {job.salary_range && (
-                          <p className="text-[#cbd5b1] font-black tracking-widest text-sm uppercase">
-                            {job.salary_range}
-                          </p>
-                        )}
-                      </div>
 
-                      {/* Hover Apply Button */}
-                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <button 
-                          onClick={(e) => { 
-                            e.stopPropagation(); 
-                            setSelectedJob(job); 
-                            setIsApplyModalOpen(true); 
-                          }}
-                          className="bg-[#cbd5b1] text-[#121212] px-8 py-3 rounded-full font-black uppercase tracking-widest text-xs hover:bg-white transition-colors shadow-2xl"
-                        >
-                          Apply Now
-                        </button>
+                <div className="relative z-10">
+                  <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-4 mb-8 text-center text-white font-serif text-xl md:text-2xl shadow-xl">
+                    Clinical jobs
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    {jobs.filter(j => j.category === 'clinician').slice(0, 6).map((job) => (
+                      <div 
+                        key={job.id}
+                        onClick={() => { setSelectedJob(job); setIsDetailsModalOpen(true); }}
+                        className="relative h-64 rounded-3xl overflow-hidden cursor-pointer group border border-white/10 bg-white/5 backdrop-blur-md hover:bg-white/10 transition-all duration-500"
+                      >
+                        <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-300" />
+                        
+                        <div className="absolute inset-0 p-6 flex flex-col justify-center items-center text-center">
+                          <h3 className="text-xl md:text-2xl font-serif font-black text-white mb-2 leading-tight group-hover:scale-105 transition-transform duration-500 line-clamp-2">
+                            {job.title}
+                          </h3>
+                          {job.salary_range && (
+                            <p className="text-[#cbd5b1] font-black tracking-widest text-sm uppercase">
+                              {formatSalary(job.salary_range)}
+                            </p>
+                          )}
+                        </div>
+
+                        {/* Hover Apply Button */}
+                        <div className="absolute inset-x-0 bottom-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
+                          <button 
+                            onClick={(e) => { 
+                              e.stopPropagation(); 
+                              setSelectedJob(job); 
+                              setIsApplyModalOpen(true); 
+                            }}
+                            className="bg-[#cbd5b1] text-[#121212] px-8 py-3 rounded-full font-black uppercase tracking-widest text-xs hover:bg-white transition-colors shadow-2xl"
+                          >
+                            Apply Now
+                          </button>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
               </div>
 
               {/* Non Clinical Jobs Column */}
-              <div className="flex-1 md:pl-12">
-                <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-4 mb-8 text-center text-white font-serif text-xl md:text-2xl shadow-xl">
-                  Non Clinical jobs
+              <div className="flex-1 md:pl-12 relative rounded-[2.5rem] overflow-hidden p-4 md:p-8">
+                {/* Column Background */}
+                <div className="absolute inset-0 z-0 scale-105">
+                  <img 
+                    src="/Non-Clinician-Jobs.png" 
+                    alt="Non Clinical Background" 
+                    className="w-full h-full object-cover opacity-50"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-b from-[#121212] via-[#121212]/40 to-[#121212]" />
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  {jobs.filter(j => j.category === 'non_clinician').slice(0, 6).map((job) => (
-                    <div 
-                      key={job.id}
-                      onClick={() => { setSelectedJob(job); setIsDetailsModalOpen(true); }}
-                      className="relative h-64 rounded-3xl overflow-hidden cursor-pointer group border border-white/10"
-                    >
-                      <img 
-                        src="/Non-Clinician-Jobs.png" 
-                        alt="Non Clinical" 
-                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                      />
-                      <div className="absolute inset-0 bg-black/40 group-hover:bg-black/60 transition-colors duration-300" />
-                      
-                      <div className="absolute inset-0 p-6 flex flex-col justify-center items-center text-center">
-                        <h3 className="text-xl md:text-2xl font-serif font-black text-white mb-2 leading-tight">
-                          {truncateTitle(job.title)}
-                        </h3>
-                        {job.salary_range && (
-                          <p className="text-[#cbd5b1] font-black tracking-widest text-sm uppercase">
-                            {job.salary_range}
-                          </p>
-                        )}
-                      </div>
 
-                      {/* Hover Apply Button */}
-                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <button 
-                          onClick={(e) => { 
-                            e.stopPropagation(); 
-                            setSelectedJob(job); 
-                            setIsApplyModalOpen(true); 
-                          }}
-                          className="bg-[#cbd5b1] text-[#121212] px-8 py-3 rounded-full font-black uppercase tracking-widest text-xs hover:bg-white transition-colors shadow-2xl"
-                        >
-                          Apply Now
-                        </button>
+                <div className="relative z-10">
+                  <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-4 mb-8 text-center text-white font-serif text-xl md:text-2xl shadow-xl">
+                    Non Clinical jobs
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    {jobs.filter(j => j.category === 'non_clinician').slice(0, 6).map((job) => (
+                      <div 
+                        key={job.id}
+                        onClick={() => { setSelectedJob(job); setIsDetailsModalOpen(true); }}
+                        className="relative h-64 rounded-3xl overflow-hidden cursor-pointer group border border-white/10 bg-white/5 backdrop-blur-md hover:bg-white/10 transition-all duration-500"
+                      >
+                        <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-300" />
+                        
+                        <div className="absolute inset-0 p-6 flex flex-col justify-center items-center text-center">
+                          <h3 className="text-xl md:text-2xl font-serif font-black text-white mb-2 leading-tight group-hover:scale-105 transition-transform duration-500 line-clamp-2">
+                            {job.title}
+                          </h3>
+                          {job.salary_range && (
+                            <p className="text-[#cbd5b1] font-black tracking-widest text-sm uppercase">
+                              {formatSalary(job.salary_range)}
+                            </p>
+                          )}
+                        </div>
+
+                        {/* Hover Apply Button */}
+                        <div className="absolute inset-x-0 bottom-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
+                          <button 
+                            onClick={(e) => { 
+                              e.stopPropagation(); 
+                              setSelectedJob(job); 
+                              setIsApplyModalOpen(true); 
+                            }}
+                            className="bg-[#cbd5b1] text-[#121212] px-8 py-3 rounded-full font-black uppercase tracking-widest text-xs hover:bg-white transition-colors shadow-2xl"
+                          >
+                            Apply Now
+                          </button>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
@@ -197,7 +257,7 @@ function LatestJobs({ searchQuery }) {
 
           {/* Other Jobs Banner */}
           {!loading && (
-            <div className="mt-12">
+            <div id="submit-resume" className="mt-12 scroll-mt-32">
               <div 
                 onClick={() => { 
                   const otherJobRecord = jobs.find(j => j.title === 'Other Jobs');

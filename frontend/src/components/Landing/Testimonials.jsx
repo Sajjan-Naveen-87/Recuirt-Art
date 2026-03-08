@@ -31,7 +31,7 @@ function Testimonials() {
   if (testimonials.length === 0) return null;
 
   return (
-    <section id="testimonials" className="py-24 bg-white overflow-hidden">
+    <section id="testimonials" className="py-24 bg-white overflow-hidden scroll-mt-32">
       <div className="max-w-6xl mx-auto px-8">
         <h2 className="text-5xl lg:text-7xl font-serif font-black text-slate-900 text-center mb-16 tracking-tight">
           Testimonials

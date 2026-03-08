@@ -7,10 +7,14 @@ function Navbar({ searchQuery, setSearchQuery, onSearchFocus }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <nav className="bg-[#cbd5b1] px-6 md:px-8 py-5 flex items-center justify-between sticky top-0 z-50">
+    <nav className="bg-[#cbd5b1] px-6 md:px-8 py-0 flex items-center justify-between sticky top-0 z-50">
       <div className="flex items-center gap-6 lg:gap-16">
-        <Link to="/" className="w-24 md:w-30 h-12 md:h-15 overflow-hidden flex-shrink-0 flex items-center hover:opacity-90 transition-opacity cursor-pointer">
-          <img src="/Logo.png" alt="Recruit Art Logo" className="w-full h-full object-contain object-left mix-blend-multiply" />
+        <Link 
+          to="/" 
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="w-40 md:w-64 h-20 md:h-28 overflow-hidden flex-shrink-0 flex items-center hover:opacity-90 transition-opacity cursor-pointer"
+        >
+          <img src="/Logo.png" alt="Recruit Art Logo" className="w-full h-full object-contain object-left" />
         </Link>
 
         {/* Search Bar - Hidden on Mobile/Tablet Navbar, shown in Menu */}
@@ -48,7 +52,7 @@ function Navbar({ searchQuery, setSearchQuery, onSearchFocus }) {
           <span className="flex items-center gap-1">Employers <ChevronDown size={16} strokeWidth={3} className="transition-transform group-hover:rotate-180" /></span>
           <div className="absolute top-full left-0 w-56 opacity-0 invisible group-hover:visible group-hover:opacity-100 transition-all duration-200 shadow-xl bg-[#e7e3d5] border border-slate-900/10 flex flex-col z-50">
             <a href="/#services" className="text-slate-900 hover:bg-[#dcd7c4] px-6 py-4 transition-colors">Services</a>
-            <Link to="/contact" className="text-slate-900 hover:bg-[#dcd7c4] px-6 py-4 transition-colors">Submit Requests</Link>
+            <Link to="/contact" className="text-slate-900 hover:bg-[#dcd7c4] px-6 py-4 transition-colors">Submit Requirements</Link>
           </div>
         </div>
 
@@ -56,6 +60,13 @@ function Navbar({ searchQuery, setSearchQuery, onSearchFocus }) {
           <span className="flex items-center gap-1">Job Seekers <ChevronDown size={16} strokeWidth={3} className="transition-transform group-hover:rotate-180" /></span>
           <div className="absolute top-full left-0 w-48 opacity-0 invisible group-hover:visible group-hover:opacity-100 transition-all duration-200 shadow-xl bg-[#e7e3d5] border border-slate-900/10 flex flex-col z-50">
             <a href="/#jobs" className="text-slate-900 hover:bg-[#dcd7c4] px-6 py-4 transition-colors">View All Jobs</a>
+            <a 
+              href="/#submit-resume" 
+              onClick={() => window.dispatchEvent(new CustomEvent('open-submit-resume-modal'))}
+              className="text-slate-900 hover:bg-[#dcd7c4] px-6 py-4 transition-colors"
+            >
+              Submit Resume
+            </a>
           </div>
         </div>
 
@@ -96,7 +107,7 @@ function Navbar({ searchQuery, setSearchQuery, onSearchFocus }) {
               className="fixed top-0 right-0 bottom-0 w-[85%] max-w-sm bg-[#f4f4f0] z-[70] xl:hidden shadow-2xl flex flex-col p-8 overflow-y-auto"
             >
               <div className="flex justify-between items-center mb-12">
-                <Link to="/" onClick={() => setIsMobileMenuOpen(false)} className="h-10">
+                <Link to="/" onClick={() => setIsMobileMenuOpen(false)} className="h-14">
                   <img src="/Logo.png" alt="Logo" className="h-full object-contain mix-blend-multiply brightness-90" />
                 </Link>
                 <button 
@@ -133,6 +144,16 @@ function Navbar({ searchQuery, setSearchQuery, onSearchFocus }) {
                   <a href="/#jobs" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-[#cbd5b1] transition-colors">Jobs</a>
                   <a href="/#portfolio" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-[#cbd5b1] transition-colors">Portfolio</a>
                   <a href="/#testimonials" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-[#cbd5b1] transition-colors">Testimonials</a>
+                   <a 
+                    href="/#submit-resume" 
+                    onClick={() => {
+                      setIsMobileMenuOpen(false);
+                      window.dispatchEvent(new CustomEvent('open-submit-resume-modal'));
+                    }} 
+                    className="hover:text-[#cbd5b1] transition-colors"
+                  >
+                    Submit Resume
+                   </a>
                   <Link to="/contact" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-[#cbd5b1] transition-colors">Contact</Link>
                 </div>
               </div>

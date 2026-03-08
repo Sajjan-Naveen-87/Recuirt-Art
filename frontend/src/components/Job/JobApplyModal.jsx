@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Upload, FileText, CheckCircle, AlertCircle, Loader2, ArrowRight } from 'lucide-react';
-import { useAuth } from '../../contexts/AuthContext';
 import { jobsService } from '../../services/jobs';
 
 const JobApplyModal = ({ job, isOpen, onClose, onSuccess }) => {

@@ -69,7 +69,7 @@ function Testimonials() {
           <div className="relative w-full max-w-5xl aspect-[16/9] md:aspect-[21/9] flex items-center justify-center">
             {/* Giant Quote Icon */}
             <div className="absolute top-0 left-0 md:left-20 text-[#121212] opacity-10">
-              <Quote size={120} strokeWidth={3} />
+              <Quote size={80} strokeWidth={3} />
             </div>
 
             <AnimatePresence initial={false} custom={direction} mode="wait">
@@ -89,7 +89,18 @@ function Testimonials() {
                 <div className="space-y-8">
                   <div className="space-y-2">
                     <h2 className="text-3xl md:text-[2.5rem] font-serif font-black text-[#121212] tracking-tight">
-                      {testimonials[currentIndex].author_name}
+                      {testimonials[currentIndex].original_url ? (
+                        <a 
+                          href={testimonials[currentIndex].original_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="hover:text-[#cbd5b1] transition-colors"
+                        >
+                          {testimonials[currentIndex].author_name}
+                        </a>
+                      ) : (
+                        testimonials[currentIndex].author_name
+                      )}
                     </h2>
                     <p className="text-lg md:text-xl font-serif italic text-slate-500 font-bold">
                       {testimonials[currentIndex].author_position}

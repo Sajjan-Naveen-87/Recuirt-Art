@@ -158,6 +158,7 @@ class TestimonialViewSet(viewsets.ModelViewSet):
     """
     queryset = Testimonial.objects.all()
     serializer_class = TestimonialSerializer
+    pagination_class = None
     
     def get_queryset(self):
         """Filterimonials based on user role."""

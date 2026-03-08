@@ -48,14 +48,25 @@ function Testimonials() {
               className="flex flex-col items-center"
             >
               {/* Giant Quote Marks */}
-              <div className="text-[12rem] md:text-[15rem] font-serif font-black text-slate-900 leading-none h-[140px] md:h-[180px] mb-4 md:mb-8 select-none flex self-start lg:translate-x-[-20%] opacity-5">
+              <div className="text-[8rem] md:text-[10rem] font-serif font-black text-slate-900 leading-none h-[100px] md:h-[120px] mb-2 md:mb-4 select-none flex self-start lg:translate-x-[-15%] opacity-5">
                 &ldquo;
               </div>
 
               <div className="text-center space-y-6 max-w-3xl md:-mt-10 relative z-10 px-4">
                 <div className="space-y-1">
                   <h3 className="text-3xl md:text-4xl font-black text-slate-900 font-serif">
-                    {testimonials[activeIndex].author_name}
+                    {testimonials[activeIndex].original_url ? (
+                      <a 
+                        href={testimonials[activeIndex].original_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="hover:text-[#cbd5b1] transition-colors"
+                      >
+                        {testimonials[activeIndex].author_name}
+                      </a>
+                    ) : (
+                      testimonials[activeIndex].author_name
+                    )}
                   </h3>
                   
                   <p className="text-lg md:text-xl font-serif font-bold text-slate-500 italic">

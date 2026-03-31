@@ -38,35 +38,37 @@ function Services() {
               </h2>
             </div>
 
-            <div className="space-y-8 md:space-y-12">
-              {/* Service 1 */}
-              <div className="group">
-                <h3 className="text-xl md:text-2xl font-black text-white mb-3 group-hover:text-[#cbd5b1] transition-colors leading-tight">Clinical & Super-Specialist Hiring</h3>
-                <p className="text-slate-400 text-sm md:text-base leading-relaxed font-medium italic">
-                  Placement of Consultants, Super-Specialists, and Critical Care Experts through precision headhunting.
-                </p>
+            <div className="space-y-6 md:space-y-8">
+              <div className="space-y-8 md:space-y-12">
+                {/* Service 1 */}
+                <div className="group">
+                  <h3 className="text-xl md:text-2xl font-black text-white mb-3 group-hover:text-[#cbd5b1] transition-colors leading-tight">Clinical & Super-Specialist Hiring</h3>
+                  <p className="text-slate-400 text-sm md:text-base leading-relaxed font-medium italic">
+                    Placement of Consultants, Super-Specialists, and Critical Care Experts through precision headhunting.
+                  </p>
+                </div>
+
+                {/* Service 2 */}
+                <div className="group">
+                  <h3 className="text-xl md:text-2xl font-black text-white mb-3 group-hover:text-[#cbd5b1] transition-colors leading-tight">Nursing & Allied Healthcare</h3>
+                  <p className="text-slate-400 text-sm md:text-base leading-relaxed font-medium italic">
+                    Structured hiring of Nursing and Paramedical Professionals to ensure uninterrupted clinical operations.
+                  </p>
+                </div>
+
+                {/* Service 3 */}
+                <div className="group">
+                  <h3 className="text-xl md:text-2xl font-black text-white mb-3 group-hover:text-[#cbd5b1] transition-colors leading-tight">Hospital Leadership & Ops</h3>
+                  <p className="text-slate-400 text-sm md:text-base leading-relaxed font-medium italic">
+                    Strategic recruitment of Administrators and Operations Heads aligned with institutional growth.
+                  </p>
+                </div>
               </div>
 
-              {/* Service 2 */}
-              <div className="group">
-                <h3 className="text-xl md:text-2xl font-black text-white mb-3 group-hover:text-[#cbd5b1] transition-colors leading-tight">Nursing & Allied Healthcare</h3>
-                <p className="text-slate-400 text-sm md:text-base leading-relaxed font-medium italic">
-                  Structured hiring of Nursing and Paramedical Professionals to ensure uninterrupted clinical operations.
-                </p>
-              </div>
-
-              {/* Service 3 */}
-              <div className="group">
-                <h3 className="text-xl md:text-2xl font-black text-white mb-3 group-hover:text-[#cbd5b1] transition-colors leading-tight">Hospital Leadership & Ops</h3>
-                <p className="text-slate-400 text-sm md:text-base leading-relaxed font-medium italic">
-                  Strategic recruitment of Administrators and Operations Heads aligned with institutional growth.
-                </p>
-              </div>
+              <a href="/#footer" className="inline-block bg-[#cbd5b1] text-[#121212] px-10 py-5 rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-xl shadow-[#cbd5b1]/10 hover:bg-[#b8c2a0] transition-all">
+                Work With Us
+              </a>
             </div>
-
-            <a href="/#footer" className="inline-block bg-[#cbd5b1] text-[#121212] px-10 py-5 rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-xl shadow-[#cbd5b1]/10 hover:bg-[#b8c2a0] transition-all">
-              Work With Us
-            </a>
           </div>
         </div>
       </div>
@@ -97,8 +99,8 @@ function Services() {
         </div>
 
         {/* Right side - Dark with Text */}
-        <div className="w-full lg:w-1/2 bg-[#121212] flex items-start justify-center p-10 md:p-20 lg:px-24 lg:pb-24 lg:pt-0 relative text-white">
-          <div className="max-w-xl relative z-10 w-full space-y-10 md:space-y-16 pt-0 pb-8 md:pb-12 md:pt-0">
+        <div className="w-full lg:w-1/2 bg-[#121212] flex items-start justify-center p-10 md:p-20 lg:px-24 lg:pb-24 lg:pt-16 relative text-white">
+          <div className="max-w-xl relative z-10 w-full space-y-10 md:space-y-16 pt-0 pb-8 md:pb-12 md:pt-8">
             <div>
               <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-[#cbd5b1] mb-6">Healthcare Mastery</h4>
               <h2 className="text-5xl md:text-7xl lg:text-8xl font-serif font-black text-white leading-[1.1] tracking-tight">

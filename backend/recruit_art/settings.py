@@ -313,7 +313,7 @@ SIMPLE_JWT = {
 # CORS Configuration
 CORS_ALLOW_ALL_ORIGINS = DEBUG
 
-DEFAULT_FRONTEND_URL = 'http://localhost:5173,http://127.0.0.1:5173,https://recruit-art.web.app,https://recruit-art-backend.onrender.com'
+DEFAULT_FRONTEND_URL = 'http://localhost:5173,http://127.0.0.1:5173,https://recruit-art.web.app,https://recruitart.in,https://www.recruitart.in,https://recruit-art-backend.onrender.com'
 CORS_ALLOWED_ORIGINS = os.getenv('FRONTEND_URL', DEFAULT_FRONTEND_URL).split(',')
 
 # CSRF Configuration

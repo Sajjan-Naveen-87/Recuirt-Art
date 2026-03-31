@@ -103,8 +103,6 @@ ${formData.message || 'No additional message.'}
               <option value="" disabled className="text-white/50">Select an option</option>
               <option value="Hiring">Hiring / Recruitment</option>
               <option value="Partnership">Partnership</option>
-              <option value="Support">General Support</option>
-              <option value="Other">Other</option>
             </select>
           </div>
 

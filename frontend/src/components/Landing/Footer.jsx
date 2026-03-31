@@ -10,7 +10,7 @@ function Footer() {
         <div className="w-full lg:max-w-xs text-center lg:text-left">
           <div className="space-y-4 text-slate-700">
             <h2 className="text-2xl md:text-3xl font-serif font-bold mb-6 md:mb-8">Contact Us</h2>
-            <a href="mailto:admin@recruitart.in " className="block text-sm md:text-base font-medium hover:text-slate-900 transition-colors">
+            <a href="mailto:admin@recruitart.in" className="block text-sm md:text-base font-medium hover:text-slate-900 transition-colors">
               admin@recruitart.in
             </a>
             <p className="text-sm md:text-base leading-relaxed">
@@ -88,7 +88,7 @@ function Footer() {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 items-center font-bold text-xs md:text-sm">
-          <span>&copy; {new Date().getFullYear()} Recruit Art</span>
+          <span>&copy; 2019 Recruit Art - Hiring Experts</span>
           <span className="hidden sm:inline opacity-30">|</span>
           <Link to="/privacy" className="hover:text-slate-700 transition-colors">Privacy policy</Link>
         </div>

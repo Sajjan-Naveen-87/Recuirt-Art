@@ -7,20 +7,20 @@ function Navbar({ searchQuery, setSearchQuery, onSearchFocus }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <nav className="bg-[#cbd5b1] px-6 md:px-8 py-0 flex items-center justify-between sticky top-0 z-50">
-      <div className="flex items-center gap-6 lg:gap-16">
+    <nav className="bg-[#cbd5b1] px-4 md:px-8 py-2 md:py-0 flex items-center justify-between sticky top-0 z-50 shadow-sm transition-all duration-300">
+      <div className="flex items-center flex-1 gap-2 md:gap-6 lg:gap-16">
         <Link 
           to="/" 
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="w-40 md:w-64 h-20 md:h-28 overflow-hidden flex-shrink-0 flex items-center hover:opacity-90 transition-opacity cursor-pointer"
+          className="w-28 sm:w-32 md:w-48 lg:w-64 h-12 sm:h-16 md:h-20 lg:h-28 overflow-hidden flex-shrink-0 flex items-center hover:opacity-90 transition-opacity cursor-pointer"
         >
           <img src="/Logo.png" alt="Recruit Art Logo" className="w-full h-full object-contain object-left" />
         </Link>
 
-        {/* Search Bar - Hidden on Mobile/Tablet Navbar, shown in Menu */}
+        {/* Search Bar - Visible on all screens, responsive width */}
         {setSearchQuery && (
-          <div className="hidden lg:flex items-center bg-white/60 backdrop-blur-md rounded-full px-6 py-3 border border-[#121212]/10 focus-within:border-indigo-500/50 transition-all w-[32rem] shadow-sm">
-            <Search size={22} className="text-slate-600 mr-3" />
+          <div className="flex flex-1 items-center bg-white/60 backdrop-blur-md rounded-full px-4 md:px-6 py-2 md:py-3 border border-[#121212]/10 focus-within:border-indigo-500/50 transition-all max-w-[12rem] sm:max-w-xs md:max-w-sm lg:max-w-[32rem] shadow-sm ml-auto sm:ml-0">
+            <Search size={18} className="text-slate-600 mr-2 md:mr-3 flex-shrink-0" />
             <input 
               type="text" 
               value={searchQuery}
@@ -30,7 +30,7 @@ function Navbar({ searchQuery, setSearchQuery, onSearchFocus }) {
               }}
               onFocus={onSearchFocus}
               placeholder="Search jobs..." 
-              className="bg-transparent border-none outline-none text-base font-semibold text-slate-900 placeholder:text-slate-500 w-full"
+              className="bg-transparent border-none outline-none text-xs md:text-base font-semibold text-slate-900 placeholder:text-slate-500 w-full"
             />
           </div>
         )}
@@ -70,8 +70,8 @@ function Navbar({ searchQuery, setSearchQuery, onSearchFocus }) {
           </div>
         </div>
 
-        <a href="/#insights" className="px-4 py-4 cursor-pointer hover:text-slate-700 transition-colors">
-          News and Insights
+        <a href="mailto:admin@recruitart.in" className="block text-sm md:text-base font-medium hover:text-slate-900 transition-colors">
+          admin@recruitart.in
         </a>
         <a href="/#footer" className="px-4 py-4 cursor-pointer hover:text-slate-700 transition-colors">
           Contact
@@ -107,7 +107,7 @@ function Navbar({ searchQuery, setSearchQuery, onSearchFocus }) {
               className="fixed top-0 right-0 bottom-0 w-[85%] max-w-sm bg-[#f4f4f0] z-[70] xl:hidden shadow-2xl flex flex-col p-8 overflow-y-auto"
             >
               <div className="flex justify-between items-center mb-12">
-                <Link to="/" onClick={() => setIsMobileMenuOpen(false)} className="h-14">
+                <Link to="/" onClick={() => setIsMobileMenuOpen(false)} className="h-10">
                   <img src="/Logo.png" alt="Logo" className="h-full object-contain mix-blend-multiply brightness-90" />
                 </Link>
                 <button 
@@ -159,7 +159,7 @@ function Navbar({ searchQuery, setSearchQuery, onSearchFocus }) {
 
               <div className="mt-auto pt-12 flex flex-col gap-4">
                 <p className="text-center text-slate-400 text-[9px] font-black uppercase tracking-widest mt-6">
-                  © 2026 RECRUIT ART
+                  © 2026 RECRUIT ART - Hiring Experts
                 </p>
               </div>
             </motion.div>

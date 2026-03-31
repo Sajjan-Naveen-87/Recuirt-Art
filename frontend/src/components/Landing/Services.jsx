@@ -4,24 +4,23 @@ function Services() {
   return (
     <section id="services" className="bg-[#121212] relative overflow-hidden scroll-mt-32">
       {/* Our Services Section */}
-      <div className="flex flex-col lg:flex-row">
+      <div className="flex flex-col lg:flex-row min-h-[500px] lg:min-h-screen">
         {/* Left side - Image */}
-        <div className="w-full lg:w-1/2 bg-[#121212] relative flex items-center overflow-hidden">
-          <div className="w-full relative z-10 w-full">
-            <div className="w-full h-auto relative overflow-hidden rounded-none">
-              <img 
-                src="/Our-Services.png" 
-                alt="Our Services" 
-                className="w-full h-auto object-contain scale-100 block"
-              />
-            </div>
+        <div className="w-full lg:w-1/2 bg-[#121212] relative flex items-stretch h-[400px] md:h-[500px] lg:h-auto p-4 lg:p-0">
+          <div className="w-full h-full relative overflow-hidden rounded-[2rem] lg:rounded-none">
+            <img 
+              src="/Our-Services.png" 
+              alt="Our Services" 
+              className="w-full h-full object-cover block"
+            />
           </div>
         </div>
 
         {/* Right side - Text */}
-        <div className="w-full lg:w-1/2 bg-[#121212] flex items-start justify-center p-10 md:p-20 lg:px-24 lg:pt-24 lg:pb-0 relative overflow-hidden">
+        <div className="w-full lg:w-1/2 bg-[#121212] flex items-center justify-center p-8 md:p-20 lg:px-24 relative overflow-hidden">
+          {/* Subtle Grid Background */}
           <div 
-            className="absolute inset-0 opacity-[0.03]"
+            className="absolute inset-0 opacity-[0.03] pointer-events-none"
             style={{
               backgroundImage: `
                 linear-gradient(to right, white 1px, transparent 1px),
@@ -30,7 +29,7 @@ function Services() {
               backgroundSize: '40px 40px'
             }}
           />
-          <div className="max-w-xl relative z-10 w-full space-y-10 md:space-y-16 pt-8 pb-0 md:pt-12 md:pb-0">
+          <div className="max-w-xl relative z-10 w-full space-y-10 md:space-y-16">
             <div>
               <h4 className="text-[14px] font-black uppercase tracking-[0.8em] text-[#cbd5b1] mb-6">Expert Solutions</h4>
               <h2 className="text-5xl md:text-7xl lg:text-8xl font-serif font-black text-white leading-[1.1] tracking-tight">
@@ -73,12 +72,24 @@ function Services() {
         </div>
       </div>
 
-      {/* Our Specialities  Section */}
-      <div className="flex flex-col lg:flex-row bg-[#121212]">
-        {/* Left side - Dark Background with curved image */}
-        <div className="w-full lg:w-1/2 bg-[#121212] relative flex items-center overflow-hidden">
+      {/* Our Specialities Section */}
+      <div className="flex flex-col lg:flex-row min-h-[500px] lg:min-h-screen">
+        {/* Left side - Image */}
+        <div className="w-full lg:w-1/2 bg-[#121212] relative flex items-stretch h-[400px] md:h-[500px] lg:h-auto p-4 lg:p-0">
+          <div className="w-full h-full relative overflow-hidden rounded-[2rem] lg:rounded-none">
+            <img 
+              src="/Our-Specialities.png" 
+              alt="Our Specialties" 
+              className="w-full h-full object-cover block"
+            />
+          </div>
+        </div>
+
+        {/* Right side - Text */}
+        <div className="w-full lg:w-1/2 bg-[#121212] flex items-center justify-center p-8 md:p-20 lg:px-24 relative text-white overflow-hidden">
+          {/* Subtle Grid Background */}
           <div 
-            className="absolute inset-0 opacity-[0.03]"
+            className="absolute inset-0 opacity-[0.03] pointer-events-none"
             style={{
               backgroundImage: `
                 linear-gradient(to right, white 1px, transparent 1px),
@@ -87,20 +98,7 @@ function Services() {
               backgroundSize: '40px 40px'
             }}
           />
-          <div className="w-full relative z-10 lg:py-0">
-            <div className="w-full h-full relative overflow-hidden rounded-none">
-              <img 
-                src="./Our-Specialities.png" 
-                alt="Our Specialties" 
-                className="w-full h-auto object-contain scale-100 block"
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Right side - Dark with Text */}
-        <div className="w-full lg:w-1/2 bg-[#121212] flex items-start justify-center p-10 md:p-20 lg:px-24 lg:pb-24 lg:pt-16 relative text-white">
-          <div className="max-w-xl relative z-10 w-full space-y-10 md:space-y-16 pt-0 pb-8 md:pb-12 md:pt-8">
+          <div className="max-w-xl relative z-10 w-full space-y-10 md:space-y-16">
             <div>
               <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-[#cbd5b1] mb-6">Healthcare Mastery</h4>
               <h2 className="text-5xl md:text-7xl lg:text-8xl font-serif font-black text-white leading-[1.1] tracking-tight">

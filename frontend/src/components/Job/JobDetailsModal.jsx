@@ -198,7 +198,7 @@ const JobDetailsModal = ({ job, isOpen, onClose, onApply }) => {
                       : 'bg-rose-50 text-rose-500 border-rose-100'
                    }`}>
                     {jobData.is_active ? <CheckCircle size={14} className="text-[#cbd5b1]" /> : <X size={14} />}
-                    {jobData.is_active ? 'Position Open' : 'Closed'}
+                    {jobData.is_active ? 'Position Open' : 'Filled'}
                   </span>
                 </div>
               </div>

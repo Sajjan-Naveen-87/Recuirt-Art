@@ -7,9 +7,9 @@ const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://127.0.0.1:8000';
 function TeamSection() {
   const team = [
     { name: "Sahitya Saini", role: "Managing Director", image: "/Founder-New.png", linkedin_url: "https://www.linkedin.com/in/sahitya-saini-7b104a98" },
-    { name: "Mansi Agrawal", role: "Senior Leadership Hiring Expert", image: "/Mansi-Agrawal.jpeg", linkedin_url: "https://www.linkedin.com/in/mansi-agrawal-034b041b5" },
-    { name: "Prerana Agrawal", role: "Clinician Hiring Expert", image: "/Prerana-Agrawal.png", linkedin_url: "https://www.linkedin.com/in/prerna-agrawal-24b87b135" },
-    { name: "Kratika Singh", role: "Non-Clinician Hiring Expert", image: "/Kratika-Singh.jpeg", linkedin_url: "https://www.linkedin.com/in/kratika-singh-591b0a231" }
+    { name: "Mansi Agrawal", role: "Team Lead - Senior Leadership", image: "/Mansi-Agrawal.jpeg", linkedin_url: "https://www.linkedin.com/in/mansi-agrawal-034b041b5" },
+    { name: "Prerana Agrawal", role: "Team Lead - Clinician", image: "/Prerana-Agrawal.png", linkedin_url: "https://www.linkedin.com/in/prerna-agrawal-24b87b135" },
+    { name: "Kratika Singh", role: "Team Lead - Healthcare", image: "/Kratika-Singh.jpeg", linkedin_url: "https://www.linkedin.com/in/kratika-singh-591b0a231" }
   ];
 
   return (
@@ -32,7 +32,7 @@ function TeamSection() {
                 className="flex flex-col items-center group cursor-pointer"
               >
                 {/* Arched Image Container */}
-                <div className="w-full aspect-[3/4] mb-8 overflow-hidden rounded-t-[10rem] flex justify-center items-end bg-[#f4f4f0] transition-all duration-700 group-hover:-translate-y-4 relative shadow-2xl shadow-slate-200">
+                <div className="w-full aspect-[3/4] mb-8 overflow-hidden rounded-[2rem] md:rounded-t-[10rem] flex justify-center items-end bg-[#f4f4f0] transition-all duration-700 group-hover:-translate-y-4 relative shadow-2xl shadow-slate-200">
                   <img 
                     src={member.image || '/Founder-New.png'} 
                     alt={member.name} 

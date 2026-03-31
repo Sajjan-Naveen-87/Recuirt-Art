@@ -66,7 +66,11 @@ class JobViewSet(viewsets.ModelViewSet):
         # Filter by category
         category = self.request.query_params.get('category')
         if category:
-            queryset = queryset.filter(category=category)
+            if category == 'non_clinician':
+                # "Non-Clinical" should include everything except Clinician (non_clinician + other)
+                queryset = queryset.exclude(category='clinician')
+            else:
+                queryset = queryset.filter(category=category)
         
         # Filter by location
         location = self.request.query_params.get('location')

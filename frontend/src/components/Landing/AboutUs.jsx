@@ -47,16 +47,14 @@ function AboutUs() {
       {/* Our Story Section */}
       <div className="flex flex-col lg:flex-row min-h-[600px] lg:min-h-[800px]">
         {/* Left side - Image */}
-        <div className="w-full lg:w-1/2 bg-[#121212] relative flex items-center h-[500px] md:h-[600px] lg:h-auto overflow-hidden">
-          <div className="w-full h-full absolute inset-0">
-            <div className="w-full h-full relative overflow-hidden rounded-b-[4rem] md:rounded-b-[8rem] lg:rounded-b-none lg:rounded-l-[0rem]">
-              <img 
-                src="/Our-Story-1.png" 
-                alt="Our Story" 
-                className="absolute inset-0 w-full h-full object-cover scale-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-white/20 to-transparent pointer-events-none" />
-            </div>
+        <div className="w-full lg:w-1/2 bg-[#121212] relative flex items-center h-[500px] md:h-[600px] lg:h-auto p-4 lg:p-0">
+          <div className="w-full h-full relative overflow-hidden rounded-[2rem] lg:rounded-none">
+            <img 
+              src="/Our-Story-1.png" 
+              alt="Our Story" 
+              className="absolute inset-0 w-full h-full object-cover scale-105"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-white/20 to-transparent pointer-events-none" />
           </div>
         </div>
 
@@ -156,16 +154,14 @@ function AboutUs() {
       {/* Our Focus Section */}
       <div className="flex flex-col lg:flex-row min-h-[600px] lg:min-h-[800px] bg-[#121212]">
         {/* Left side - Image with curved edge */}
-        <div className="w-full lg:w-1/2 bg-[#121212] relative flex items-center h-[500px] md:h-[600px] lg:h-auto overflow-hidden">
-          <div className="w-full h-full absolute inset-0 lg:py-0">
-              <div className="w-full h-full relative overflow-hidden rounded-b-[4rem] md:rounded-b-[8rem] lg:rounded-b-none lg:rounded-l-[0rem]">
-              <img 
-                src="/Our-Focus.png" 
-                alt="Our Focus" 
-                className="absolute inset-0 w-full h-full object-cover scale-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-white/20 to-transparent pointer-events-none" />
-            </div>
+        <div className="w-full lg:w-1/2 bg-[#121212] relative flex items-center h-[500px] md:h-[600px] lg:h-auto p-4 lg:p-0">
+          <div className="w-full h-full relative overflow-hidden rounded-[2rem] lg:rounded-none">
+            <img 
+              src="/Our-Focus.png" 
+              alt="Our Focus" 
+              className="absolute inset-0 w-full h-full object-cover scale-105"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-white/20 to-transparent pointer-events-none" />
           </div>
         </div>
 

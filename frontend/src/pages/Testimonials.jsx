@@ -66,7 +66,7 @@ function Testimonials() {
             <div className="w-12 h-12 border-4 border-[#121212]/10 border-t-[#121212] rounded-full animate-spin"></div>
           </div>
         ) : testimonials.length > 0 ? (
-          <div className="relative w-full max-w-5xl aspect-[16/9] md:aspect-[21/9] flex items-center justify-center">
+          <div className="relative w-full max-w-5xl md:aspect-[21/9] flex items-center justify-center min-h-[450px]">
             {/* Giant Quote Icon */}
             <div className="absolute top-0 left-0 md:left-20 text-[#121212] opacity-10">
               <Quote size={80} strokeWidth={3} />

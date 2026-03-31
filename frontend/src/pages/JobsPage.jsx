@@ -67,21 +67,21 @@ const JobsPage = () => {
           </p>
         </div>
 
-        {/* Search Bar */}
-        <div className="flex flex-col md:flex-row md:items-center gap-8 mb-12">
-          <div className="bg-[#cbd5b1] p-2 md:p-3 rounded-2xl md:rounded-3xl flex items-center shadow-2xl border border-slate-100 max-w-2xl flex-1">
-             <div className="p-3 md:p-4 bg-[#f4f4f0] rounded-xl md:rounded-2xl text-dark shadow-lg"><Search size={18} /></div>
+        {/* Search Bar & Filters */}
+        <div className="flex flex-col lg:flex-row lg:items-center gap-6 md:gap-10 mb-12">
+          <div className="bg-[#cbd5b1] p-1.5 md:p-3 rounded-[2rem] md:rounded-3xl flex items-center shadow-2xl border border-slate-100 max-w-3xl flex-1">
+             <div className="p-2.5 md:p-4 bg-[#f4f4f0] rounded-xl md:rounded-2xl text-dark shadow-lg shrink-0"><Search size={18} /></div>
              <input 
                 type="text" 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search for roles, skills, or locations..." 
-                className="flex-1 px-4 md:px-8 outline-none text-base md:text-xl font-serif font-black placeholder:text-dark bg-transparent text-dark" 
+                className="flex-1 px-3 md:px-8 outline-none text-sm md:text-xl font-serif font-black placeholder:text-dark/40 bg-transparent text-dark w-full" 
              />
           </div>
-
+          
           {/* Category Radio Buttons */}
-          <div className="flex items-center gap-6 px-2">
+          <div className="flex flex-wrap items-center gap-4 sm:gap-6 px-2">
             {[
               { label: 'All Jobs', value: 'all' },
               { label: 'Clinical', value: 'clinician' },
@@ -97,7 +97,10 @@ const JobsPage = () => {
                     name="jobCategory" 
                     value={cat.value}
                     checked={jobCategory === cat.value}
-                    onChange={(e) => setJobCategory(e.target.value)}
+                    onChange={(e) => {
+                      setJobCategory(e.target.value);
+                      if (e.target.value === 'all') setSearchQuery('');
+                    }}
                     className="appearance-none w-5 h-5 border-2 border-[#121212]/30 rounded-full checked:border-indigo-600 transition-all cursor-pointer"
                   />
                   {jobCategory === cat.value && (
@@ -122,61 +125,85 @@ const JobsPage = () => {
              <p className="text-slate-400 font-serif text-2xl italic">No positions matching your search were found.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
             {jobs.map((job) => (
               <motion.div 
                 key={job.id}
-                whileHover={{ y: -5 }}
+                whileHover={{ y: -8, scale: 1.02 }}
                 onClick={() => { setSelectedJob(job); setShowDetails(true); }}
-                className="bg-[#cbd5b1] p-8 rounded-[2.5rem] shadow-xl border border-slate-100 flex flex-col group cursor-pointer"
+                className="relative aspect-[3/4] bg-[#1a1a1a] p-4 text-white rounded-[2.5rem] shadow-2xl flex flex-col group cursor-pointer overflow-hidden border-2 border-transparent hover:border-[#cbd5b1]/30 transition-all duration-500"
               >
-                <div className="flex justify-between items-start mb-6">
-                  <div className="w-12 h-12 bg-[#f4f4f0] rounded-2xl flex items-center justify-center text-[#121212] font-serif font-black text-xl">
-                    {job.company_name?.[0] || 'R'}
-                  </div>
-                  <span className="px-3 py-1 bg-[#cbd5b1]/20 text-[#121212] text-[9px] font-black uppercase tracking-widest rounded-full border border-[#cbd5b1]/30">
-                    {job.category === 'clinician' ? 'Clinician' : 'Non-Clinician'}
-                  </span>
+                {/* Category Label at Top Left */}
+                <div className="absolute top-4 left-4 z-10">
+                   <span className="px-2 py-0.5 bg-white/10 backdrop-blur-md text-white/60 text-[7px] font-black uppercase tracking-widest rounded-full border border-white/10">
+                      {job.category === 'clinician' ? 'Clinician' : 
+                       job.category === 'non_clinician' ? 'Non-Clinician' : 'Other Jobs'}
+                   </span>
                 </div>
 
-                <h3 className="text-xl font-serif font-black text-[#121212] mb-3 leading-tight group-hover:text-white transition-colors">
-                  {job.title}
-                </h3>
-                
-                <p className="text-slate-500 text-sm mb-6 line-clamp-2 font-medium">
-                  {truncate(job.description, 100)}
-                </p>
-
-                <div className="mt-auto pt-6 border-t border-slate-100 space-y-3">
-                  <div className="flex items-center justify-between">
-                     <div className="flex items-center gap-2 text-slate-400">
-                        <MapPin size={14} />
-                        <span className="text-[10px] font-black uppercase tracking-widest">{job.location}</span>
-                     </div>
-                      <p className="text-[#121212] font-black text-sm">
-                        {(() => {
-                          const s = (job.salary_range || 'Negotiable').toString();
-                          const cleanS = s.replace(/,/g, '');
-                          return cleanS.replace(/([$₹])?\s?(\d+)/g, (match, symbol, num) => {
-                            const n = parseInt(num);
-                            const curSymbol = symbol === '$' ? '₹' : (symbol || '₹');
-                            return n >= 1000 ? `${curSymbol}${Math.floor(n / 1000)}K` : `${curSymbol}${n}`;
-                          }).replace(/\s?-\s?/g, ' - ');
-                        })()}
-                      </p>
-                  </div>
-                  
-                  <button 
-                    onClick={() => { setSelectedJob(job); setShowDetails(true); }}
-                    className="w-full py-4 bg-[#121212] text-white rounded-2xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-white hover:text-[#121212] transition-all"
+                {/* Center Initial Avatar */}
+                <div className="flex-1 flex items-center justify-center">
+                  <motion.div 
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    className="w-20 h-20 bg-gradient-to-br from-[#cbd5b1] to-[#a3b18a] rounded-full flex items-center justify-center text-[#121212] font-serif font-black text-3xl shadow-inner border-[6px] border-white/5"
                   >
-                    View Details <ArrowRight size={14} />
-                  </button>
+                    {job.title?.[0] || 'J'}
+                  </motion.div>
                 </div>
+
+                {/* Info at the Bottom (matching image style) */}
+                <div className="pt-2">
+                  <h3 className="text-sm font-serif font-black text-white leading-tight mb-1 truncate">
+                    {job.title}
+                  </h3>
+                  
+                  <div className="flex flex-col gap-0.5">
+                    <div className="flex items-center gap-1.5 text-white/40">
+                      <MapPin size={10} className="shrink-0" />
+                      <span className="text-[8px] font-black uppercase tracking-widest truncate">{job.location}</span>
+                    </div>
+                    
+                    <div className="text-[#cbd5b1] font-serif font-black text-[10px] tracking-tight">
+                      {(() => {
+                        const s = (job.salary_range || 'Negotiable').toString();
+                        const cleanS = s.replace(/,/g, '');
+                        return cleanS.replace(/([$₹])?\s?(\d+)/g, (match, symbol, num) => {
+                          const n = parseInt(num);
+                          const curSymbol = symbol === '$' ? '₹' : (symbol || '₹');
+                          return n >= 1000 ? `${curSymbol}${Math.floor(n / 1000)}K` : `${curSymbol}${n}`;
+                        }).replace(/\s?-\s?/g, ' - ');
+                      })()}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Subtle Glow Effect on Hover */}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#cbd5b1]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
               </motion.div>
             ))}
           </div>
         )}
+
+        {!loading && (
+          <div className="w-full max-w-4xl mx-auto mt-20 pt-16 border-t border-slate-200 flex flex-col items-center gap-8 text-center">
+            <div 
+              id="submit-resume"
+              onClick={() => { 
+                const otherJobRecord = jobs.find(j => j.title === 'Other Jobs' || j.title === 'other');
+                setSelectedJob(otherJobRecord || { id: 18, title: 'Other Jobs' }); 
+                setShowApply(true); 
+              }}
+              className="group cursor-pointer flex flex-col items-center gap-3"
+            >
+              <p className="text-[#121212] text-md uppercase tracking-widest font-black">Can't find your Choice?.</p>
+              <div className="bg-[#cbd5b1] border border-[#121212]/10 text-md px-10 py-4 rounded-full font-black uppercase tracking-[0.2em] hover:bg-[#121212] hover:text-white transition-all shadow-xl flex items-center gap-2.5">
+                No Worries, Submit your resume for future fits.
+              </div>
+            </div>
+          </div>
+        )}
+
       </main>
 
       <Footer />

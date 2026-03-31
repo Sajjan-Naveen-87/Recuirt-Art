@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Upload, FileText, CheckCircle, AlertCircle, Loader2, ArrowRight } from 'lucide-react';
+import { X, Upload, FileText, CheckCircle, AlertCircle, Loader2, ArrowRight, MapPin } from 'lucide-react';
 import { jobsService } from '../../services/jobs';
 
 const JobApplyModal = ({ job, isOpen, onClose, onSuccess }) => {
@@ -17,8 +17,6 @@ const JobApplyModal = ({ job, isOpen, onClose, onSuccess }) => {
     cover_letter: '',
     resume: null,
     agree_to_policy: false,
-    custom_job_title: '',
-    job_type_requested: '',
   });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
@@ -74,10 +72,7 @@ const JobApplyModal = ({ job, isOpen, onClose, onSuccess }) => {
     if (!formData.join_after.trim()) newErrors.join_after = 'Joining time is required';
     if (!formData.total_experience.trim()) newErrors.total_experience = 'Experience is required';
     
-    if (job.title === 'Other Jobs') {
-      if (!formData.custom_job_title.trim()) newErrors.custom_job_title = 'Job title is required';
-      if (!formData.job_type_requested.trim()) newErrors.job_type_requested = 'Job type is required';
-    }
+    // Remove validation for Other Jobs specific fields if they are no longer in the UI
 
     if (!formData.resume) newErrors.resume = 'Resume is required';
     if (!formData.agree_to_policy) newErrors.agree_to_policy = 'You must agree to the privacy policy';
@@ -107,9 +102,6 @@ const JobApplyModal = ({ job, isOpen, onClose, onSuccess }) => {
       applicationData.append('total_experience', formData.total_experience);
       
       let finalCoverLetter = formData.cover_letter;
-      if (job.title === 'Other Jobs') {
-        finalCoverLetter = `Job Title Requested: ${formData.custom_job_title}\nJob Type Requested: ${formData.job_type_requested}\n\n${formData.cover_letter}`;
-      }
       applicationData.append('cover_letter', finalCoverLetter);
       
       if (formData.resume instanceof File) {
@@ -182,7 +174,12 @@ const JobApplyModal = ({ job, isOpen, onClose, onSuccess }) => {
           >
             {/* Header */}
             <div className="px-8 py-6 border-b border-slate-200 flex items-center justify-between flex-shrink-0">
-               <h2 className="text-xl font-bold text-slate-900">Fill your job information</h2>
+               <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+                 Fill your job information for {job.title} 
+                 <span className="flex items-center gap-1 text-slate-500 font-normal text-lg ml-2">
+                   <MapPin size={18} className="text-blue-600" /> {job.location}
+                 </span>
+               </h2>
                <button
                  onClick={handleClose}
                  className="text-slate-400 hover:text-slate-900 transition-colors"
@@ -216,33 +213,7 @@ const JobApplyModal = ({ job, isOpen, onClose, onSuccess }) => {
 
                   {/* 3-Column Grid */}
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-6">
-                    {/* Conditional Other Job Fields */}
-                    {job.title === 'Other Jobs' && (
-                      <>
-                        <div className="space-y-1">
-                          <input
-                            type="text"
-                            name="custom_job_title"
-                            value={formData.custom_job_title}
-                            onChange={handleChange}
-                            className={`w-full border border-slate-300 rounded-md py-2.5 px-4 text-slate-700 placeholder:text-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all ${errors.custom_job_title ? 'border-red-500 bg-red-50' : ''}`}
-                            placeholder="Job title *"
-                          />
-                        </div>
-                        <div className="space-y-1">
-                          <input
-                            type="text"
-                            name="job_type_requested"
-                            value={formData.job_type_requested}
-                            onChange={handleChange}
-                            className={`w-full border border-slate-300 rounded-md py-2.5 px-4 text-slate-700 placeholder:text-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all ${errors.job_type_requested ? 'border-red-500 bg-red-50' : ''}`}
-                            placeholder="What kind of job *"
-                          />
-                        </div>
-                        {/* Spacer to maintain grid if needed - or just let it flow */}
-                        <div className="hidden md:block"></div>
-                      </>
-                    )}
+                    {/* Conditional other job fields removed by user */}
 
                     {/* Name */}
                     <div className="space-y-1">
@@ -318,14 +289,24 @@ const JobApplyModal = ({ job, isOpen, onClose, onSuccess }) => {
 
                     {/* Expected Salary */}
                     <div className="space-y-1">
-                      <input
-                        type="text"
+                      <select
                         name="expected_salary"
                         value={formData.expected_salary}
                         onChange={handleChange}
-                        className={`w-full border border-slate-300 rounded-md py-2.5 px-4 text-slate-700 placeholder:text-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all ${errors.expected_salary ? 'border-red-500 bg-red-50' : ''}`}
-                        placeholder="Expected Salary per Month *"
-                      />
+                        className={`w-full border border-slate-300 rounded-md py-2.5 px-4 text-slate-700 bg-white placeholder:text-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all ${errors.expected_salary ? 'border-red-500 bg-red-50' : ''}`}
+                      >
+                        <option value="" disabled>Current Salary per Month (₹)*</option>
+                        <option value="10,000 - 30,000">10,000 - 30,000</option>
+                        <option value="30,000 - 50,000">30,000 - 50,000</option>
+                        <option value="50,000 - 75,000">50,000 - 75,000</option>
+                        <option value="75,000 - 1 Lakh">75,000 - 1 Lakh</option>
+                        <option value="1 - 2 Lakh">1 - 2 Lakh</option>
+                        <option value="2 - 3 Lakh">2 - 3 Lakh</option>
+                        <option value="3 - 5 Lakh">3 - 5 Lakh</option>
+                        <option value="5 - 7.5 Lakh">5 - 7.5 Lakh</option>
+                        <option value="7.5 - 10 Lakh">7.5 - 10 Lakh</option>
+                        <option value="10+ Lakh">10+ Lakh</option>
+                      </select>
                     </div>
 
                     {/* Join After */}
@@ -336,20 +317,27 @@ const JobApplyModal = ({ job, isOpen, onClose, onSuccess }) => {
                         value={formData.join_after}
                         onChange={handleChange}
                         className={`w-full border border-slate-300 rounded-md py-2.5 px-4 text-slate-700 placeholder:text-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all ${errors.join_after ? 'border-red-500 bg-red-50' : ''}`}
-                        placeholder="Can join after *"
+                        placeholder="Available to join after (Days or Month)"
                       />
                     </div>
 
                     {/* Total Experience */}
                     <div className="space-y-1">
-                      <input
-                        type="text"
+                      <select
                         name="total_experience"
                         value={formData.total_experience}
                         onChange={handleChange}
-                        className={`w-full border border-slate-300 rounded-md py-2.5 px-4 text-slate-700 placeholder:text-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all ${errors.total_experience ? 'border-red-500 bg-red-50' : ''}`}
-                        placeholder="Total Experience *"
-                      />
+                        className={`w-full border border-slate-300 rounded-md py-2.5 px-4 text-slate-700 bg-white placeholder:text-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all ${errors.total_experience ? 'border-red-500 bg-red-50' : ''}`}
+                      >
+                        <option value="" disabled>Total Work Experience</option>
+                        <option value="Fresher">Fresher</option>
+                        <option value="Internship only">Internship only</option>
+                        <option value="1 - 3 Years">1 - 3 Years</option>
+                        <option value="3 - 6 Years">3 - 6 Years</option>
+                        <option value="6 - 10 Years">6 - 10 Years</option>
+                        <option value="10 - 15 Years">10 - 15 Years</option>
+                        <option value="15+ Years">15+ Years</option>
+                      </select>
                     </div>
                   </div>
 

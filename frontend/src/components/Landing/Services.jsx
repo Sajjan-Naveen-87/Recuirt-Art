@@ -4,23 +4,22 @@ function Services() {
   return (
     <section id="services" className="bg-[#121212] relative overflow-hidden scroll-mt-32">
       {/* Our Services Section */}
-      <div className="flex flex-col lg:flex-row min-h-[600px] lg:min-h-[800px]">
-        {/* Left side - Image with curved edge */}
-        <div className="w-full lg:w-1/2 bg-[#121212] relative flex items-center h-[500px] md:h-[600px] lg:h-auto overflow-hidden">
-          <div className="w-full h-full absolute inset-0">
-            <div className="w-full h-full relative overflow-hidden rounded-t-[4rem] rounded-b-[4rem] md:rounded-t-none md:rounded-b-[8rem] lg:rounded-b-none lg:rounded-l-[0rem]">
+      <div className="flex flex-col lg:flex-row">
+        {/* Left side - Image */}
+        <div className="w-full lg:w-1/2 bg-[#121212] relative flex items-center overflow-hidden">
+          <div className="w-full relative z-10 w-full">
+            <div className="w-full h-auto relative overflow-hidden rounded-none">
               <img 
                 src="/Our-Services.png" 
                 alt="Our Services" 
-                className="absolute inset-0 w-full h-full object-cover scale-100"
+                className="w-full h-auto object-contain scale-100 block"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-white/20 to-transparent pointer-events-none" />
             </div>
           </div>
         </div>
 
-        {/* Right side - Dark with grid */}
-        <div className="w-full lg:w-1/2 bg-[#121212] flex items-center justify-center p-10 md:p-20 lg:p-24 relative overflow-hidden">
+        {/* Right side - Text */}
+        <div className="w-full lg:w-1/2 bg-[#121212] flex items-start justify-center p-10 md:p-20 lg:px-24 lg:pt-24 lg:pb-0 relative overflow-hidden">
           <div 
             className="absolute inset-0 opacity-[0.03]"
             style={{
@@ -31,7 +30,7 @@ function Services() {
               backgroundSize: '40px 40px'
             }}
           />
-          <div className="max-w-xl relative z-10 w-full space-y-10 md:space-y-16 py-8 md:py-12">
+          <div className="max-w-xl relative z-10 w-full space-y-10 md:space-y-16 pt-8 pb-0 md:pt-12 md:pb-0">
             <div>
               <h4 className="text-[14px] font-black uppercase tracking-[0.8em] text-[#cbd5b1] mb-6">Expert Solutions</h4>
               <h2 className="text-5xl md:text-7xl lg:text-8xl font-serif font-black text-white leading-[1.1] tracking-tight">
@@ -72,10 +71,10 @@ function Services() {
         </div>
       </div>
 
-      {/* Our Specialties Section */}
-      <div className="flex flex-col lg:flex-row min-h-[600px] lg:min-h-[800px] bg-[#121212]">
+      {/* Our Specialities  Section */}
+      <div className="flex flex-col lg:flex-row bg-[#121212]">
         {/* Left side - Dark Background with curved image */}
-        <div className="w-full lg:w-1/2 bg-[#121212] relative flex items-center h-[500px] md:h-[600px] lg:h-auto overflow-hidden">
+        <div className="w-full lg:w-1/2 bg-[#121212] relative flex items-center overflow-hidden">
           <div 
             className="absolute inset-0 opacity-[0.03]"
             style={{
@@ -86,25 +85,24 @@ function Services() {
               backgroundSize: '40px 40px'
             }}
           />
-          <div className="w-full h-full absolute inset-0 lg:py-0">
-            <div className="w-full h-full relative overflow-hidden rounded-t-[4rem] md:rounded-t-[8rem] lg:rounded-t-none lg:rounded-bl-[0rem]">
+          <div className="w-full relative z-10 lg:py-0">
+            <div className="w-full h-full relative overflow-hidden rounded-none">
               <img 
                 src="./Our-Specialities.png" 
                 alt="Our Specialties" 
-                className="absolute inset-0 w-full h-full object-cover scale-100"
+                className="w-full h-auto object-contain scale-100 block"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#121212]/30 to-transparent pointer-events-none" />
             </div>
           </div>
         </div>
 
         {/* Right side - Dark with Text */}
-        <div className="w-full lg:w-1/2 bg-[#121212] flex items-center justify-center p-10 md:p-20 lg:p-24 relative text-white">
-          <div className="max-w-xl relative z-10 w-full space-y-10 md:space-y-16 py-8 md:py-12">
+        <div className="w-full lg:w-1/2 bg-[#121212] flex items-start justify-center p-10 md:p-20 lg:px-24 lg:pb-24 lg:pt-0 relative text-white">
+          <div className="max-w-xl relative z-10 w-full space-y-10 md:space-y-16 pt-0 pb-8 md:pb-12 md:pt-0">
             <div>
               <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-[#cbd5b1] mb-6">Healthcare Mastery</h4>
               <h2 className="text-5xl md:text-7xl lg:text-8xl font-serif font-black text-white leading-[1.1] tracking-tight">
-                Our <br className="hidden md:block" /> Specialties.
+                Our <br className="hidden md:block" /> Specialities
               </h2>
             </div>
             

@@ -42,8 +42,8 @@ function Navbar({ searchQuery, setSearchQuery, onSearchFocus }) {
           <span className="flex items-center gap-1">About Us <ChevronDown size={16} strokeWidth={3} className="transition-transform group-hover:rotate-180" /></span>
           <div className="absolute top-full left-0 w-48 opacity-0 invisible group-hover:visible group-hover:opacity-100 transition-all duration-200 shadow-xl border border-slate-900/10 flex flex-col z-50">
             <a href="/#about-us" className="bg-[#e7e3d5] text-slate-900 hover:bg-[#dcd7c4] px-6 py-4 transition-colors">Our Story</a>
-            <a href="/#team" className="bg-[#e7e3d5] text-slate-900 hover:bg-[#dcd7c4] px-6 py-4 transition-colors">Meet the Team</a>
             <a href="/#portfolio" className="bg-[#e7e3d5] text-slate-900 hover:bg-[#dcd7c4] px-6 py-4 transition-colors">Portfolio</a>
+            <a href="/#team" className="bg-[#e7e3d5] text-slate-900 hover:bg-[#dcd7c4] px-6 py-4 transition-colors">Our Team</a>
             <a href="/#testimonials" className="bg-[#e7e3d5] text-slate-900 hover:bg-[#dcd7c4] px-6 py-4 transition-colors">Testimonials</a>
           </div>
         </div>

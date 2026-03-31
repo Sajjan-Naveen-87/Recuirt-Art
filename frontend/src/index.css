@@ -62,6 +62,16 @@
   .layout-wrapper {
     @apply flex h-screen overflow-hidden bg-[#121212];
   }
+
+  /* Global hand cursor for interactive elements */
+  a,
+  button,
+  [role="button"],
+  input[type="button"],
+  input[type="submit"],
+  .cursor-pointer {
+    cursor: pointer !important;
+  }
 }
 
 /* Utilities for the specific look */

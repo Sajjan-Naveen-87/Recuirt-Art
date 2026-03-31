@@ -86,53 +86,7 @@ function AboutUs() {
         </div>
       </div>
 
-      {/* Our Focus Section */}
-      <div className="flex flex-col lg:flex-row min-h-[600px] lg:min-h-[800px] bg-[#121212]">
-        {/* Left side - Image with curved edge */}
-        <div className="w-full lg:w-1/2 bg-[#121212] relative flex items-center h-[500px] md:h-[600px] lg:h-auto overflow-hidden">
-          <div className="w-full h-full absolute inset-0 lg:py-0">
-              <div className="w-full h-full relative overflow-hidden rounded-b-[4rem] md:rounded-b-[8rem] lg:rounded-b-none lg:rounded-l-[0rem]">
-              <img 
-                src="/Our-Focus.png" 
-                alt="Our Focus" 
-                className="absolute inset-0 w-full h-full object-cover scale-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-white/20 to-transparent pointer-events-none" />
-            </div>
-          </div>
-        </div>
-
-        {/* Right side - Text */}
-        <div className="w-full lg:w-1/2 bg-[#121212] flex items-center justify-center p-10 md:p-20 lg:p-24 relative text-white">
-          <div className="max-w-xl relative z-10 w-full space-y-8 md:space-y-12 py-8 md:py-12">
-            <div>
-              <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-[#cbd5b1] mb-6">Sector Strategy</h4>
-              <h2 className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-serif font-black text-white leading-[1.1] tracking-tight">
-                Our <br className="hidden md:block" /> Focus.
-              </h2>
-            </div>
-            
-            <div className="space-y-6 md:space-y-8">
-              <p className="text-slate-400 text-base md:text-lg leading-relaxed font-medium">
-                Today, Recruit Art is strategically aligned toward comprehensive hospital hiring solutions. Our primary focus is on Clinicians, Super-Specialists, Nursing Professionals, and Hospital Operations leadership.
-              </p>
-              <p className="text-slate-400 text-base md:text-lg leading-relaxed font-medium">
-                We work closely with multi-speciality hospitals and diagnostic chains to close critical, time-sensitive roles with precision and confidentiality.
-              </p>
-              <p className="text-slate-400 text-base leading-relaxed font-medium">
-                Under <strong className="text-white">Sahitya Saini's</strong> leadership, Recruit Art continues to position itself as a premium healthcare recruitment partner — ethical, performance-focused, and committed to organizational excellence.
-              </p>
-            </div>
-
-            <a href="/#footer" className="inline-block bg-[#cbd5b1] text-[#121212] px-10 py-4 md:py-5 rounded-2xl font-black text-[10px] md:text-xs uppercase tracking-[0.2em] shadow-xl shadow-[#cbd5b1]/20 hover:bg-[#b8c2a0] transition-colors whitespace-nowrap">
-              Work With Us
-            </a>
-
-          </div>
-        </div>
-      </div>
-
-      {/* Stats Banner Section */}
+      {/* Stats Banner Section (Portfolio) */}
       <div id="portfolio" className="w-full bg-[#121212] py-20 xl:py-16 relative overflow-hidden flex flex-col xl:flex-row items-center justify-between shadow-2xl min-h-[650px] border-t border-slate-800 scroll-mt-32">
           {/* Subtle grid background */}
           <div 
@@ -197,6 +151,52 @@ function AboutUs() {
               We focus on building strong, lasting connections between exceptional healthcare professionals and leading institutions. Quality and integrity are at the heart of every placement.
             </p>
           </div>
+      </div>
+
+      {/* Our Focus Section */}
+      <div className="flex flex-col lg:flex-row min-h-[600px] lg:min-h-[800px] bg-[#121212]">
+        {/* Left side - Image with curved edge */}
+        <div className="w-full lg:w-1/2 bg-[#121212] relative flex items-center h-[500px] md:h-[600px] lg:h-auto overflow-hidden">
+          <div className="w-full h-full absolute inset-0 lg:py-0">
+              <div className="w-full h-full relative overflow-hidden rounded-b-[4rem] md:rounded-b-[8rem] lg:rounded-b-none lg:rounded-l-[0rem]">
+              <img 
+                src="/Our-Focus.png" 
+                alt="Our Focus" 
+                className="absolute inset-0 w-full h-full object-cover scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-white/20 to-transparent pointer-events-none" />
+            </div>
+          </div>
+        </div>
+
+        {/* Right side - Text */}
+        <div className="w-full lg:w-1/2 bg-[#121212] flex items-center justify-center p-10 md:p-20 lg:p-24 relative text-white">
+          <div className="max-w-xl relative z-10 w-full space-y-8 md:space-y-12 py-8 md:py-12">
+            <div>
+              <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-[#cbd5b1] mb-6">Sector Strategy</h4>
+              <h2 className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-serif font-black text-white leading-[1.1] tracking-tight">
+                Our <br className="hidden md:block" /> Focus.
+              </h2>
+            </div>
+            
+            <div className="space-y-6 md:space-y-8">
+              <p className="text-slate-400 text-base md:text-lg leading-relaxed font-medium">
+                Today, Recruit Art is strategically aligned toward comprehensive hospital hiring solutions. Our primary focus is on Clinicians, Super-Specialists, Nursing Professionals, and Hospital Operations leadership.
+              </p>
+              <p className="text-slate-400 text-base md:text-lg leading-relaxed font-medium">
+                We work closely with multi-speciality hospitals and diagnostic chains to close critical, time-sensitive roles with precision and confidentiality.
+              </p>
+              <p className="text-slate-400 text-base leading-relaxed font-medium">
+                Under <strong className="text-white">Sahitya Saini's</strong> leadership, Recruit Art continues to position itself as a premium healthcare recruitment partner — ethical, performance-focused, and committed to organizational excellence.
+              </p>
+            </div>
+
+            <a href="/#footer" className="inline-block bg-[#cbd5b1] text-[#121212] px-10 py-4 md:py-5 rounded-2xl font-black text-[10px] md:text-xs uppercase tracking-[0.2em] shadow-xl shadow-[#cbd5b1]/20 hover:bg-[#b8c2a0] transition-colors whitespace-nowrap">
+              Work With Us
+            </a>
+
+          </div>
+        </div>
       </div>
 
     </section>

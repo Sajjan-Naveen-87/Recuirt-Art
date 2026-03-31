@@ -10,8 +10,8 @@ function Footer() {
         <div className="w-full lg:max-w-xs text-center lg:text-left">
           <div className="space-y-4 text-slate-700">
             <h2 className="text-2xl md:text-3xl font-serif font-bold mb-6 md:mb-8">Contact Us</h2>
-            <a href="mailto:admin@recuruitart.in" className="block text-sm md:text-base font-medium hover:text-slate-900 transition-colors">
-              admin@recuruitart.in
+            <a href="mailto:admin@recruitart.in " className="block text-sm md:text-base font-medium hover:text-slate-900 transition-colors">
+              admin@recruitart.in
             </a>
             <p className="text-sm md:text-base leading-relaxed">
               Plot No. 40, Nagla Enclave Part 1, NIIT, Faridabad, Haryana 121004
@@ -35,6 +35,9 @@ function Footer() {
                 Home
               </Link>
               <a href="/#about-us" className="hover:text-slate-900 transition-colors text-sm md:text-base">Our Story</a>
+              <a href="/#portfolio" className="hover:text-slate-900 transition-colors text-sm md:text-base">Portfolio</a>
+              <a href="/#team" className="hover:text-slate-900 transition-colors text-sm md:text-base">Our Team</a>
+              <a href="/#testimonials" className="hover:text-slate-900 transition-colors text-sm md:text-base">Testimonials</a>
             </div>
           </div>
 
@@ -43,7 +46,7 @@ function Footer() {
             <h4 className="text-2xl md:text-3xl font-serif font-bold mb-6 md:mb-8">For Employers</h4>
             <div className="flex flex-col items-center sm:items-start gap-4 md:gap-6 font-bold text-slate-700">
               <a href="/#services" className="hover:text-slate-900 transition-colors text-sm md:text-base">Services</a>
-              <a href="/#contact" className="hover:text-slate-900 transition-colors text-sm md:text-base">Submit Vacancy</a>
+              <a href="/#contact" className="hover:text-slate-900 transition-colors text-sm md:text-base">Submit Requirements</a>
             </div>
           </div>
 

@@ -12,6 +12,7 @@ const JobsPage = () => {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const [jobCategory, setJobCategory] = useState('all');
   const [selectedJob, setSelectedJob] = useState(null);
   const [showDetails, setShowDetails] = useState(false);
   const [showApply, setShowApply] = useState(false);
@@ -19,12 +20,20 @@ const JobsPage = () => {
   useEffect(() => {
     fetchJobs();
     window.scrollTo(0, 0);
-  }, [searchQuery]);
+  }, [searchQuery, jobCategory]);
 
   const fetchJobs = async () => {
     try {
       setLoading(true);
-      const data = await jobsService.getJobs({ search: searchQuery });
+      const params = { 
+        search: searchQuery || '' 
+      };
+
+      if (jobCategory && jobCategory !== 'all') {
+        params.category = jobCategory;
+      }
+
+      const data = await jobsService.getJobs(params);
       setJobs(data.results || data || []);
     } catch (err) {
       console.error("Error fetching jobs:", err);
@@ -37,32 +46,70 @@ const JobsPage = () => {
 
   return (
     <div className="min-h-screen bg-[#f4f4f0] font-sans">
-      <Navbar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+      <Navbar 
+        searchQuery={searchQuery} 
+        setSearchQuery={setSearchQuery} 
+        jobCategory={jobCategory}
+        setJobCategory={setJobCategory}
+      />
 
       <main className="max-w-7xl mx-auto px-6 py-20 md:py-32">
         <Link to="/" className="inline-flex items-center gap-2 text-slate-500 hover:text-[#121212] mb-12 transition-colors font-bold uppercase tracking-widest text-[10px]">
-          <ChevronLeft size={16} /> Back to Home
+          <ChevronLeft size={16} /> Back to home
         </Link>
 
         <div className="mb-16">
           <h1 className="text-4xl md:text-6xl font-serif font-black text-[#121212] mb-6 tracking-tight">
-            Explore <span className="text-[#cbd5b1]">Opportunities.</span>
+            Available <span className="text-[#cbd5b1]">Jobs </span> With Us.
           </h1>
           <p className="text-slate-500 text-lg md:text-xl font-medium max-w-2xl">
-            Discover a wide range of clinical and non-clinical roles tailored to your expertise.
+            Discover a wide range of clinician and non-clinician jobs.
           </p>
         </div>
 
         {/* Search Bar */}
-        <div className="bg-white p-2 md:p-3 rounded-2xl md:rounded-3xl mb-12 flex items-center shadow-2xl border border-slate-100 max-w-2xl">
-           <div className="p-3 md:p-4 bg-[#121212] rounded-xl md:rounded-2xl text-[#cbd5b1] shadow-lg"><Search size={18} md:size={22} /></div>
-           <input 
-              type="text" 
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search for roles, skills, or locations..." 
-              className="flex-1 px-4 md:px-8 outline-none text-base md:text-xl font-serif font-black placeholder:text-slate-300 bg-transparent text-[#121212]" 
-           />
+        <div className="flex flex-col md:flex-row md:items-center gap-8 mb-12">
+          <div className="bg-[#cbd5b1] p-2 md:p-3 rounded-2xl md:rounded-3xl flex items-center shadow-2xl border border-slate-100 max-w-2xl flex-1">
+             <div className="p-3 md:p-4 bg-[#f4f4f0] rounded-xl md:rounded-2xl text-dark shadow-lg"><Search size={18} /></div>
+             <input 
+                type="text" 
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search for roles, skills, or locations..." 
+                className="flex-1 px-4 md:px-8 outline-none text-base md:text-xl font-serif font-black placeholder:text-dark bg-transparent text-dark" 
+             />
+          </div>
+
+          {/* Category Radio Buttons */}
+          <div className="flex items-center gap-6 px-2">
+            {[
+              { label: 'All Jobs', value: 'all' },
+              { label: 'Clinical', value: 'clinician' },
+              { label: 'Non Clinical', value: 'non_clinician' }
+            ].map((cat) => (
+              <label 
+                key={cat.value} 
+                className="flex items-center gap-3 cursor-pointer group"
+              >
+                <div className="relative flex items-center justify-center">
+                  <input 
+                    type="radio" 
+                    name="jobCategory" 
+                    value={cat.value}
+                    checked={jobCategory === cat.value}
+                    onChange={(e) => setJobCategory(e.target.value)}
+                    className="appearance-none w-5 h-5 border-2 border-[#121212]/30 rounded-full checked:border-indigo-600 transition-all cursor-pointer"
+                  />
+                  {jobCategory === cat.value && (
+                    <div className="absolute w-2.5 h-2.5 bg-indigo-600 rounded-full" />
+                  )}
+                </div>
+                <span className={`text-[13px] font-black uppercase tracking-wider transition-colors ${jobCategory === cat.value ? 'text-indigo-600' : 'text-slate-500 group-hover:text-slate-900'}`}>
+                  {cat.label}
+                </span>
+              </label>
+            ))}
+          </div>
         </div>
 
         {loading ? (
@@ -80,18 +127,19 @@ const JobsPage = () => {
               <motion.div 
                 key={job.id}
                 whileHover={{ y: -5 }}
-                className="bg-white p-8 rounded-[2.5rem] shadow-xl border border-slate-100 flex flex-col group"
+                onClick={() => { setSelectedJob(job); setShowDetails(true); }}
+                className="bg-[#cbd5b1] p-8 rounded-[2.5rem] shadow-xl border border-slate-100 flex flex-col group cursor-pointer"
               >
                 <div className="flex justify-between items-start mb-6">
                   <div className="w-12 h-12 bg-[#f4f4f0] rounded-2xl flex items-center justify-center text-[#121212] font-serif font-black text-xl">
                     {job.company_name?.[0] || 'R'}
                   </div>
                   <span className="px-3 py-1 bg-[#cbd5b1]/20 text-[#121212] text-[9px] font-black uppercase tracking-widest rounded-full border border-[#cbd5b1]/30">
-                    {job.category === 'clinician' ? 'Clinical' : 'Non-Clinical'}
+                    {job.category === 'clinician' ? 'Clinician' : 'Non-Clinician'}
                   </span>
                 </div>
 
-                <h3 className="text-xl font-serif font-black text-[#121212] mb-3 leading-tight group-hover:text-[#cbd5b1] transition-colors">
+                <h3 className="text-xl font-serif font-black text-[#121212] mb-3 leading-tight group-hover:text-white transition-colors">
                   {job.title}
                 </h3>
                 
@@ -120,7 +168,7 @@ const JobsPage = () => {
                   
                   <button 
                     onClick={() => { setSelectedJob(job); setShowDetails(true); }}
-                    className="w-full py-4 bg-[#121212] text-white rounded-2xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-[#cbd5b1] hover:text-[#121212] transition-all"
+                    className="w-full py-4 bg-[#121212] text-white rounded-2xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-white hover:text-[#121212] transition-all"
                   >
                     View Details <ArrowRight size={14} />
                   </button>

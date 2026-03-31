@@ -18,7 +18,7 @@ function TeamSection() {
         <div className="space-y-4 mb-16 md:mb-20">
           <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-[#cbd5b1]">The Leadership</h4>
           <h2 className="text-4xl md:text-6xl lg:text-8xl font-serif font-black text-white tracking-tight leading-none">
-            Meet <span className="text-[#cbd5b1]">The Team.</span>
+            Our  <span className="text-[#cbd5b1]">Team.</span>
           </h2>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 md:gap-12 lg:gap-20">

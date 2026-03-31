@@ -32,10 +32,10 @@ function LandingPage() {
       <main>
         <HeroSection />
         <AboutUs />
-        <Services />
         <TeamSection />
-        <LatestJobs searchQuery={searchQuery} />
         <Testimonials />
+        <Services />
+        <LatestJobs searchQuery={searchQuery} />
         <InsightsSection />
         <ContactSection />
       </main>

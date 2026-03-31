@@ -250,9 +250,16 @@ function LatestJobs({ searchQuery }) {
             </div>
           )}
 
-          {/* Bottom Call to Actions */}
           {!loading && (
-            <div className="w-full max-w-5xl mx-auto mt-16 pt-12 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-8">
+            <div className="w-full max-w-4xl mx-auto mt-20 pt-16 border-t border-white/10 flex flex-col items-center gap-12 text-center">
+              
+              <Link 
+                to="/jobs" 
+                className="bg-[#cbd5b1] text-[#121212] px-14 py-5 rounded-full font-black uppercase tracking-[0.2em] text-sm hover:bg-white transition-all hover:scale-105 shadow-2xl shadow-black/50 flex items-center gap-3 shrink-0"
+              >
+                View More <Search size={20} />
+              </Link>
+
               <div 
                 id="submit-resume"
                 onClick={() => { 
@@ -260,23 +267,13 @@ function LatestJobs({ searchQuery }) {
                   setSelectedJob(otherJobRecord || { id: 18, title: 'Other Jobs' }); 
                   setIsApplyModalOpen(true); 
                 }}
-                className="group cursor-pointer flex items-center gap-6 text-left"
+                className="group cursor-pointer flex flex-col items-center gap-3"
               >
-                <div className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center text-white group-hover:border-[#cbd5b1] group-hover:text-[#cbd5b1] transition-colors bg-black/50 backdrop-blur-sm">
-                  <Briefcase size={20} />
-                </div>
-                <div>
-                  <h3 className="text-lg font-serif font-black text-white group-hover:text-[#cbd5b1] transition-colors drop-shadow-sm">Can't find your role?</h3>
-                  <p className="text-white/60 text-sm font-medium italic group-hover:text-white/80">Submit your resume for future fits.</p>
+                <p className="text-white text-[10px] uppercase tracking-widest font-black">Can't find your Choice?.</p>
+                <div className="bg-[#cbd5b1] border border-white/30 text-[#121212] px-10 py-3.5 rounded-full font-black uppercase tracking-[0.2em] text-[10px] hover:bg-white hover:text-[#121212] hover:border-white transition-all shadow-lg flex items-center gap-2.5">
+                  No Worries, Submit your resume for future fits. <Briefcase size={16} />
                 </div>
               </div>
-
-              <Link 
-                to="/jobs" 
-                className="bg-[#cbd5b1] text-[#121212] px-10 py-4 rounded-full font-black uppercase tracking-[0.2em] text-xs hover:bg-white transition-colors shadow-xl shadow-black/50 flex items-center gap-3 shrink-0"
-              >
-                Explore All Jobs <Search size={16} />
-              </Link>
             </div>
           )}
         </div>

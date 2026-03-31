@@ -31,7 +31,7 @@ function HeroSection() {
         />
         
         <div className="max-w-xl relative z-10 w-full space-y-8 md:space-y-10">
-          <h1 className="text-5xl md:text-6xl lg:text-8xl font-serif font-black text-white leading-[1.1] tracking-tight">
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-serif font-black text-white leading-[1.1] tracking-tight">
             Explore<br className="hidden md:block" />
             <span className="text-[#cbd5b1]">New Career</span> Opportunities.
           </h1>

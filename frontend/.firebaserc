@@ -1,5 +1,7 @@
 {
   "projects": {
     "default": "recruit-art"
-  }
+  },
+  "targets": {},
+  "etags": {}
 }

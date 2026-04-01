@@ -358,7 +358,7 @@ class JobApplicationViewSet(viewsets.ModelViewSet):
             return Response(
                 {
                     'error': 'An unexpected server error occurred while processing your application.',
-                    'detail': str(e) if settings.DEBUG else 'Please contact support.'
+                    'detail': str(e)
                 },
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )

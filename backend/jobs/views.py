@@ -354,11 +354,18 @@ class JobApplicationViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_201_CREATED
             )
         except Exception as e:
-            logger.error(f"Unexpected error in job application submission: {str(e)}", exc_info=True)
+            # Check for common Firebase Storage/Google Cloud errors to provide a more specific hint
+            error_details = str(e)
+            if "bucket does not exist" in error_details.lower():
+                error_details = f"Storage Configuration Error: The Firebase bucket name is invalid or not yet initialized in the Firebase Console. Details: {error_details}"
+            elif "Service account" in error_details:
+                error_details = f"Authentication Error: The provided Firebase service account credentials are invalid or lack permissions. Details: {error_details}"
+
+            logger.error(f"Unexpected error in job application submission: {error_details}", exc_info=True)
             return Response(
                 {
                     'error': 'An unexpected server error occurred while processing your application.',
-                    'detail': str(e)
+                    'detail': error_details
                 },
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )

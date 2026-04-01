@@ -180,11 +180,17 @@ if USE_CLOUD_STORAGE and os.getenv('FIREBASE_SERVICE_ACCOUNT_JSON'):
     creds_dict = json.loads(firebase_creds_json)
     GS_CREDENTIALS = service_account.Credentials.from_service_account_info(creds_dict)
     
-    # E.g., 'your-project-id.appspot.com'
+    # E.g., 'your-project-id.appspot.com' or 'your-project-id.firebasestorage.app'
     GS_BUCKET_NAME = os.getenv('GS_BUCKET_NAME')
+    
     if not GS_BUCKET_NAME:
-        # Try to infer it from the project ID if not explicitly set
-        GS_BUCKET_NAME = f"{creds_dict.get('project_id')}.appspot.com"
+        # Default project ID from credentials
+        project_id = creds_dict.get('project_id', 'recruit-art')
+        # Try the modern .firebasestorage.app format first, then fallback
+        GS_BUCKET_NAME = f"{project_id}.firebasestorage.app"
+        print(f"INFO: No GS_BUCKET_NAME env var found. Defaulting to {GS_BUCKET_NAME}")
+    else:
+        print(f"INFO: Using configured GS_BUCKET_NAME: {GS_BUCKET_NAME}")
         
     GS_DEFAULT_ACL = None
     

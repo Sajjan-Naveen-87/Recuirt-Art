@@ -117,26 +117,18 @@ const JobApplyModal = ({ job, isOpen, onClose, onSuccess }) => {
         }, 2000);
       }
     } catch (err) {
-      console.error('Job application error:', err.response?.data);
-      const data = err.response?.data;
+      console.error('Job application error:', err);
       let errorMessage = 'Failed to submit application. Please try again.';
       
-      if (data) {
-        if (typeof data === 'string') {
-          errorMessage = data;
-        } else if (data.error || data.message) {
-          errorMessage = data.error || data.message;
-        } else if (typeof data === 'object') {
-          const fieldErrors = Object.entries(data)
-            .map(([key, value]) => {
-              const msg = Array.isArray(value) ? value.join(', ') : value;
-              return `${key}: ${msg}`;
-            });
-          if (fieldErrors.length > 0) {
-            errorMessage = fieldErrors.join(' | ');
-          }
-        }
+      if (err.message) {
+        errorMessage = err.message;
+      } else if (err.code) {
+        errorMessage = `Firebase error: ${err.code}`;
+      } else if (err.response?.data) {
+        const data = err.response.data;
+        errorMessage = data.detail || data.error || data.message || errorMessage;
       }
+      
       setError(errorMessage);
     } finally {
       setLoading(false);

@@ -200,7 +200,7 @@ function LatestJobs({ searchQuery }) {
                       {/* Info Centered */}
                       <div className="flex-1 flex flex-col items-center justify-between relative z-10 w-full pt-1 pb-1 group-hover:translate-y-[-2px] transition-transform duration-100">
                         <div className="flex-1 flex items-center">
-                          <h3 className="text-[12px] md:text-[13px] font-serif font-black text-[#0c0e14] leading-tight group-hover:text-[#FFC107] transition-colors duration-100">
+                          <h3 className="text-[12px] md:text-[13px] font-serif font-black text-[#0c0e14] leading-tight group-hover:transition-colors duration-100">
                             {job.title}
                           </h3>
                         </div>
@@ -246,14 +246,24 @@ function LatestJobs({ searchQuery }) {
                       {/* Info Centered */}
                       <div className="flex-1 flex flex-col items-center justify-between relative z-10 w-full pt-1 pb-1 group-hover:translate-y-[-2px] transition-transform duration-100">
                         <div className="flex-1 flex items-center">
-                          <h3 className="text-[12px] md:text-[13px] font-serif font-black text-[#0c0e14] leading-tight group-hover:text-[#FFC107] transition-colors duration-100">
+                          <h3 className="text-[12px] md:text-[13px] font-serif font-black text-[#0c0e14] leading-tight group-hover:transition-colors duration-100">
                             {job.title}
                           </h3>
                         </div>
                         
-                        <div className="text-[#0c0e14] bg-[#FFC107] font-serif font-black text-[8px] px-3 py-0.5 rounded-full tracking-tight shadow-md border border-[#FFC107]/20 group-hover:shadow-[#FFC107]/20 transition-all duration-100">
+                        <div className="text-[#0c0e14] bg-[#FFC107] font-serif font-black text-[8px] px-3 py-0.5 rounded-full tracking-tight shadow-md border border-[#FFC107]/20 group-hover:opacity-0 transition-all duration-100">
                           {formatSalary(job.salary_range)}
                         </div>
+                      </div>
+
+                      {/* Apply Now Hover Action */}
+                      <div className="absolute inset-x-0 bottom-3 flex justify-center z-30 opacity-0 group-hover:opacity-100 group-hover:translate-y-[-4px] transition-all duration-100 pointer-events-none group-hover:pointer-events-auto">
+                        <button 
+                          onClick={(e) => { e.stopPropagation(); setSelectedJob(job); setIsApplyModalOpen(true); }}
+                          className="bg-[#0c0e14] text-white px-6 py-1.5 rounded-full text-[8px] font-black uppercase tracking-[0.2em] shadow-2xl border border-white/10 hover:bg-[#FFC107] hover:text-[#0c0e14] transition-all active:scale-95"
+                        >
+                          Apply Now
+                        </button>
                       </div>
 
                       {/* Hover Overlay */}

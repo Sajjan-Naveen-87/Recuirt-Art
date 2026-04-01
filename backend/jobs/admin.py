@@ -3,6 +3,7 @@ from import_export import resources, fields
 from import_export.admin import ExportMixin
 from jobs.models import Job, JobRequirement, JobApplication, ApplicationResponse
 from django.db.models import Prefetch
+from django.utils.html import format_html
 
 class JobRequirementInline(admin.TabularInline):
     """Inline admin for JobRequirement model."""
@@ -137,7 +138,7 @@ class JobApplicationAdmin(ExportMixin, admin.ModelAdmin):
             'fields': ('job', 'applicant', 'full_name', 'email', 'mobile')
         }),
         ('Resume & Links', {
-            'fields': ('resume', 'linkedin_url', 'portfolio_url')
+            'fields': ('resume_link', 'linkedin_url', 'portfolio_url')
         }),
         ('Additional Details', {
             'fields': ('expected_salary', 'notice_period', 'cover_letter'),
@@ -162,15 +163,33 @@ class JobApplicationAdmin(ExportMixin, admin.ModelAdmin):
 
     def get_readonly_fields(self, request, obj=None):
         """
-        Make fields editable but keep timestamps readonly.
-        User requested "jobs uploaded are editable by the admin". 
-        I'll make JobApplication fields editable too, in case admin needs to correct typos.
+        Make fields editable but keep timestamps and resume_link readonly.
         """
-        return ['applied_at', 'updated_at']
+        return ['applied_at', 'updated_at', 'resume_link']
     
     def has_delete_permission(self, request, obj=None):
         """Allow deletion if needed, but usually kept restricted."""
         return request.user.is_superuser
+
+    def resume_link(self, obj):
+        """Safely render a link to the resume without crashing if storage is broken."""
+        if not obj.resume:
+            return "No resume uploaded"
+        try:
+            return format_html(
+                '<a href="{}" target="_blank" style="font-weight: bold; color: #264b5d;">'
+                '<span style="margin-right: 5px;">📄</span>View Resume ({})'
+                '</a>',
+                obj.resume.url,
+                obj.resume_file_name or "PDF"
+            )
+        except Exception as e:
+            return format_html(
+                '<span style="color: #ba2121;">⚠️ File Missing or Corrupted (ID: {})</span>',
+                obj.id
+            )
+    
+    resume_link.short_description = 'Resume/CV'
 
 
 @admin.register(JobRequirement)

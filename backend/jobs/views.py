@@ -12,6 +12,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
 from django.utils import timezone
+from django.conf import settings
 from jobs.models import Job, JobRequirement, JobApplication, ApplicationResponse
 from jobs.serializers import (
     JobSerializer,
@@ -353,7 +354,7 @@ class JobApplicationViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_201_CREATED
             )
         except Exception as e:
-            logger.error(f"Unexpected error in job application submission: {e}", exc_info=True)
+            logger.error(f"Unexpected error in job application submission: {str(e)}", exc_info=True)
             return Response(
                 {
                     'error': 'An unexpected server error occurred while processing your application.',

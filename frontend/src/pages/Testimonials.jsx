@@ -53,22 +53,22 @@ function Testimonials() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f4f4f0] font-sans flex flex-col relative overflow-hidden">
+    <div className="min-h-screen bg-[#f8f9fa] font-sans flex flex-col relative overflow-hidden">
       <Navbar />
 
       <main className="flex-1 flex flex-col items-center justify-center pt-24 pb-32 px-6 relative z-10 w-full max-w-7xl mx-auto">
-        <h1 className="text-4xl md:text-7xl font-serif text-[#121212] mb-20 text-center tracking-tight font-black">
-          Testimonials
+        <h1 className="text-4xl md:text-7xl font-serif text-[#0c0e14] mb-20 text-center tracking-tight font-black uppercase">
+          <span className="text-[#FFC107]">Testimonials</span>
         </h1>
 
         {loading ? (
           <div className="h-64 flex items-center justify-center">
-            <div className="w-12 h-12 border-4 border-[#121212]/10 border-t-[#121212] rounded-full animate-spin"></div>
+            <div className="w-12 h-12 border-4 border-[#0c0e14]/10 border-t-[#FFC107] rounded-full animate-spin"></div>
           </div>
         ) : testimonials.length > 0 ? (
           <div className="relative w-full max-w-5xl md:aspect-[21/9] flex items-center justify-center min-h-[450px]">
             {/* Giant Quote Icon */}
-            <div className="absolute top-0 left-0 md:left-20 text-[#121212] opacity-10">
+            <div className="absolute top-0 left-0 md:left-20 text-[#FFC107] opacity-10">
               <Quote size={80} strokeWidth={3} />
             </div>
 
@@ -88,13 +88,13 @@ function Testimonials() {
               >
                 <div className="space-y-8">
                   <div className="space-y-2">
-                    <h2 className="text-3xl md:text-[2.5rem] font-serif font-black text-[#121212] tracking-tight">
+                    <h2 className="text-3xl md:text-[2.5rem] font-serif font-black text-[#0c0e14] tracking-tight">
                       {testimonials[currentIndex].original_url ? (
                         <a 
                           href={testimonials[currentIndex].original_url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="hover:text-[#cbd5b1] transition-colors"
+                          className="hover:text-[#FFC107] transition-colors"
                         >
                           {testimonials[currentIndex].author_name}
                         </a>
@@ -102,12 +102,12 @@ function Testimonials() {
                         testimonials[currentIndex].author_name
                       )}
                     </h2>
-                    <p className="text-lg md:text-xl font-serif italic text-slate-500 font-bold">
+                    {/* <p className="text-lg md:text-xl font-serif italic text-slate-500 font-bold">
                       {testimonials[currentIndex].author_position}
-                    </p>
+                    </p> */}
                   </div>
 
-                  <p className="text-xl md:text-3xl lg:text-4xl font-serif font-medium text-[#121212]/80 leading-snug max-w-4xl mx-auto italic">
+                  <p className="text-xl md:text-3xl lg:text-4xl font-serif font-medium text-[#0c0e14]/90 leading-snug max-w-4xl mx-auto italic">
                     "{testimonials[currentIndex].content}"
                   </p>
 
@@ -118,9 +118,9 @@ function Testimonials() {
                         href={testimonials[currentIndex].original_url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-3 bg-[#121212] text-white px-8 py-3 rounded-full font-bold uppercase tracking-widest text-[10px] hover:bg-[#cbd5b1] hover:text-[#121212] transition-all shadow-xl"
+                        className="inline-flex items-center gap-3 bg-[#0c0e14] text-white px-10 py-4 rounded-xl font-black uppercase tracking-widest text-[10px] hover:bg-[#FFC107] hover:text-[#0c0e14] transition-all shadow-xl hover:scale-105"
                       >
-                        View Original <ExternalLink size={14} />
+                        View Case Study <ExternalLink size={14} />
                       </a>
                     </div>
                   )}
@@ -132,21 +132,21 @@ function Testimonials() {
             <div className="absolute inset-x-0 bottom-[-80px] md:bottom-auto md:inset-y-0 flex justify-center md:justify-between items-center px-4 gap-8 md:gap-0 pointer-events-none">
               <button
                 onClick={() => paginate(-1)}
-                className="w-14 h-14 rounded-full border border-[#121212]/10 flex items-center justify-center text-[#121212] hover:bg-[#121212] hover:text-white transition-all pointer-events-auto bg-white/50 backdrop-blur-sm"
+                className="w-14 h-14 rounded-full border border-[#0c0e14]/10 flex items-center justify-center text-[#0c0e14] hover:bg-[#0c0e14] hover:text-[#FFC107] transition-all pointer-events-auto bg-white/80 backdrop-blur-sm shadow-xl"
               >
                 <ChevronLeft size={24} />
               </button>
               <button
                 onClick={() => paginate(1)}
-                className="w-14 h-14 rounded-full border border-[#121212]/10 flex items-center justify-center text-[#121212] hover:bg-[#121212] hover:text-white transition-all pointer-events-auto bg-white/50 backdrop-blur-sm"
+                className="w-14 h-14 rounded-full border border-[#0c0e14]/10 flex items-center justify-center text-[#0c0e14] hover:bg-[#0c0e14] hover:text-[#FFC107] transition-all pointer-events-auto bg-white/80 backdrop-blur-sm shadow-xl"
               >
                 <ChevronRight size={24} />
               </button>
             </div>
           </div>
         ) : (
-          <div className="text-center py-20 bg-white/5 rounded-[4rem] border border-white/10 w-full max-w-4xl">
-            <Quote size={48} className="mx-auto mb-6 text-[#121212]/20" />
+          <div className="text-center py-20 bg-white/40 rounded-[4rem] border border-[#0c0e14]/5 w-full max-w-4xl shadow-2xl">
+            <Quote size={48} className="mx-auto mb-6 text-[#FFC107]/20" />
             <p className="text-2xl font-serif italic text-slate-400">Our success stories are being written...</p>
           </div>
         )}
@@ -162,7 +162,7 @@ function Testimonials() {
                   setCurrentIndex(index);
                 }}
                 className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
-                  index === currentIndex ? 'bg-[#121212] w-8' : 'bg-[#121212]/20'
+                  index === currentIndex ? 'bg-[#FFC107] w-8' : 'bg-[#0c0e14]/10'
                 }`}
               />
             ))}

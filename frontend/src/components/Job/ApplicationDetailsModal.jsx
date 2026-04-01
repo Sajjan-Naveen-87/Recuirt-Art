@@ -32,8 +32,8 @@ const ApplicationDetailsModal = ({ isOpen, onClose, applicationId }) => {
     const configs = {
       'pending': { color: 'text-slate-500', bg: 'bg-slate-50', border: 'border-slate-200', label: 'Pending Review', icon: <Clock size={16} /> },
       'reviewing': { color: 'text-amber-600', bg: 'bg-amber-50', border: 'border-amber-100', label: 'Reviewing', icon: <Clock size={16} /> },
-      'shortlisted': { color: 'text-[#121212]', bg: 'bg-[#cbd5b1]/10', border: 'border-[#cbd5b1]/20', label: 'Shortlisted', icon: <CheckCircle size={16} /> },
-      'hired': { color: 'text-[#121212]', bg: 'bg-[#cbd5b1]', border: 'border-[#cbd5b1]', label: 'Hired', icon: <CheckCircle size={16} /> },
+      'shortlisted': { color: 'text-[#0c0e14]', bg: 'bg-[#FFC107]/10', border: 'border-[#FFC107]/20', label: 'Shortlisted', icon: <CheckCircle size={16} /> },
+      'hired': { color: 'text-[#0c0e14]', bg: 'bg-[#FFC107]', border: 'border-[#FFC107]', label: 'Hired', icon: <CheckCircle size={16} /> },
       'rejected': { color: 'text-rose-500', bg: 'bg-rose-50', border: 'border-rose-100', label: 'Rejected', icon: <X size={16} /> },
     };
     return configs[status?.toLowerCase()] || configs.pending;
@@ -55,24 +55,24 @@ const ApplicationDetailsModal = ({ isOpen, onClose, applicationId }) => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 bg-[#121212]/40 backdrop-blur-md z-[100] flex items-center justify-center p-4 lg:p-8"
+        className="fixed inset-0 bg-[#0c0e14]/40 backdrop-blur-md z-[100] flex items-center justify-center p-4 lg:p-8"
         onClick={handleClose}
       >
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 30 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 30 }}
-          className="bg-white rounded-[3rem] shadow-2xl w-full max-w-3xl overflow-hidden flex flex-col max-h-[90vh] border border-slate-200/60"
+          className="bg-white rounded-[3rem] shadow-2xl w-full max-w-3xl overflow-hidden flex flex-col max-h-[90vh] border border-[#0c0e14]/5"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}
           <div className="p-10 border-b border-slate-100 flex items-center justify-between bg-gradient-to-b from-slate-50 to-white">
             <div className="flex items-center gap-6">
-              <div className="w-16 h-16 bg-[#121212] rounded-2xl flex items-center justify-center shadow-lg shadow-[#121212]/10 border border-white/10 group-hover:rotate-12 transition-transform">
-                <FileText size={28} className="text-[#cbd5b1]" />
+              <div className="w-16 h-16 bg-[#0c0e14] rounded-2xl flex items-center justify-center shadow-lg shadow-black/10 border border-white/10 group-hover:rotate-12 transition-transform">
+                <FileText size={28} className="text-[#FFC107]" />
               </div>
               <div>
-                <h2 className="text-3xl font-serif font-black text-[#121212]">Application Details.</h2>
+                <h2 className="text-3xl font-serif font-black text-[#0c0e14]">Application Details.</h2>
                 <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 mt-2">
                   Submitted • {application ? new Date(application.applied_at).toLocaleDateString() : '...'}
                 </p>
@@ -80,7 +80,7 @@ const ApplicationDetailsModal = ({ isOpen, onClose, applicationId }) => {
             </div>
             <button
               onClick={handleClose}
-              className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-slate-400 hover:text-[#121212] hover:border-[#cbd5b1] transition-all shadow-sm border border-slate-200/60"
+              className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-slate-400 hover:text-[#0c0e14] hover:border-[#FFC107] transition-all shadow-sm border border-slate-200/60"
             >
               <X size={20} />
             </button>
@@ -93,7 +93,7 @@ const ApplicationDetailsModal = ({ isOpen, onClose, applicationId }) => {
                 <motion.div 
                   animate={{ rotate: 360 }}
                   transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                  className="w-12 h-12 border-4 border-[#cbd5b1] border-t-transparent rounded-full"
+                  className="w-12 h-12 border-4 border-[#FFC107] border-t-transparent rounded-full"
                 />
                 <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Retrieving Information</p>
               </div>
@@ -105,13 +105,13 @@ const ApplicationDetailsModal = ({ isOpen, onClose, applicationId }) => {
             ) : application && (
               <div className="space-y-12">
                 {/* Status & Job Summary */}
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 p-8 bg-[#f4f4f0] rounded-[2.5rem] border border-slate-200/40">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 p-8 bg-[#f8f9fa] rounded-[2.5rem] border border-slate-100">
                   <div className="flex items-center gap-5">
-                    <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center shadow-sm border border-slate-100 text-[#121212]">
+                    <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center shadow-sm border border-slate-100 text-[#0c0e14]">
                       <Building2 size={26} />
                     </div>
                     <div>
-                      <h3 className="text-xl font-serif font-black text-[#121212] mb-1">{application.job_title}</h3>
+                      <h3 className="text-xl font-serif font-black text-[#0c0e14] mb-1">{application.job_title}</h3>
                       <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">{application.company_name}</p>
                     </div>
                   </div>
@@ -128,15 +128,15 @@ const ApplicationDetailsModal = ({ isOpen, onClose, applicationId }) => {
                     <div className="space-y-4">
                       <div className="flex items-center gap-4 text-slate-700 bg-slate-50/50 p-4 rounded-2xl border border-slate-100">
                         <User size={18} className="text-slate-400" />
-                        <span className="text-sm font-bold text-[#121212]">{application.full_name}</span>
+                        <span className="text-sm font-bold text-[#0c0e14]">{application.full_name}</span>
                       </div>
                       <div className="flex items-center gap-4 text-slate-700 bg-slate-50/50 p-4 rounded-2xl border border-slate-100">
                         <Mail size={18} className="text-slate-400" />
-                        <span className="text-sm font-bold text-[#121212]">{application.email}</span>
+                        <span className="text-sm font-bold text-[#0c0e14]">{application.email}</span>
                       </div>
                       <div className="flex items-center gap-4 text-slate-700 bg-slate-50/50 p-4 rounded-2xl border border-slate-100">
                         <Phone size={18} className="text-slate-400" />
-                        <span className="text-sm font-bold text-[#121212]">{application.mobile}</span>
+                        <span className="text-sm font-bold text-[#0c0e14]">{application.mobile}</span>
                       </div>
                     </div>
                   </div>
@@ -145,17 +145,17 @@ const ApplicationDetailsModal = ({ isOpen, onClose, applicationId }) => {
                     <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] pl-1">Online Presence</h4>
                     <div className="space-y-4">
                       {application.linkedin_url && (
-                        <a href={application.linkedin_url} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-4 bg-[#cbd5b1]/10 rounded-2xl border border-[#cbd5b1]/20 group/link transition-all hover:bg-[#cbd5b1]/20">
-                          <div className="flex items-center gap-4 text-[#121212]">
-                            <Linkedin size={18} className="text-[#cbd5b1]" />
+                        <a href={application.linkedin_url} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-4 bg-[#FFC107]/10 rounded-2xl border border-[#FFC107]/20 group/link transition-all hover:bg-[#FFC107]/20">
+                          <div className="flex items-center gap-4 text-[#0c0e14]">
+                            <Linkedin size={18} className="text-[#FFC107]" />
                             <span className="text-sm font-black uppercase tracking-widest">LinkedIn</span>
                           </div>
-                          <ExternalLink size={14} className="text-[#cbd5b1] group-hover/link:translate-x-1 transition-transform" />
+                          <ExternalLink size={14} className="text-[#FFC107] group-hover/link:translate-x-1 transition-transform" />
                         </a>
                       )}
                       {application.portfolio_url && (
-                        <a href={application.portfolio_url} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-4 bg-[#f4f4f0] rounded-2xl border border-slate-200 group/link transition-all hover:bg-slate-100">
-                          <div className="flex items-center gap-4 text-[#121212]">
+                        <a href={application.portfolio_url} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-4 bg-[#f8f9fa] rounded-2xl border border-slate-200 group/link transition-all hover:bg-slate-100">
+                          <div className="flex items-center gap-4 text-[#0c0e14]">
                             <LinkIcon size={18} className="text-slate-400" />
                             <span className="text-sm font-black uppercase tracking-widest">Portfolio</span>
                           </div>
@@ -178,14 +178,14 @@ const ApplicationDetailsModal = ({ isOpen, onClose, applicationId }) => {
                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] pl-1">Expected Earnings</p>
                      <div className="bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm flex items-center justify-between">
                         <span className="text-slate-400 text-[10px] font-black uppercase tracking-widest">Annual Salary</span>
-                        <span className="text-lg font-serif font-black text-[#121212]">{application.expected_salary ? `₹ ${application.expected_salary}` : 'Negotiable'}</span>
+                        <span className="text-lg font-serif font-black text-[#0c0e14]">{application.expected_salary ? `₹ ${application.expected_salary}` : 'Negotiable'}</span>
                      </div>
                    </div>
                    <div className="space-y-3">
                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] pl-1">Availability</p>
                      <div className="bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm flex items-center justify-between">
                         <span className="text-slate-400 text-[10px] font-black uppercase tracking-widest">Notice Period</span>
-                        <span className="text-lg font-serif font-black text-[#121212]">{application.notice_period || 'Immediate'}</span>
+                        <span className="text-lg font-serif font-black text-[#0c0e14]">{application.notice_period || 'Immediate'}</span>
                      </div>
                    </div>
                 </div>
@@ -194,16 +194,16 @@ const ApplicationDetailsModal = ({ isOpen, onClose, applicationId }) => {
                 {application.resume && (
                   <div className="space-y-6">
                     <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] pl-1">Resume / CV</h4>
-                    <div className="flex items-center justify-between p-8 bg-[#121212] rounded-[2.5rem] border border-white/5 relative overflow-hidden group">
-                      <div className="absolute top-0 right-0 w-32 h-32 bg-[#cbd5b1]/10 rounded-full blur-3xl -mr-16 -mt-16 group-hover:bg-[#cbd5b1]/20 transition-colors"></div>
+                    <div className="flex items-center justify-between p-8 bg-[#0c0e14] rounded-[2.5rem] border border-white/5 relative overflow-hidden group">
+                      <div className="absolute top-0 right-0 w-32 h-32 bg-[#FFC107]/10 rounded-full blur-3xl -mr-16 -mt-16 group-hover:bg-[#FFC107]/20 transition-colors"></div>
                       
                       <div className="flex items-center gap-6 relative z-10">
-                        <div className="w-16 h-16 bg-[#cbd5b1]/10 text-[#cbd5b1] rounded-2xl flex items-center justify-center shadow-lg border border-[#cbd5b1]/20">
+                        <div className="w-16 h-16 bg-[#FFC107]/10 text-[#FFC107] rounded-2xl flex items-center justify-center shadow-lg border border-[#FFC107]/20">
                           <FileText size={28} />
                         </div>
                         <div>
                           <p className="font-serif font-black text-white text-lg truncate max-w-[240px]">{application.resume_file_name || 'Resume Document'}</p>
-                          <p className="text-[#cbd5b1] text-[9px] font-black uppercase tracking-[0.3em] mt-1">Digital Portfolio</p>
+                          <p className="text-[#FFC107] text-[9px] font-black uppercase tracking-[0.3em] mt-1">Digital Portfolio</p>
                         </div>
                       </div>
                       
@@ -211,7 +211,7 @@ const ApplicationDetailsModal = ({ isOpen, onClose, applicationId }) => {
                         href={application.resume.startsWith('http') ? application.resume : `${import.meta.env.VITE_BACKEND_URL || 'http://127.0.0.1:8000'}${application.resume}`} 
                         target="_blank" 
                         rel="noopener noreferrer"
-                        className="flex items-center gap-3 bg-[#cbd5b1] text-[#121212] px-8 py-4 rounded-xl font-black text-[10px] uppercase tracking-widest shadow-xl hover:scale-105 transition-all group/btn relative z-10"
+                        className="flex items-center gap-3 bg-[#FFC107] text-[#0c0e14] px-8 py-4 rounded-xl font-black text-[10px] uppercase tracking-widest shadow-xl hover:scale-105 transition-all group/btn relative z-10"
                       >
                          <Download size={18} className="group-hover/btn:translate-y-0.5 transition-transform" />
                          Preview File
@@ -228,7 +228,7 @@ const ApplicationDetailsModal = ({ isOpen, onClose, applicationId }) => {
                       {application.responses.map((resp, i) => (
                         <div key={i} className="bg-slate-50/50 p-6 rounded-[2rem] border border-slate-100 hover:border-slate-200 transition-colors">
                            <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3">{resp.question_text}</p>
-                           <p className="text-[#121212] font-serif font-medium leading-relaxed whitespace-pre-wrap">{resp.response_value || 'No response provided.'}</p>
+                           <p className="text-[#0c0e14] font-serif font-medium leading-relaxed whitespace-pre-wrap">{resp.response_value || 'No response provided.'}</p>
                         </div>
                       ))}
                     </div>
@@ -239,8 +239,8 @@ const ApplicationDetailsModal = ({ isOpen, onClose, applicationId }) => {
                 {application.cover_letter && (
                   <div className="space-y-6">
                     <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] pl-1">Cover Note</h4>
-                    <div className="p-10 bg-[#f4f4f0] border border-slate-200/40 rounded-[3rem] text-[#121212] leading-relaxed font-serif text-lg italic whitespace-pre-wrap relative shadow-inner">
-                      <div className="absolute top-6 left-6 text-4xl text-[#121212]/5 font-serif">"</div>
+                    <div className="p-10 bg-[#f8f9fa] border border-slate-100 rounded-[3rem] text-[#0c0e14] leading-relaxed font-serif text-lg italic whitespace-pre-wrap relative shadow-inner">
+                      <div className="absolute top-6 left-6 text-4xl text-[#0c0e14]/5 font-serif">"</div>
                       {application.cover_letter}
                     </div>
                   </div>
@@ -253,7 +253,7 @@ const ApplicationDetailsModal = ({ isOpen, onClose, applicationId }) => {
           <div className="p-10 border-t border-slate-100 bg-white flex justify-end items-center gap-4">
              <button
                 onClick={handleClose}
-                className="px-12 py-5 bg-[#121212] text-white rounded-2xl font-black text-[11px] uppercase tracking-[0.3em] hover:bg-[#cbd5b1] hover:text-[#121212] transition-all shadow-xl"
+                className="px-12 py-5 bg-[#0c0e14] text-white rounded-2xl font-black text-[11px] uppercase tracking-[0.3em] hover:bg-[#FFC107] hover:text-[#0c0e14] transition-all shadow-xl"
               >
                 Close Window
               </button>

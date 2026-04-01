@@ -30,21 +30,19 @@
 
 @layer base {
   :root {
-    /* Color Palette from Inspiration */
-    --color-dark: #121212;
-    --color-soft: #f4f4f0;
+    /* Brand-Aligned Palette */
+    --color-dark: #0c0e14;
+    --color-soft: #f8f9fa;
     /* Soft off-white */
-    --color-sage: #cbd5b1;
-    --color-accent: #4f46e5;
-    /* Electric Indigo */
-    --color-accent-glow: #818cf8;
+    --color-brand-yellow: #FFC107;
+    --color-brand-blue: #4473C5;
 
     --font-serif: 'Libre Baskerville', serif;
     --font-sans: 'Source Sans 3', sans-serif;
   }
 
   body {
-    @apply bg-[#f4f4f0] text-[#121212] antialiased;
+    @apply bg-[#f8f9fa] text-[#0c0e14] antialiased;
     font-family: var(--font-sans);
   }
 
@@ -60,7 +58,7 @@
 
   /* Shazamme-style smooth layout */
   .layout-wrapper {
-    @apply flex h-screen overflow-hidden bg-[#121212];
+    @apply flex h-screen overflow-hidden bg-[#0c0e14];
   }
 
   /* Global hand cursor for interactive elements */

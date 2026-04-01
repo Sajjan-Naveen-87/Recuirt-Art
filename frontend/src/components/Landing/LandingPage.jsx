@@ -22,7 +22,7 @@ function LandingPage() {
   };
 
   return (
-    <div className="font-sans min-h-screen bg-[#121212] scroll-smooth" style={{ scrollPaddingTop: '100px' }}>
+    <div className="font-sans min-h-screen bg-[#0c0e14] scroll-smooth" style={{ scrollPaddingTop: '100px' }}>
       <Navbar 
         searchQuery={searchQuery} 
         setSearchQuery={setSearchQuery} 

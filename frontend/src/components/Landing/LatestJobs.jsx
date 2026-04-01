@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { jobsService } from '../../services/jobs';
 import { MapPin, Clock, Briefcase, ChevronRight, ChevronLeft, Search } from 'lucide-react';
@@ -32,16 +33,25 @@ function LatestJobs({ searchQuery }) {
         });
         
         // Handle paginated response
-        if (response?.results) {
-          setJobs(response.results);
-          setTotalCount(response.count || 0);
-        } else if (Array.isArray(response)) {
-          setJobs(response);
-          setTotalCount(response.length);
-        } else {
-          setJobs([]);
-          setTotalCount(0);
-        }
+        const allJobs = response?.results || (Array.isArray(response) ? response : []);
+        
+        // Filter out expired or inactive vacancies
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        
+        const activeJobs = allJobs.filter(job => {
+          // Must be active and deadline must not have passed
+          const isActive = job.is_active !== false;
+          if (!isActive) return false;
+          
+          if (!job.apply_deadline) return true;
+          const deadline = new Date(job.apply_deadline);
+          deadline.setHours(23, 59, 59, 999);
+          return deadline >= today;
+        });
+
+        setJobs(activeJobs);
+        setTotalCount(activeJobs.length);
       } catch (error) {
         console.error("Error fetching jobs for landing page:", error);
         setJobs([]);
@@ -111,7 +121,7 @@ function LatestJobs({ searchQuery }) {
   };
 
   return (
-    <section id="jobs" className="bg-[#121212] relative overflow-hidden scroll-mt-32">
+    <section id="jobs" className="bg-[#0c0e14] relative overflow-hidden scroll-mt-32">
       <div className="relative min-h-[800px] w-full flex flex-col lg:flex-row shadow-2xl">
         {/* Background Images Layer */}
         <div className="absolute inset-0 z-0 flex flex-col lg:flex-row">
@@ -124,10 +134,10 @@ function LatestJobs({ searchQuery }) {
                 className="absolute inset-0 w-full h-full object-cover"
               />
               {/* Dark gradient overlay to make text readable */}
-              <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/80 lg:to-black/40" />
+              <div className="absolute inset-0 bg-gradient-to-r from-[#0c0e14]/40 via-[#0c0e14]/10 to-transparent" />
               
               {/* Very large subtle background text */}
-              <div className="absolute inset-y-0 left-0 flex items-center pl-8 lg:pl-16 opacity-[0.03] pointer-events-none overflow-hidden">
+              <div className="absolute inset-y-0 left-0 flex items-center pl-8 lg:pl-16 opacity-[0.05] pointer-events-none overflow-hidden">
                 <span className="text-[10rem] lg:text-[15rem] font-serif font-black text-white whitespace-nowrap leading-none select-none">
                   CLINICAL
                 </span>
@@ -144,10 +154,10 @@ function LatestJobs({ searchQuery }) {
                 className="absolute inset-0 w-full h-full object-cover"
               />
               {/* Dark gradient overlay to make text readable */}
-              <div className="absolute inset-0 bg-gradient-to-l from-black/80 via-black/60 to-black/80 lg:to-black/40" />
+              <div className="absolute inset-0 bg-gradient-to-l from-[#0c0e14]/40 via-[#0c0e14]/10 to-transparent" />
               
               {/* Very large subtle background text */}
-              <div className="absolute inset-y-0 right-0 flex items-center pr-8 lg:pr-16 opacity-[0.03] pointer-events-none overflow-hidden">
+              <div className="absolute inset-y-0 right-0 flex items-center pr-8 lg:pr-16 opacity-[0.05] pointer-events-none overflow-hidden">
                 <span className="text-[10rem] lg:text-[15rem] font-serif font-black text-white whitespace-nowrap leading-none select-none">
                   NON CLINICAL
                 </span>
@@ -160,15 +170,15 @@ function LatestJobs({ searchQuery }) {
         <div className="relative z-10 w-full h-full flex flex-col p-8 md:p-12 lg:p-20">
           
           <div className="text-center mb-16">
-            <h4 className="text-[10px] md:text-sm font-black uppercase tracking-[0.6em] text-[#cbd5b1] mb-4">Career Opportunities</h4>
-            <h2 className="text-5xl md:text-7xl font-serif font-black text-white tracking-tight drop-shadow-lg">
+            {/* <h4 className="text-[10px] md:text-sm font-black uppercase tracking-[0.6em] text-[#FFC107] mb-4">Career Opportunities</h4> */}
+            <h2 className="text-5xl md:text-7xl font-serif font-black text-[#FFC107] tracking-tight drop-shadow-lg">
               Latest Jobs.
             </h2>
           </div>
 
           {loading ? (
             <div className="flex flex-col items-center justify-center py-20 text-white flex-1 min-h-[400px]">
-              <div className="w-16 h-16 border-4 border-[#cbd5b1]/20 border-t-[#cbd5b1] rounded-full animate-spin mb-6 shadow-lg"></div>
+              <div className="w-16 h-16 border-4 border-[#FFC107]/20 border-t-[#FFC107] rounded-full animate-spin mb-6 shadow-lg"></div>
               <p className="font-serif italic text-xl drop-shadow-md">Discovering positions...</p>
             </div>
           ) : (
@@ -176,81 +186,79 @@ function LatestJobs({ searchQuery }) {
               
               {/* Clinical Column */}
               <div className="flex-1">
-                <div className="flex items-center gap-4 mb-8 pb-4 border-b border-white/20">
-                  <h3 className="text-[#cbd5b1] font-serif font-black text-4xl drop-shadow-md">Clinician Jobs</h3>
+                <div className="flex items-center gap-4 mb-8 pb-4 border-b border-white/10">
+                  <h3 className="text-[#FFC107] font-serif font-black text-4xl drop-shadow-md">Clinician Jobs</h3>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-3 gap-3 auto-rows-min max-h-[500px] md:max-h-[800px] overflow-y-auto pr-4 custom-scrollbar">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-3 gap-4 auto-rows-min max-h-[500px] md:max-h-[800px] overflow-y-auto pt-6 pb-20 pr-4 custom-scrollbar">
                   {jobs.filter(j => j.category === 'clinician').slice(0, 9).map((job) => (
-                    <div 
+                    <motion.div 
                       key={job.id}
+                      whileHover={{ y: -10, scale: 1.02 }}
                       onClick={() => { setSelectedJob(job); setIsDetailsModalOpen(true); }}
-                      className="relative aspect-[1.5/1] bg-white/5 backdrop-blur-md p-3 text-white rounded-[1.5rem] shadow-2xl flex flex-col group cursor-pointer overflow-hidden border border-white/10 hover:border-[#cbd5b1]/30 transition-all duration-500"
+                      className="relative z-10 aspect-[1.5/1] bg-white/90 backdrop-blur-xl p-4 text-[#0c0e14] rounded-[1.5rem] shadow-2xl flex flex-col items-center text-center group cursor-pointer overflow-hidden border border-[#0c0e14]/5 hover:border-[#FFC107]/50 transition-all duration-100 hover:z-50"
                     >
-                      {/* Center Initial Avatar */}
-                      <div className="flex-1 flex items-center justify-center">
-                        <div className="w-10 h-10 bg-gradient-to-br from-[#cbd5b1] to-[#a3b18a] rounded-full flex items-center justify-center text-[#121212] font-serif font-black text-xl border-2 border-white/5">
-                          {job.title?.[0] || 'J'}
+                      {/* Info Centered */}
+                      <div className="flex-1 flex flex-col items-center justify-between relative z-10 w-full pt-1 pb-1 group-hover:translate-y-[-2px] transition-transform duration-100">
+                        <div className="flex-1 flex items-center">
+                          <h3 className="text-[12px] md:text-[13px] font-serif font-black text-[#0c0e14] leading-tight group-hover:text-[#FFC107] transition-colors duration-100">
+                            {job.title}
+                          </h3>
+                        </div>
+                        
+                        <div className="text-[#0c0e14] bg-[#FFC107] font-serif font-black text-[8px] px-3 py-0.5 rounded-full tracking-tight shadow-md border border-[#FFC107]/20 group-hover:opacity-0 transition-all duration-100">
+                          {formatSalary(job.salary_range)}
                         </div>
                       </div>
 
-                      {/* Info at the Bottom */}
-                      <div className="pt-1">
-                        <h3 className="text-[10px] md:text-xs font-serif font-black text-white leading-tight mb-0.5 truncate">
-                          {job.title}
-                        </h3>
-                        
-                        <div className="flex flex-col">
-                          <div className="text-[#cbd5b1] font-serif font-black text-[8px] tracking-tight">
-                            {formatSalary(job.salary_range)}
-                          </div>
-                        </div>
+                      {/* Apply Now Hover Action */}
+                      <div className="absolute inset-x-0 bottom-3 flex justify-center z-30 opacity-0 group-hover:opacity-100 group-hover:translate-y-[-4px] transition-all duration-100 pointer-events-none group-hover:pointer-events-auto">
+                        <button 
+                          onClick={(e) => { e.stopPropagation(); setSelectedJob(job); setIsApplyModalOpen(true); }}
+                          className="bg-[#0c0e14] text-white px-6 py-1.5 rounded-full text-[8px] font-black uppercase tracking-[0.2em] shadow-2xl border border-white/10 hover:bg-[#FFC107] hover:text-[#0c0e14] transition-all active:scale-95"
+                        >
+                          Apply Now
+                        </button>
                       </div>
 
                       {/* Hover Overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#cbd5b1]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-                    </div>
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#FFC107]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                    </motion.div>
                   ))}
                 </div>
               </div>
 
               {/* Dotted Divider for large screens */}
-              <div className="hidden lg:block w-px bg-gradient-to-b from-transparent via-white/20 to-transparent" />
+              <div className="hidden lg:block w-px bg-gradient-to-b from-transparent via-white/10 to-transparent" />
 
               {/* Non-Clinical Column */}
               <div className="flex-1">
-                <div className="flex items-center gap-4 mb-8 pb-4 border-b border-white/20">
-                  <h3 className="text-[#cbd5b1] font-serif font-black text-4xl drop-shadow-md">Non-Clinician Jobs</h3>
+                <div className="flex items-center gap-4 mb-8 pb-4 border-b border-white/10">
+                  <h3 className="text-[#FFC107] font-serif font-black text-4xl drop-shadow-md">Non-Clinician Jobs</h3>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-3 gap-3 auto-rows-min max-h-[500px] md:max-h-[800px] overflow-y-auto pr-4 custom-scrollbar">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-3 gap-3 auto-rows-min max-h-[500px] md:max-h-[800px] overflow-y-auto pt-6 pb-20 pr-4 custom-scrollbar">
                   {jobs.filter(j => j.category !== 'clinician').slice(0, 9).map((job) => (
-                    <div 
+                    <motion.div 
                       key={job.id}
+                      whileHover={{ y: -10, scale: 1.02 }}
                       onClick={() => { setSelectedJob(job); setIsDetailsModalOpen(true); }}
-                      className="relative aspect-[1.5/1] bg-white/5 backdrop-blur-md p-3 text-white rounded-[1.5rem] shadow-2xl flex flex-col group cursor-pointer overflow-hidden border border-white/10 hover:border-[#cbd5b1]/30 transition-all duration-500"
+                      className="relative z-10 aspect-[1.5/1] bg-white/90 backdrop-blur-xl p-4 text-[#0c0e14] rounded-[1.5rem] shadow-2xl flex flex-col items-center text-center group cursor-pointer overflow-hidden border border-[#0c0e14]/5 hover:border-[#FFC107]/50 transition-all duration-100 hover:z-50"
                     >
-                      {/* Center Initial Avatar */}
-                      <div className="flex-1 flex items-center justify-center">
-                        <div className="w-10 h-10 bg-gradient-to-br from-[#cbd5b1] to-[#a3b18a] rounded-full flex items-center justify-center text-[#121212] font-serif font-black text-xl border-2 border-white/5">
-                          {job.title?.[0] || 'J'}
+                      {/* Info Centered */}
+                      <div className="flex-1 flex flex-col items-center justify-between relative z-10 w-full pt-1 pb-1 group-hover:translate-y-[-2px] transition-transform duration-100">
+                        <div className="flex-1 flex items-center">
+                          <h3 className="text-[12px] md:text-[13px] font-serif font-black text-[#0c0e14] leading-tight group-hover:text-[#FFC107] transition-colors duration-100">
+                            {job.title}
+                          </h3>
                         </div>
-                      </div>
-
-                      {/* Info at the Bottom */}
-                      <div className="pt-1">
-                        <h3 className="text-[10px] md:text-xs font-serif font-black text-white leading-tight mb-0.5 truncate">
-                          {job.title}
-                        </h3>
                         
-                        <div className="flex flex-col">
-                          <div className="text-[#cbd5b1] font-serif font-black text-[8px] tracking-tight">
-                            {formatSalary(job.salary_range)}
-                          </div>
+                        <div className="text-[#0c0e14] bg-[#FFC107] font-serif font-black text-[8px] px-3 py-0.5 rounded-full tracking-tight shadow-md border border-[#FFC107]/20 group-hover:shadow-[#FFC107]/20 transition-all duration-100">
+                          {formatSalary(job.salary_range)}
                         </div>
                       </div>
 
                       {/* Hover Overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#cbd5b1]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-                    </div>
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#FFC107]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                    </motion.div>
                   ))}
                 </div>
               </div>
@@ -262,9 +270,9 @@ function LatestJobs({ searchQuery }) {
               
               <Link 
                 to="/jobs" 
-                className="bg-[#cbd5b1] text-[#121212] px-14 py-5 rounded-full font-black uppercase tracking-[0.2em] text-md hover:bg-white transition-all hover:scale-105 shadow-2xl shadow-black/50 flex items-center gap-3 shrink-0"
+                className="bg-[#FFC107] text-[#0c0e14] px-14 py-5 rounded-full font-black uppercase tracking-[0.2em] text-md hover:scale-105 transition-all shadow-2xl shadow-black/50 flex items-center gap-3 shrink-0"
               >
-                View More 
+                View More Jobs
               </Link>
             </div>
           )}

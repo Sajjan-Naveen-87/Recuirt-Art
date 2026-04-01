@@ -59,7 +59,7 @@ const ScrollNav = () => {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.8, y: 20 }}
             onClick={scrollToTop}
-            className="w-12 h-12 md:w-14 md:h-14 bg-white/80 backdrop-blur-md rounded-2xl flex items-center justify-center text-slate-900 border border-slate-200/50 shadow-xl hover:bg-[#cbd5b1] hover:text-[#121212] transition-colors group cursor-pointer"
+            className="w-12 h-12 md:w-14 md:h-14 bg-white/80 backdrop-blur-md rounded-2xl flex items-center justify-center text-[#0c0e14] border border-[#0c0e14]/5 shadow-xl hover:bg-[#FFC107] hover:text-[#0c0e14] transition-all group cursor-pointer"
             aria-label="Scroll to top"
           >
             <ArrowUp size={24} className="group-hover:-translate-y-1 transition-transform" />
@@ -74,7 +74,7 @@ const ScrollNav = () => {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.8, y: -20 }}
             onClick={scrollToBottom}
-            className="w-12 h-12 md:w-14 md:h-14 bg-[#121212]/80 backdrop-blur-md rounded-2xl flex items-center justify-center text-white border border-white/10 shadow-xl hover:bg-[#cbd5b1] hover:text-[#121212] transition-colors group cursor-pointer"
+            className="w-12 h-12 md:w-14 md:h-14 bg-[#0c0e14]/80 backdrop-blur-md rounded-2xl flex items-center justify-center text-white border border-white/10 shadow-xl hover:bg-[#FFC107] hover:text-[#0c0e14] transition-all group cursor-pointer"
             aria-label="Scroll to bottom"
           >
             <ArrowDown size={24} className="group-hover:translate-y-1 transition-transform" />

@@ -75,20 +75,20 @@ ${formData.message || 'No additional message.'}
   };
 
   return (
-    <div className="min-h-screen bg-[#121212] font-sans flex flex-col relative overflow-hidden">
+    <div className="min-h-screen bg-[#0c0e14] font-sans flex flex-col relative overflow-hidden">
 
       <Navbar />
 
       <main className="flex-1 flex flex-col items-center pt-24 pb-32 px-6 relative z-10 w-full max-w-4xl mx-auto">
-        <h1 className="text-4xl md:text-5xl font-serif text-white mb-20 text-center tracking-wide">
-          Let us know Your Requirements
+        <h1 className="text-4xl md:text-5xl font-serif font-black text-white mb-20 text-center tracking-tight uppercase">
+          Let us know <span className="text-[#FFC107]">Requirements.</span>
         </h1>
 
         {status.message && (
-          <div className={`w-full p-4 rounded-xl mb-8 flex items-center gap-3 font-medium ${
-            status.type === 'success' ? 'bg-[#cbd5b1]/10 text-[#cbd5b1] border border-[#cbd5b1]/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'
+          <div className={`w-full p-4 rounded-xl mb-8 flex items-center gap-3 font-black uppercase tracking-widest text-[10px] ${
+            status.type === 'success' ? 'bg-[#FFC107]/10 text-[#FFC107] border border-[#FFC107]/20' : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'
           }`}>
-             {status.type === 'success' ? <CheckCircle size={20} /> : <AlertCircle size={20} />}
+             {status.type === 'success' ? <CheckCircle size={16} /> : <AlertCircle size={16} />}
              {status.message}
           </div>
         )}
@@ -97,35 +97,36 @@ ${formData.message || 'No additional message.'}
           
           {/* Row 1: Enquiry Type */}
           <div className="flex flex-col gap-2">
-            <label className="text-white font-medium text-[15px]">Enquiry Type *</label>
+            <label className="text-white font-black uppercase tracking-widest text-[10px]">Enquiry Type *</label>
             <select 
               required
               name="enquiryType"
               value={formData.enquiryType}
               onChange={handleChange}
-              className="w-full bg-[#121212] text-white border border-white/20 rounded-full py-3.5 px-6 appearance-none outline-none focus:border-white/50 transition-colors"
+              className="w-full bg-white/5 text-white border border-white/10 rounded-full py-4 px-8 appearance-none outline-none focus:border-[#FFC107]/50 transition-colors font-serif font-black text-lg"
             >
-              <option value="" disabled className="text-white/50">Select an option</option>
-              <option value="Hiring">Hiring / Recruitment</option>
-              <option value="Partnership">Partnership</option>
+              <option value="" disabled className="bg-[#0c0e14] text-white/50">Select an option</option>
+              <option value="Hiring" className="bg-[#0c0e14]">Hiring / Recruitment</option>
+              <option value="Partnership" className="bg-[#0c0e14]">Partnership</option>
+              <option value="Other" className="bg-[#0c0e14]">Other Enquiry</option>
             </select>
           </div>
 
           {/* Row 2: Name and Number of Requirements */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="flex flex-col gap-2">
-              <label className="text-white font-medium text-[15px]">Name *</label>
+              <label className="text-white font-black uppercase tracking-widest text-[10px]">Name *</label>
               <input 
                 required
                 type="text"
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                className="w-full bg-[#121212] text-white border border-white/20 rounded-full py-3.5 px-6 outline-none focus:border-white/50 transition-colors"
+                className="w-full bg-white/5 text-white border border-white/10 rounded-full py-4 px-8 outline-none focus:border-[#FFC107]/50 transition-colors font-serif font-black text-lg"
               />
             </div>
             <div className="flex flex-col gap-2">
-              <label className="text-white font-medium text-[15px]">Number of requirements *</label>
+              <label className="text-white font-black uppercase tracking-widest text-[10px]">Position Count *</label>
               <input 
                 required
                 type="number"
@@ -133,7 +134,7 @@ ${formData.message || 'No additional message.'}
                 value={formData.no_of_requirements}
                 onChange={handleChange}
                 min="1"
-                className="w-full bg-[#121212] text-white border border-white/20 rounded-full py-3.5 px-6 outline-none focus:border-white/50 transition-colors"
+                className="w-full bg-white/5 text-white border border-white/10 rounded-full py-4 px-8 outline-none focus:border-[#FFC107]/50 transition-colors font-serif font-black text-lg"
                 placeholder="e.g. 5"
               />
             </div>
@@ -142,25 +143,25 @@ ${formData.message || 'No additional message.'}
           {/* Row 3: Email and Contact */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="flex flex-col gap-2">
-              <label className="text-white font-medium text-[15px]">Email address *</label>
+              <label className="text-white font-black uppercase tracking-widest text-[10px]">Email address *</label>
               <input 
                 required
                 type="email"
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full bg-[#121212] text-white border border-white/20 rounded-full py-3.5 px-6 outline-none focus:border-white/50 transition-colors"
+                className="w-full bg-white/5 text-white border border-white/10 rounded-full py-4 px-8 outline-none focus:border-[#FFC107]/50 transition-colors font-serif font-black text-lg"
               />
             </div>
             <div className="flex flex-col gap-2">
-              <label className="text-white font-medium text-[15px]">Contact number *</label>
+              <label className="text-white font-black uppercase tracking-widest text-[10px]">Contact number *</label>
               <input 
                 required
                 type="tel"
                 name="phone"
                 value={formData.phone}
                 onChange={handleChange}
-                className="w-full bg-[#121212] text-white border border-white/20 rounded-full py-3.5 px-6 outline-none focus:border-white/50 transition-colors"
+                className="w-full bg-white/5 text-white border border-white/10 rounded-full py-4 px-8 outline-none focus:border-[#FFC107]/50 transition-colors font-serif font-black text-lg"
               />
             </div>
           </div>
@@ -168,39 +169,39 @@ ${formData.message || 'No additional message.'}
           {/* Row 4: Company and Location */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="flex flex-col gap-2">
-              <label className="text-white font-medium text-[15px]">Company name *</label>
+              <label className="text-white font-black uppercase tracking-widest text-[10px]">Company name *</label>
               <input 
                 required
                 type="text"
                 name="company"
                 value={formData.company}
                 onChange={handleChange}
-                className="w-full bg-[#121212] text-white border border-white/20 rounded-full py-3.5 px-6 outline-none focus:border-white/50 transition-colors"
+                className="w-full bg-white/5 text-white border border-white/10 rounded-full py-4 px-8 outline-none focus:border-[#FFC107]/50 transition-colors font-serif font-black text-lg"
               />
             </div>
             <div className="flex flex-col gap-2">
-              <label className="text-white font-medium text-[15px]">Location *</label>
+              <label className="text-white font-black uppercase tracking-widest text-[10px]">Location *</label>
               <input 
                 required
                 type="text"
                 name="location"
                 value={formData.location}
                 onChange={handleChange}
-                placeholder="e.g. Bengaluru,Karnataka,India"
-                className="w-full bg-[#121212] text-white border border-white/20 rounded-full py-3.5 px-6 outline-none focus:border-white/50 transition-colors"
+                placeholder="City, State, Country"
+                className="w-full bg-white/5 text-white border border-white/10 rounded-full py-4 px-8 outline-none focus:border-[#FFC107]/50 transition-colors font-serif font-black text-lg"
               />
             </div>
           </div>
 
           {/* Row 5: Message */}
           <div className="flex flex-col gap-2 pt-2">
-            <label className="text-white font-medium text-[15px]">Message</label>
+            <label className="text-white font-black uppercase tracking-widest text-[10px]">Message</label>
             <textarea 
               name="message"
               value={formData.message}
               onChange={handleChange}
               rows="4"
-              className="w-full bg-[#121212] text-white border border-white/20 rounded-[2rem] py-4 px-6 outline-none focus:border-white/50 transition-colors resize-none"
+              className="w-full bg-white/5 text-white border border-white/10 rounded-[2.5rem] py-6 px-8 outline-none focus:border-[#FFC107]/50 transition-colors resize-none font-serif font-black text-lg"
             />
           </div>
 
@@ -209,12 +210,12 @@ ${formData.message || 'No additional message.'}
             <button 
               type="submit"
               disabled={isSubmitting}
-              className="bg-[#cbd5b1] text-slate-900 font-bold px-12 py-3.5 rounded-full hover:bg-[#b8c2a0] transition-colors disabled:opacity-70 flex items-center gap-2"
+              className="bg-[#FFC107] text-[#0c0e14] font-black uppercase tracking-[0.2em] text-sm px-16 py-5 rounded-full hover:scale-105 transition-all disabled:opacity-70 flex items-center justify-center min-w-[200px] shadow-2xl shadow-[#FFC107]/10"
             >
               {isSubmitting ? (
-                 <div className="w-5 h-5 border-2 border-slate-900/30 border-t-slate-900 rounded-full animate-spin" />
+                 <div className="w-5 h-5 border-2 border-[#0c0e14]/30 border-t-[#0c0e14] rounded-full animate-spin" />
               ) : (
-                "Submit"
+                "Send Message"
               )}
             </button>
           </div>

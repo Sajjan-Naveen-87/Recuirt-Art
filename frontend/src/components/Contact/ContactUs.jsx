@@ -51,50 +51,50 @@ const ContactUs = ({ isOpen, onClose, isModal = false }) => {
       <div className="flex-1 overflow-y-auto p-8 flex flex-col gap-6">
         {loading ? (
           <div className="flex items-center justify-center py-20">
-             <div className="w-8 h-8 border-2 border-indigo-200 border-t-indigo-600 rounded-full animate-spin"></div>
+             <div className="w-8 h-8 border-2 border-[#FFC107]/20 border-t-[#FFC107] rounded-full animate-spin"></div>
           </div>
         ) : contactInfo ? (
           <>
             <div className="text-center mb-4">
-               <div className="w-20 h-20 bg-indigo-50 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Building2 size={32} className="text-indigo-600" />
+               <div className="w-20 h-20 bg-[#FFC107]/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Building2 size={32} className="text-[#FFC107]" />
                </div>
-               <h3 className="text-xl font-bold font-serif text-[#121212]">{contactInfo.company_name}</h3>
-               <p className="text-slate-400 text-sm">Corporate Headquarters</p>
+               <h3 className="text-xl font-black font-serif text-[#0c0e14]">{contactInfo.company_name}.</h3>
+               <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest mt-1">Corporate Headquarters</p>
             </div>
 
             <div className="space-y-4">
-               <div className="flex items-start gap-4 p-4 bg-slate-50 rounded-2xl">
-                  <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-indigo-600 shrink-0">
+               <div className="flex items-start gap-4 p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                  <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-[#FFC107] shrink-0 border border-slate-100">
                      <Mail size={18} />
                   </div>
                   <div>
-                     <p className="text-xs font-bold uppercase tracking-widest text-slate-400">Email</p>
-                     <a href={`mailto:${contactInfo.email}`} className="text-[#121212] font-semibold hover:text-indigo-600 transition-colors block break-all">
+                     <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">Email Address</p>
+                     <a href={`mailto:${contactInfo.email}`} className="text-[#0c0e14] font-bold hover:text-[#FFC107] transition-colors block break-all">
                         {contactInfo.email}
                      </a>
                   </div>
                </div>
 
-               <div className="flex items-start gap-4 p-4 bg-slate-50 rounded-2xl">
-                  <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-indigo-600 shrink-0">
+               <div className="flex items-start gap-4 p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                  <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-[#FFC107] shrink-0 border border-slate-100">
                      <Phone size={18} />
                   </div>
                   <div>
-                     <p className="text-xs font-bold uppercase tracking-widest text-slate-400">Phone</p>
-                     <a href={`tel:${contactInfo.phone}`} className="text-[#121212] font-semibold hover:text-indigo-600 transition-colors">
+                     <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">Direct Line</p>
+                     <a href={`tel:${contactInfo.phone}`} className="text-[#0c0e14] font-bold hover:text-[#FFC107] transition-colors">
                         {contactInfo.phone}
                      </a>
                   </div>
                </div>
 
-               <div className="flex items-start gap-4 p-4 bg-slate-50 rounded-2xl">
-                  <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-indigo-600 shrink-0">
+               <div className="flex items-start gap-4 p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                  <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-[#FFC107] shrink-0 border border-slate-100">
                      <MapPin size={18} />
                   </div>
                   <div>
-                     <p className="text-xs font-bold uppercase tracking-widest text-slate-400">Address</p>
-                     <p className="text-[#121212] font-medium leading-relaxed">
+                     <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">Office Location</p>
+                     <p className="text-[#0c0e14] font-medium leading-relaxed font-serif italic">
                         {contactInfo.address}
                      </p>
                   </div>
@@ -102,34 +102,27 @@ const ContactUs = ({ isOpen, onClose, isModal = false }) => {
             </div>
 
             {contactInfo.socials && (
-               <div className="flex justify-center gap-4 mt-4 pt-6 border-t border-slate-100">
+               <div className="flex justify-center gap-4 mt-4 pt-8 border-t border-slate-100">
                   {contactInfo.socials.linkedin && (
                      <a href={contactInfo.socials.linkedin} target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-[#0077b5] text-white rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-lg shadow-blue-200">
                         <Linkedin size={20} />
-                     </a>
-                  )}
-                  {contactInfo.socials.twitter && (
-                     <a href={contactInfo.socials.twitter} target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-black text-white rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-lg shadow-slate-200">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                           <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932 6.064-6.932zm-1.294 19.497h2.039L6.482 2.395H4.293l13.314 18.255z" />
-                        </svg>
                      </a>
                   )}
                </div>
             )}
           </>
         ) : (
-             <p className="text-center text-slate-500">Unable to load contact information.</p>
+             <p className="text-center text-slate-500 font-serif italic">Unable to load contact info.</p>
         )}
       </div>
 
       {/* Footer */}
-      <div className="p-6 border-t border-slate-100 flex justify-center flex-shrink-0">
+      <div className="p-8 border-t border-slate-100 flex justify-center flex-shrink-0">
          <button
             onClick={handleClose}
-            className="w-full py-4 bg-[#121212] text-white rounded-2xl font-bold shadow-lg shadow-slate-200 hover:bg-slate-800 transition-all uppercase tracking-widest text-xs"
+            className="w-full py-5 bg-[#0c0e14] text-white rounded-2xl font-black uppercase tracking-[0.3em] text-[10px] shadow-xl hover:bg-[#FFC107] hover:text-[#0c0e14] transition-all"
           >
-            Close
+            Close Window
           </button>
       </div>
     </div>
@@ -145,7 +138,7 @@ const ContactUs = ({ isOpen, onClose, isModal = false }) => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-[#121212]/50 backdrop-blur-sm z-50"
+              className="fixed inset-0 bg-[#0c0e14]/60 backdrop-blur-md z-50"
               onClick={handleClose}
             />
 

@@ -7,7 +7,7 @@ function Navbar({ searchQuery, setSearchQuery, onSearchFocus }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <nav className="bg-[#cbd5b1] px-4 md:px-8 py-2 md:py-0 flex items-center justify-between sticky top-0 z-50 shadow-sm transition-all duration-300">
+    <nav className="bg-[#0c0e14] px-4 md:px-8 py-2 md:py-0 flex items-center justify-between sticky top-0 z-50 shadow-md transition-all duration-300">
       <div className="flex items-center flex-1 gap-2 md:gap-6 lg:gap-16">
         <Link 
           to="/" 
@@ -19,8 +19,8 @@ function Navbar({ searchQuery, setSearchQuery, onSearchFocus }) {
 
         {/* Search Bar - Visible on all screens, responsive width */}
         {setSearchQuery && (
-          <div className="flex flex-1 items-center bg-white/60 backdrop-blur-md rounded-full px-4 md:px-6 py-2 md:py-3 border border-[#121212]/10 focus-within:border-indigo-500/50 transition-all max-w-[12rem] sm:max-w-xs md:max-w-sm lg:max-w-[32rem] shadow-sm ml-auto sm:ml-0">
-            <Search size={18} className="text-slate-600 mr-2 md:mr-3 flex-shrink-0" />
+          <div className="flex flex-1 items-center bg-white/10 backdrop-blur-md rounded-full px-4 md:px-6 py-2 md:py-3 border border-white/10 focus-within:border-[#FFC107]/50 transition-all max-w-[12rem] sm:max-w-xs md:max-w-sm lg:max-w-[32rem] shadow-sm ml-auto sm:ml-0">
+            <Search size={18} className="text-slate-400 mr-2 md:mr-3 flex-shrink-0" />
             <input 
               type="text" 
               value={searchQuery}
@@ -30,50 +30,56 @@ function Navbar({ searchQuery, setSearchQuery, onSearchFocus }) {
               }}
               onFocus={onSearchFocus}
               placeholder="Search jobs..." 
-              className="bg-transparent border-none outline-none text-xs md:text-base font-semibold text-slate-900 placeholder:text-slate-500 w-full"
+              className="bg-transparent border-none outline-none text-xs md:text-base font-semibold text-white placeholder:text-slate-500 w-full"
             />
           </div>
         )}
       </div>
 
       {/* Desktop Links */}
-      <div className="hidden xl:flex items-center text-slate-900 font-bold text-[15px] h-full relative">
-        <div className="group relative flex items-center h-full px-4 cursor-pointer hover:text-slate-700 transition-colors py-4">
-          <span className="flex items-center gap-1">About Us <ChevronDown size={16} strokeWidth={3} className="transition-transform group-hover:rotate-180" /></span>
-          <div className="absolute top-full left-0 w-48 opacity-0 invisible group-hover:visible group-hover:opacity-100 transition-all duration-200 shadow-xl border border-slate-900/10 flex flex-col z-50">
-            <a href="/#about-us" className="bg-[#e7e3d5] text-slate-900 hover:bg-[#dcd7c4] px-6 py-4 transition-colors">Our Story</a>
-            <a href="/#portfolio" className="bg-[#e7e3d5] text-slate-900 hover:bg-[#dcd7c4] px-6 py-4 transition-colors">Portfolio</a>
-            <a href="/#team" className="bg-[#e7e3d5] text-slate-900 hover:bg-[#dcd7c4] px-6 py-4 transition-colors">Our Team</a>
-            <a href="/#testimonials" className="bg-[#e7e3d5] text-slate-900 hover:bg-[#dcd7c4] px-6 py-4 transition-colors">Testimonials</a>
+      <div className="hidden xl:flex items-center gap-2 text-[#0c0e14] font-black text-[14px] h-full py-4 px-4 pr-0">
+        <div className="group relative">
+          <div className="flex items-center gap-1.5 px-6 py-3 rounded-xl bg-[#FFC107] border border-[#FFC107] cursor-pointer hover:scale-105 transition-all duration-300">
+            About Us <ChevronDown size={14} strokeWidth={3} className="transition-transform group-hover:rotate-180" />
+          </div>
+          <div className="absolute top-[calc(100%+8px)] left-0 w-48 opacity-0 invisible group-hover:visible group-hover:opacity-100 transition-all duration-200 shadow-2xl border border-white/10 flex flex-col z-50 rounded-xl overflow-hidden bg-[#1a1c23]">
+            <a href="/#about-us" className="text-white hover:bg-[#FFC107] hover:text-[#0c0e14] px-6 py-3.5 transition-colors text-sm">Our Story</a>
+            <a href="/#portfolio" className="text-white hover:bg-[#FFC107] hover:text-[#0c0e14] px-6 py-3.5 transition-colors text-sm">Portfolio</a>
+            <a href="/#team" className="text-white hover:bg-[#FFC107] hover:text-[#0c0e14] px-6 py-3.5 transition-colors text-sm">Our Team</a>
+            <a href="/#testimonials" className="text-white hover:bg-[#FFC107] hover:text-[#0c0e14] px-6 py-3.5 transition-colors text-sm">Testimonials</a>
           </div>
         </div>
 
-        <div className="group relative flex items-center h-full px-4 cursor-pointer hover:text-slate-700 transition-colors py-4">
-          <span className="flex items-center gap-1">Employers <ChevronDown size={16} strokeWidth={3} className="transition-transform group-hover:rotate-180" /></span>
-          <div className="absolute top-full left-0 w-56 opacity-0 invisible group-hover:visible group-hover:opacity-100 transition-all duration-200 shadow-xl bg-[#e7e3d5] border border-slate-900/10 flex flex-col z-50">
-            <a href="/#services" className="text-slate-900 hover:bg-[#dcd7c4] px-6 py-4 transition-colors">Services</a>
-            <a href="/#contact" className="text-slate-900 hover:bg-[#dcd7c4] px-6 py-4 transition-colors">Submit Requirements</a>
+        <div className="group relative">
+          <div className="flex items-center gap-1.5 px-6 py-3 rounded-xl bg-[#FFC107] border border-[#FFC107] cursor-pointer hover:scale-105 transition-all duration-300">
+            Employers <ChevronDown size={14} strokeWidth={3} className="transition-transform group-hover:rotate-180" />
+          </div>
+          <div className="absolute top-[calc(100%+8px)] left-0 w-56 opacity-0 invisible group-hover:visible group-hover:opacity-100 transition-all duration-200 shadow-2xl bg-[#1a1c23] border border-white/10 flex flex-col z-50 rounded-xl overflow-hidden">
+            <a href="/#services" className="text-white hover:bg-[#FFC107] hover:text-[#0c0e14] px-6 py-3.5 transition-colors text-sm">Services</a>
+            <a href="/#contact" className="text-white hover:bg-[#FFC107] hover:text-[#0c0e14] px-6 py-3.5 transition-colors text-sm">Submit Requirements</a>
           </div>
         </div>
 
-        <div className="group relative flex items-center h-full px-4 cursor-pointer hover:text-slate-700 transition-colors py-4">
-          <span className="flex items-center gap-1">Job Seekers <ChevronDown size={16} strokeWidth={3} className="transition-transform group-hover:rotate-180" /></span>
-          <div className="absolute top-full left-0 w-48 opacity-0 invisible group-hover:visible group-hover:opacity-100 transition-all duration-200 shadow-xl bg-[#e7e3d5] border border-slate-900/10 flex flex-col z-50">
-            <a href="/#jobs" className="text-slate-900 hover:bg-[#dcd7c4] px-6 py-4 transition-colors">View All Jobs</a>
+        <div className="group relative">
+          <div className="flex items-center gap-1.5 px-6 py-3 rounded-xl bg-[#FFC107] border border-[#FFC107] cursor-pointer hover:scale-105 transition-all duration-300">
+            Job Seekers <ChevronDown size={14} strokeWidth={3} className="transition-transform group-hover:rotate-180" />
+          </div>
+          <div className="absolute top-[calc(100%+8px)] left-0 w-48 opacity-0 invisible group-hover:visible group-hover:opacity-100 transition-all duration-200 shadow-2xl bg-[#1a1c23] border border-white/10 flex flex-col z-50 rounded-xl overflow-hidden">
+            <a href="/#jobs" className="text-white hover:bg-[#FFC107] hover:text-[#0c0e14] px-6 py-3.5 transition-colors text-sm">View All Jobs</a>
             <a 
               href="/#submit-resume" 
               onClick={() => window.dispatchEvent(new CustomEvent('open-submit-resume-modal'))}
-              className="text-slate-900 hover:bg-[#dcd7c4] px-6 py-4 transition-colors"
+              className="text-white hover:bg-[#FFC107] hover:text-[#0c0e14] px-6 py-3.5 transition-colors text-sm"
             >
               Submit Resume
             </a>
           </div>
         </div>
 
-        <a href="mailto:admin@recruitart.in" className="block text-sm md:text-base font-medium hover:text-slate-900 transition-colors">
-          admin@recruitart.in
+        <a href="/#insights" className="flex items-center px-6 py-3 rounded-xl bg-[#FFC107] text-[#0c0e14] border border-[#FFC107] hover:scale-105 transition-all duration-300 text-sm whitespace-nowrap">
+          News & Insights
         </a>
-        <a href="/#footer" className="px-4 py-4 cursor-pointer hover:text-slate-700 transition-colors">
+        <a href="/#footer" className="flex items-center px-6 py-3 rounded-xl bg-[#FFC107] text-[#0c0e14] border border-[#FFC107] hover:scale-105 transition-all duration-300 text-sm shrink-0">
           Contact
         </a>
       </div>
@@ -82,7 +88,7 @@ function Navbar({ searchQuery, setSearchQuery, onSearchFocus }) {
         {/* Mobile Menu Toggle */}
         <button 
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="xl:hidden w-10 h-10 flex items-center justify-center text-slate-900 hover:bg-black/5 rounded-full transition-colors"
+          className="xl:hidden w-10 h-10 flex items-center justify-center text-white hover:bg-white/10 rounded-full transition-colors"
         >
           {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
@@ -104,15 +110,15 @@ function Navbar({ searchQuery, setSearchQuery, onSearchFocus }) {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed top-0 right-0 bottom-0 w-[85%] max-w-sm bg-[#f4f4f0] z-[70] xl:hidden shadow-2xl flex flex-col p-8 overflow-y-auto"
+              className="fixed top-0 right-0 bottom-0 w-[85%] max-w-sm bg-[#0c0e14] z-[70] xl:hidden shadow-2xl flex flex-col p-8 overflow-y-auto"
             >
               <div className="flex justify-between items-center mb-12">
                 <Link to="/" onClick={() => setIsMobileMenuOpen(false)} className="h-10">
-                  <img src="/Logo.png" alt="Logo" className="h-full object-contain mix-blend-multiply brightness-90" />
+                  <img src="/Logo.png" alt="Logo" className="h-full object-contain brightness-110" />
                 </Link>
                 <button 
                   onClick={() => setIsMobileMenuOpen(false)} 
-                  className="w-10 h-10 flex items-center justify-center bg-white rounded-full text-slate-900 shadow-sm border border-slate-200"
+                  className="w-10 h-10 flex items-center justify-center bg-white/10 rounded-full text-white shadow-sm border border-white/10"
                 >
                   <X size={20} />
                 </button>
@@ -120,8 +126,8 @@ function Navbar({ searchQuery, setSearchQuery, onSearchFocus }) {
 
               {/* Mobile Search */}
               {setSearchQuery && (
-                <div className="flex items-center bg-white rounded-2xl px-5 py-4 border border-slate-200 mb-10 shadow-sm focus-within:ring-2 focus-within:ring-[#cbd5b1]/50 transition-all">
-                  <Search size={18} className="text-slate-400 mr-3" />
+                <div className="flex items-center bg-white/5 rounded-2xl px-5 py-4 border border-white/10 mb-10 shadow-sm focus-within:ring-2 focus-within:ring-[#FFC107]/50 transition-all">
+                  <Search size={18} className="text-slate-500 mr-3" />
                   <input 
                     type="text" 
                     value={searchQuery}
@@ -130,35 +136,36 @@ function Navbar({ searchQuery, setSearchQuery, onSearchFocus }) {
                       if (onSearchFocus) onSearchFocus();
                     }}
                     placeholder="Search roles..." 
-                    className="bg-transparent border-none outline-none text-base font-bold text-slate-900 placeholder:text-slate-300 w-full"
+                    className="bg-transparent border-none outline-none text-base font-bold text-white placeholder:text-slate-500 w-full"
                   />
                 </div>
               )}
 
               <div className="flex flex-col gap-6">
-                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-[#cbd5b1] mb-2">Navigation</p>
-                <div className="flex flex-col gap-5 text-2xl font-serif font-black text-[#121212]">
-                  <button onClick={() => { window.scrollTo({ top: 0, behavior: 'smooth' }); setIsMobileMenuOpen(false); }} className="hover:text-[#cbd5b1] transition-colors text-left">Home</button>
-                  <a href="/#about-us" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-[#cbd5b1] transition-colors">About</a>
-                  <a href="/#services" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-[#cbd5b1] transition-colors">Services</a>
-                  <a href="/#jobs" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-[#cbd5b1] transition-colors">Jobs</a>
-                  <a href="/#portfolio" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-[#cbd5b1] transition-colors">Portfolio</a>
-                  <a href="/#testimonials" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-[#cbd5b1] transition-colors">Testimonials</a>
+                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-[#FFC107] mb-2">Navigation</p>
+                <div className="flex flex-col gap-3 text-xl font-serif font-black text-[#0c0e14]">
+                  <button onClick={() => { window.scrollTo({ top: 0, behavior: 'smooth' }); setIsMobileMenuOpen(false); }} className="px-6 py-4 rounded-xl bg-[#FFC107] border border-[#FFC107] hover:scale-105 transition-all text-left">Home</button>
+                  <a href="/#about-us" onClick={() => setIsMobileMenuOpen(false)} className="px-6 py-4 rounded-xl bg-[#FFC107] border border-[#FFC107] hover:scale-105 transition-all">About</a>
+                  <a href="/#services" onClick={() => setIsMobileMenuOpen(false)} className="px-6 py-4 rounded-xl bg-[#FFC107] border border-[#FFC107] hover:scale-105 transition-all">Services</a>
+                  <a href="/#jobs" onClick={() => setIsMobileMenuOpen(false)} className="px-6 py-4 rounded-xl bg-[#FFC107] border border-[#FFC107] hover:scale-105 transition-all">Jobs</a>
+                  <a href="/#portfolio" onClick={() => setIsMobileMenuOpen(false)} className="px-6 py-4 rounded-xl bg-[#FFC107] border border-[#FFC107] hover:scale-105 transition-all">Portfolio</a>
+                  <a href="/#testimonials" onClick={() => setIsMobileMenuOpen(false)} className="px-6 py-4 rounded-xl bg-[#FFC107] border border-[#FFC107] hover:scale-105 transition-all">Testimonials</a>
+                  <a href="/#insights" onClick={() => setIsMobileMenuOpen(false)} className="px-6 py-4 rounded-xl bg-[#FFC107] border border-[#FFC107] hover:scale-105 transition-all">News & Insights</a>
                   <a href="/#submit-resume" 
                     onClick={() => {
                       setIsMobileMenuOpen(false);
                       window.dispatchEvent(new CustomEvent('open-submit-resume-modal'));
                     }} 
-                    className="hover:text-[#cbd5b1] transition-colors"
+                    className="px-6 py-4 rounded-xl bg-[#FFC107] border border-[#FFC107] hover:scale-105 transition-all text-center"
                   >
                     Submit Resume
                    </a>
-                  <a href="/#contact" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-[#cbd5b1] transition-colors">Contact</a>
+                  <a href="/#contact" onClick={() => setIsMobileMenuOpen(false)} className="px-6 py-4 rounded-xl bg-[#FFC107] text-[#0c0e14] border border-[#FFC107] hover:scale-105 transition-all text-center">Contact</a>
                 </div>
               </div>
 
               <div className="mt-auto pt-12 flex flex-col gap-4">
-                <p className="text-center text-slate-400 text-[9px] font-black uppercase tracking-widest mt-6">
+                <p className="text-center text-slate-500 text-[9px] font-black uppercase tracking-widest mt-6">
                   © 2026 RECRUIT ART - Hiring Experts
                 </p>
               </div>

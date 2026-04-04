@@ -138,36 +138,37 @@ const ApplicationDetailsModal = ({ isOpen, onClose, applicationId }) => {
                         <Phone size={18} className="text-slate-400" />
                         <span className="text-sm font-bold text-[#0c0e14]">{application.mobile}</span>
                       </div>
+                      {application.alternative_mobile && (
+                        <div className="flex items-center gap-4 text-slate-700 bg-slate-50/50 p-4 rounded-2xl border border-slate-100">
+                          <Phone size={18} className="text-slate-400" />
+                          <div className="flex flex-col">
+                            <span className="text-[8px] font-black uppercase text-slate-400 leading-none mb-1">Alt. Mobile</span>
+                            <span className="text-sm font-bold text-[#0c0e14]">{application.alternative_mobile}</span>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
 
                   <div className="space-y-6">
-                    <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] pl-1">Online Presence</h4>
+                    <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] pl-1">Job Preferences</h4>
                     <div className="space-y-4">
-                      {application.linkedin_url && (
-                        <a href={application.linkedin_url} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-4 bg-[#FFC107]/10 rounded-2xl border border-[#FFC107]/20 group/link transition-all hover:bg-[#FFC107]/20">
-                          <div className="flex items-center gap-4 text-[#0c0e14]">
-                            <Linkedin size={18} className="text-[#FFC107]" />
-                            <span className="text-sm font-black uppercase tracking-widest">LinkedIn</span>
-                          </div>
-                          <ExternalLink size={14} className="text-[#FFC107] group-hover/link:translate-x-1 transition-transform" />
-                        </a>
-                      )}
-                      {application.portfolio_url && (
-                        <a href={application.portfolio_url} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-4 bg-[#f8f9fa] rounded-2xl border border-slate-200 group/link transition-all hover:bg-slate-100">
-                          <div className="flex items-center gap-4 text-[#0c0e14]">
-                            <LinkIcon size={18} className="text-slate-400" />
-                            <span className="text-sm font-black uppercase tracking-widest">Portfolio</span>
-                          </div>
-                          <ExternalLink size={14} className="text-slate-400 group-hover/link:translate-x-1 transition-transform" />
-                        </a>
-                      )}
-                      {!application.linkedin_url && !application.portfolio_url && (
-                        <div className="p-10 border border-dashed border-slate-200 rounded-[2rem] flex flex-col items-center justify-center text-center">
-                           <LinkIcon size={24} className="text-slate-200 mb-2" />
-                           <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">No profiles shared</p>
-                        </div>
-                      )}
+                      <div className="bg-slate-50/50 p-4 rounded-2xl border border-slate-100 flex flex-col gap-1">
+                        <span className="text-[9px] font-black uppercase text-slate-400 leading-none">Preferred Designation</span>
+                        <span className="text-sm font-bold text-[#0c0e14]">{application.preferred_job_designation || 'Not specified'}</span>
+                      </div>
+                      <div className="bg-slate-50/50 p-4 rounded-2xl border border-slate-100 flex flex-col gap-1">
+                        <span className="text-[9px] font-black uppercase text-slate-400 leading-none">Preferred Location</span>
+                        <span className="text-sm font-bold text-[#0c0e14]">{application.preferred_job_location || 'Not specified'}</span>
+                      </div>
+                      <div className="bg-slate-50/50 p-4 rounded-2xl border border-slate-100 flex flex-col gap-1">
+                        <span className="text-[9px] font-black uppercase text-slate-400 leading-none">Experience</span>
+                        <span className="text-sm font-bold text-[#0c0e14]">{application.total_experience || 'Not specified'}</span>
+                      </div>
+                      <div className="bg-slate-50/50 p-4 rounded-2xl border border-slate-100 flex flex-col gap-1">
+                        <span className="text-[9px] font-black uppercase text-slate-400 leading-none">Available to join</span>
+                        <span className="text-sm font-bold text-[#0c0e14]">{application.join_after || 'Immediate'}</span>
+                      </div>
                     </div>
                   </div>
                 </div>

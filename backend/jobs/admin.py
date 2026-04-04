@@ -33,12 +33,15 @@ class JobApplicationResource(resources.ModelResource):
     full_name = fields.Field(attribute='full_name', column_name='Applicant Name')
     email = fields.Field(attribute='email', column_name='Email')
     mobile = fields.Field(attribute='mobile', column_name='Mobile')
+    alternative_mobile = fields.Field(attribute='alternative_mobile', column_name='Alternative Mobile')
+    preferred_job_designation = fields.Field(attribute='preferred_job_designation', column_name='Preferred Designation')
+    preferred_job_location = fields.Field(attribute='preferred_job_location', column_name='Preferred Location')
+    total_experience = fields.Field(attribute='total_experience', column_name='Total Experience')
+    join_after = fields.Field(attribute='join_after', column_name='Can Join After')
     status = fields.Field(attribute='get_status_display', column_name='Status')
     applied_at = fields.Field(attribute='applied_at', column_name='Applied At')
     expected_salary = fields.Field(attribute='expected_salary', column_name='Expected Salary')
     notice_period = fields.Field(attribute='notice_period', column_name='Notice Period')
-    linkedin_url = fields.Field(attribute='linkedin_url', column_name='LinkedIn')
-    portfolio_url = fields.Field(attribute='portfolio_url', column_name='Portfolio')
     resume_file = fields.Field(attribute='resume_file_name', column_name='Resume File')
     cover_letter = fields.Field(attribute='cover_letter', column_name='Cover Letter')
 
@@ -46,8 +49,9 @@ class JobApplicationResource(resources.ModelResource):
         model = JobApplication
         fields = (
             'id', 'job_title', 'job_category', 'full_name', 'email', 'mobile',
-            'status', 'applied_at', 'expected_salary', 'notice_period',
-            'linkedin_url', 'portfolio_url', 'resume_file', 'cover_letter'
+            'alternative_mobile', 'preferred_job_designation', 'preferred_job_location',
+            'total_experience', 'join_after', 'status', 'applied_at', 
+            'expected_salary', 'notice_period', 'resume_file', 'cover_letter'
         )
         export_order = fields
 
@@ -135,10 +139,16 @@ class JobApplicationAdmin(ExportMixin, admin.ModelAdmin):
     
     fieldsets = (
         ('Applicant Information', {
-            'fields': ('job', 'applicant', 'full_name', 'email', 'mobile')
+            'fields': ('job', 'applicant', 'full_name', 'email', 'mobile', 'alternative_mobile')
+        }),
+        ('Job Preferences', {
+            'fields': (
+                'preferred_job_designation', 'preferred_job_location', 
+                'total_experience', 'join_after'
+            )
         }),
         ('Resume & Links', {
-            'fields': ('resume_link', 'linkedin_url', 'portfolio_url')
+            'fields': ('resume_link',)
         }),
         ('Additional Details', {
             'fields': ('expected_salary', 'notice_period', 'cover_letter'),

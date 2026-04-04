@@ -196,10 +196,11 @@ class JobApplicationAdminSerializer(serializers.ModelSerializer):
         model = JobApplication
         fields = [
             'id', 'job', 'job_title', 'applicant', 'applicant_email',
-            'full_name', 'email', 'mobile', 'resume', 'resume_file_name',
-            'linkedin_url', 'portfolio_url', 'expected_salary',
-            'notice_period', 'cover_letter', 'status',
-            'applied_at', 'updated_at'
+            'full_name', 'email', 'mobile', 'alternative_mobile',
+            'preferred_job_designation', 'preferred_job_location',
+            'resume', 'resume_file_name', 'expected_salary',
+            'join_after', 'total_experience', 'notice_period',
+            'cover_letter', 'status', 'applied_at', 'updated_at'
         ]
         read_only_fields = ['applied_at', 'updated_at']
 

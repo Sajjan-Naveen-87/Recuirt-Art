@@ -204,20 +204,39 @@ class JobApplicationAdmin(ExportMixin, admin.ModelAdmin):
         return response
 
     def resume_link(self, obj):
-        """Safely render a link to the resume without crashing if storage is broken."""
+        """
+        Safely render a link to the resume. Handles Cloudinary vs Local storage.
+        If it's a relative URL in production, we try to construct a Cloudinary link.
+        """
         if not obj.resume:
             return "No resume uploaded"
+        
         try:
+            resume_url = obj.resume.url
+            
+            # If we're on Render and the URL is relative (starts with /media/),
+            # it means the storage backend failed to return the absolute Cloudinary URL.
+            if resume_url.startswith('/media/') and not settings.DEBUG:
+                # Try to get cloud name to build a fallback link
+                from django.conf import settings as django_settings
+                cloud_name = getattr(django_settings, 'CLOUDINARY_STORAGE', {}).get('CLOUD_NAME')
+                if cloud_name:
+                    # Construct manual Cloudinary RAW URL as fallback
+                    # Pattern for raw files: res.cloudinary.com/<cloud>/raw/upload/<path>
+                    path = resume_url.replace('/media/', '')
+                    resume_url = f"https://res.cloudinary.com/{cloud_name}/raw/upload/{path}"
+
             return format_html(
-                '<a href="{}" target="_blank" style="font-weight: bold; color: #264b5d; text-decoration: underline;">'
+                '<a href="{}" target="_blank" style="font-weight: bold; color: #264b5d; text-decoration: underline;" title="Opens in new tab">'
                 '<span style="margin-right: 5px;">📄</span>View Resume ({})'
                 '</a>',
-                obj.resume.url,
+                resume_url,
                 obj.resume_file_name or "PDF file"
             )
         except Exception as e:
             return format_html(
-                '<span style="color: #ba2121;">⚠️ File Error (Check Cloudinary)</span>'
+                '<span style="color: #ba2121;">⚠️ File Link Error: {}</span>',
+                str(e)[:50]
             )
     
     resume_link.short_description = 'Resume/CV'

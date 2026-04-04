@@ -120,13 +120,16 @@ const JobApplyModal = ({ job, isOpen, onClose, onSuccess }) => {
       console.error('Job application error:', err);
       let errorMessage = 'Failed to submit application. Please try again.';
       
-      if (err.message) {
-        errorMessage = err.message;
-      } else if (err.code) {
-        errorMessage = `Firebase error: ${err.code}`;
+      // Handle Django/Axios error responses
+      if (err.detail) {
+        errorMessage = err.detail;
+      } else if (err.error) {
+        errorMessage = err.error;
       } else if (err.response?.data) {
         const data = err.response.data;
         errorMessage = data.detail || data.error || data.message || errorMessage;
+      } else if (err.message) {
+        errorMessage = err.message;
       }
       
       setError(errorMessage);

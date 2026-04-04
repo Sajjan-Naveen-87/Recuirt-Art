@@ -1,108 +1,56 @@
-import { db, functions } from '../firebase';
-import { 
-  collection, 
-  getDocs, 
-  getDoc, 
-  doc, 
-  query, 
-  where, 
-  orderBy,
-  addDoc,
-  updateDoc,
-  deleteDoc,
-  serverTimestamp
-} from 'firebase/firestore';
-import { httpsCallable } from 'firebase/functions';
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-
-const storage = getStorage();
+import api from './api';
 
 export const jobsService = {
-  // Get all jobs from Firestore
+  // Get all jobs from the Render backend
   getJobs: async (params = {}) => {
     try {
-      const jobsCol = collection(db, 'jobs');
-      let q = query(jobsCol, orderBy('created_at', 'desc'));
-      
-      if (params.category) {
-        q = query(q, where('category', '==', params.category));
-      }
-      
-      if (params.status) {
-        q = query(q, where('status', '==', params.status));
-      } else {
-        // Default to active jobs for public view
-        q = query(q, where('status', '==', 'active'));
-      }
-
-      const snapshot = await getDocs(q);
-      return snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data(),
-        // Convert Firestore timestamp to JS Date string for compatibility
-        created_at: doc.data().created_at?.toDate()?.toISOString()
-      }));
+      const response = await api.get('/jobs/jobs/', { params });
+      return response.data;
     } catch (error) {
       console.error("Error fetching jobs:", error);
       throw error;
     }
   },
 
-  // Get job details from Firestore
+  // Get job details from the Render backend
   getJob: async (id) => {
-    const jobDoc = await getDoc(doc(db, 'jobs', id));
-    if (jobDoc.exists()) {
-      return { id: jobDoc.id, ...jobDoc.data() };
-    }
-    throw new Error("Job not found");
-  },
-
-  // Apply for job (Using Cloud Function for server-side processing)
-  applyForJob: async (formData) => {
     try {
-      let resumeUrl = "";
-      
-      // 1. Handle Resume Upload to Firebase Storage
-      const resumeFile = formData.get('resume');
-      if (resumeFile && resumeFile instanceof File) {
-        const storageRef = ref(storage, `resumes/${Date.now()}_${resumeFile.name}`);
-        const uploadResult = await uploadBytes(storageRef, resumeFile);
-        resumeUrl = await getDownloadURL(uploadResult.ref);
-      }
-
-      // 2. Call the Cloud Function
-      const submitApplication = httpsCallable(functions, 'submitApplication');
-      const result = await submitApplication({
-        jobId: formData.get('job'),
-        fullName: formData.get('full_name'),
-        email: formData.get('email'),
-        mobile: formData.get('mobile'),
-        alternativeMobile: formData.get('alternative_mobile'),
-        preferredJobDesignation: formData.get('preferred_job_designation'),
-        preferredJobLocation: formData.get('preferred_job_location'),
-        expectedSalary: formData.get('expected_salary'),
-        joinAfter: formData.get('join_after'),
-        totalExperience: formData.get('total_experience'),
-        coverLetter: formData.get('cover_letter'),
-        resumeUrl: resumeUrl,
-        responses: [] // Custom requirements logic can be added here
-      });
-
-      return result.data;
+      const response = await api.get(`/jobs/jobs/${id}/`);
+      return response.data;
     } catch (error) {
-      console.error("Error applying for job:", error);
+      console.error("Error fetching job details:", error);
       throw error;
     }
   },
 
-  // Get user's applications
-  getMyApplications: async (userUid) => {
-    const q = query(
-      collection(db, 'applications'), 
-      where('applicant_uid', '==', userUid),
-      orderBy('applied_at', 'desc')
-    );
-    const snapshot = await getDocs(q);
-    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  // Apply for job (Sending FormData directly to Render backend)
+  applyForJob: async (formData) => {
+    try {
+      // Axios automatically sets current Content-Type for FormData
+      const response = await api.post('/jobs/applications/', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error applying for job:", error);
+      // Ensure the error response from the backend is accessible
+      if (error.response?.data) {
+        throw error.response.data;
+      }
+      throw error;
+    }
+  },
+
+  // Get user's applications from the Render backend
+  getMyApplications: async () => {
+    try {
+      const response = await api.get('/jobs/applications/me/');
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching applications:", error);
+      throw error;
+    }
   }
 };

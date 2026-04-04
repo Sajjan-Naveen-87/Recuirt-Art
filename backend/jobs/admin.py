@@ -4,6 +4,7 @@ from import_export.admin import ExportMixin
 from jobs.models import Job, JobRequirement, JobApplication, ApplicationResponse
 from django.db.models import Prefetch
 from django.utils.html import format_html
+from django.http import HttpResponse
 
 class JobRequirementInline(admin.TabularInline):
     """Inline admin for JobRequirement model."""
@@ -44,6 +45,7 @@ class JobApplicationResource(resources.ModelResource):
     notice_period = fields.Field(attribute='notice_period', column_name='Notice Period')
     resume_file = fields.Field(attribute='resume_file_name', column_name='Resume File')
     cover_letter = fields.Field(attribute='cover_letter', column_name='Cover Letter')
+    responses = fields.Field(column_name='Custom Questionnaire Responses')
 
     class Meta:
         model = JobApplication
@@ -51,12 +53,19 @@ class JobApplicationResource(resources.ModelResource):
             'id', 'job_title', 'job_category', 'full_name', 'email', 'mobile',
             'alternative_mobile', 'preferred_job_designation', 'preferred_job_location',
             'total_experience', 'join_after', 'status', 'applied_at', 
-            'expected_salary', 'notice_period', 'resume_file', 'cover_letter'
+            'expected_salary', 'notice_period', 'resume_file', 'cover_letter', 'responses'
         )
         export_order = fields
 
     def dehydrate_applied_at(self, obj):
         return obj.applied_at.strftime('%Y-%m-%d %H:%M:%S') if obj.applied_at else ''
+
+    def dehydrate_responses(self, obj):
+        """Concatenate all custom responses into a readable string for Excel."""
+        responses = obj.responses.all()
+        if not responses:
+            return "No custom responses"
+        return " | ".join([f"{r.requirement.question_text}: {r.response_value}" for r in responses])
 
     def get_export_queryset(self):
         """Optimize queryset for export."""
@@ -128,6 +137,7 @@ class JobApplicationAdmin(ExportMixin, admin.ModelAdmin):
     """Admin for JobApplication model with Excel Export."""
     
     resource_class = JobApplicationResource
+    actions = ['export_selected_to_excel']
     
     list_display = [
         'full_name', 'email', 'job', 'status', 'applied_at'
@@ -181,22 +191,33 @@ class JobApplicationAdmin(ExportMixin, admin.ModelAdmin):
         """Allow deletion if needed, but usually kept restricted."""
         return request.user.is_superuser
 
+    @admin.action(description="Export selected applications to Excel")
+    def export_selected_to_excel(self, request, queryset):
+        """Action to export selected applications to Excel with all fields."""
+        resource = JobApplicationResource()
+        dataset = resource.export(queryset)
+        response = HttpResponse(
+            dataset.xlsx, 
+            content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        )
+        response['Content-Disposition'] = 'attachment; filename="job_applications_export.xlsx"'
+        return response
+
     def resume_link(self, obj):
         """Safely render a link to the resume without crashing if storage is broken."""
         if not obj.resume:
             return "No resume uploaded"
         try:
             return format_html(
-                '<a href="{}" target="_blank" style="font-weight: bold; color: #264b5d;">'
+                '<a href="{}" target="_blank" style="font-weight: bold; color: #264b5d; text-decoration: underline;">'
                 '<span style="margin-right: 5px;">📄</span>View Resume ({})'
                 '</a>',
                 obj.resume.url,
-                obj.resume_file_name or "PDF"
+                obj.resume_file_name or "PDF file"
             )
         except Exception as e:
             return format_html(
-                '<span style="color: #ba2121;">⚠️ File Missing or Corrupted (ID: {})</span>',
-                obj.id
+                '<span style="color: #ba2121;">⚠️ File Error (Check Cloudinary)</span>'
             )
     
     resume_link.short_description = 'Resume/CV'

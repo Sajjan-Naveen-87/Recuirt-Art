@@ -6,6 +6,7 @@ import AboutUs from './AboutUs';
 import Services from './Services';
 import TeamSection from './TeamSection';
 import LatestJobs from './LatestJobs';
+import NewsSection from './NewsSection';
 import Testimonials from './Testimonials';
 import InsightsSection from './InsightsSection';
 import ScrollNav from './ScrollNav';
@@ -36,6 +37,7 @@ function LandingPage() {
         <Testimonials />
         <Services />
         <LatestJobs searchQuery={searchQuery} />
+        <NewsSection />
         <InsightsSection />
         <ContactSection />
       </main>

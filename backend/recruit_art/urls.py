@@ -15,6 +15,7 @@ urlpatterns = [
     path("api/feedback/", include("feedback.urls", namespace="feedback")),
     path("api/requirements/", include("requirements.urls", namespace="requirements")),
     path("api/notifications/", include("notifications.urls", namespace="notifications")),
+    path("api/content/", include("content.urls")),
     
     # Social Auth URLs
     path("auth/", include("social_django.urls", namespace="social")),

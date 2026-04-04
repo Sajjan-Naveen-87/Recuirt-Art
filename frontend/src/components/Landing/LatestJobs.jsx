@@ -14,6 +14,8 @@ function LatestJobs({ searchQuery }) {
   const [selectedJob, setSelectedJob] = useState(null);
   const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
+  const [showAllClinical, setShowAllClinical] = useState(false);
+  const [showAllNonClinical, setShowAllNonClinical] = useState(false);
   const pageSize = 20; // Increase page size to get enough for both columns
 
   useEffect(() => {
@@ -159,7 +161,7 @@ function LatestJobs({ searchQuery }) {
               {/* Very large subtle background text */}
               <div className="absolute inset-y-0 right-0 flex items-center pr-8 lg:pr-16 opacity-[0.05] pointer-events-none overflow-hidden">
                 <span className="text-[10rem] lg:text-[15rem] font-serif font-black text-white whitespace-nowrap leading-none select-none">
-                  NON CLINICAL
+                  NON-CLINICAL
                 </span>
               </div>
             </div>
@@ -172,7 +174,7 @@ function LatestJobs({ searchQuery }) {
           <div className="text-center mb-16">
             {/* <h4 className="text-[10px] md:text-sm font-black uppercase tracking-[0.6em] text-[#FFC107] mb-4">Career Opportunities</h4> */}
             <h2 className="text-5xl md:text-7xl font-serif font-black text-[#FFC107] tracking-tight drop-shadow-lg">
-              Latest Jobs.
+              Latest Job
             </h2>
           </div>
 
@@ -187,34 +189,54 @@ function LatestJobs({ searchQuery }) {
               {/* Clinical Column */}
               <div className="flex-1">
                 <div className="flex items-center gap-4 mb-8 pb-4 border-b border-white/10">
-                  <h3 className="text-[#FFC107] font-serif font-black text-4xl drop-shadow-md">Clinician Jobs</h3>
+                  <h3 className="text-[#FFC107] font-serif font-black text-4xl drop-shadow-md text-slate-100">Clinical Jobs</h3>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-3 gap-4 auto-rows-min max-h-[500px] md:max-h-[800px] overflow-y-auto pt-6 pb-20 pr-4 custom-scrollbar">
-                  {jobs.filter(j => j.category === 'clinician').slice(0, 9).map((job) => (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-3 gap-4 auto-rows-min max-h-[none] lg:max-h-[800px] overflow-y-auto pt-6 pb-10 sm:pb-20 pr-0 sm:pr-4 custom-scrollbar px-1 sm:px-0">
+                  {jobs.filter(j => j.category === 'clinician').slice(0, showAllClinical ? undefined : 3).map((job) => (
                     <motion.div 
                       key={job.id}
-                      whileHover={{ y: -10, scale: 1.02 }}
+                      whileHover={{ y: -5, scale: 1.02 }}
                       onClick={() => { setSelectedJob(job); setIsDetailsModalOpen(true); }}
-                      className="relative z-10 aspect-[1.5/1] bg-white/90 backdrop-blur-xl p-4 text-[#0c0e14] rounded-[1.5rem] shadow-2xl flex flex-col items-center text-center group cursor-pointer overflow-hidden border border-[#0c0e14]/5 hover:border-[#FFC107]/50 transition-all duration-100 hover:z-50"
+                      className="relative z-10 aspect-[3/1] sm:aspect-[1.5/1] bg-white p-3 sm:p-4 text-[#0c0e14] rounded-xl sm:rounded-[1.5rem] shadow-xl shadow-black/20 flex flex-row sm:flex-col items-center text-left sm:text-center group cursor-pointer overflow-hidden border border-[#0c0e14]/5 hover:border-[#FFC107]/50 transition-all duration-100 hover:z-50"
                     >
-                      {/* Info Centered */}
-                      <div className="flex-1 flex flex-col items-center justify-between relative z-10 w-full pt-1 pb-1 group-hover:translate-y-[-2px] transition-transform duration-100">
+                      {/* Info for Tab View (Mobile) */}
+                      <div className="sm:hidden flex-1 flex flex-col justify-center">
+                         <h4 className="text-[14px] font-black leading-tight text-[#0c0e14] mb-1">{job.title}</h4>
+                         <div className="flex items-center gap-2">
+                           <span className="text-[10px] font-bold text-[#FFC107] bg-[#0c0e14] px-3 py-0.5 rounded-full">{formatSalary(job.salary_range)}</span>
+                           <span className="text-[9px] text-slate-400 font-bold uppercase tracking-widest">{job.location}</span>
+                         </div>
+                      </div>
+
+                      {/* Desktop View Content (Hidden on Mobile) */}
+                      <div className="hidden sm:flex flex-1 flex-col items-center justify-between relative z-10 w-full pt-1 pb-1 group-hover:translate-y-[-2px] transition-transform duration-100">
                         <div className="flex-1 flex items-center">
                           <h3 className="text-[12px] md:text-[13px] font-serif font-black text-[#0c0e14] leading-tight group-hover:transition-colors duration-100">
                             {job.title}
                           </h3>
                         </div>
                         
-                        <div className="text-[#0c0e14] bg-[#FFC107] font-serif font-black text-[8px] px-3 py-0.5 rounded-full tracking-tight shadow-md border border-[#FFC107]/20 group-hover:opacity-0 transition-all duration-100">
+                        <div className="text-[#0c0e14] bg-[#FFC107] font-black text-[10px] md:text-[12px] px-4 py-1 rounded-full tracking-tight shadow-md border border-[#FFC107]/20 group-hover:opacity-0 transition-all duration-100">
                           {formatSalary(job.salary_range)}
                         </div>
                       </div>
 
-                      {/* Apply Now Hover Action */}
-                      <div className="absolute inset-x-0 bottom-3 flex justify-center z-30 opacity-0 group-hover:opacity-100 group-hover:translate-y-[-4px] transition-all duration-100 pointer-events-none group-hover:pointer-events-auto">
+                      {/* Right side icon for mobile tab */}
+                      <div className="sm:hidden w-8 h-8 rounded-full border border-slate-100 flex items-center justify-center text-slate-300">
+                         <ChevronRight size={16} />
+                      </div>
+
+                      {/* Apply Now Hover Action (Desktop) */}
+                      <div className="absolute inset-x-0 bottom-4 hidden sm:flex flex-col gap-2 px-4 z-30 opacity-0 group-hover:opacity-100 group-hover:translate-y-[-4px] transition-all duration-100 pointer-events-none group-hover:pointer-events-auto">
+                        <button 
+                          onClick={(e) => { e.stopPropagation(); setSelectedJob(job); setIsDetailsModalOpen(true); }}
+                          className="w-full bg-[#0c0e14] text-white py-1.5 rounded-full text-[9px] font-black uppercase tracking-[0.2em] shadow-lg border border-white/10 hover:bg-[#FFC107] hover:text-[#0c0e14] transition-all active:scale-95"
+                        >
+                          View Details
+                        </button>
                         <button 
                           onClick={(e) => { e.stopPropagation(); setSelectedJob(job); setIsApplyModalOpen(true); }}
-                          className="bg-[#0c0e14] text-white px-6 py-1.5 rounded-full text-[8px] font-black uppercase tracking-[0.2em] shadow-2xl border border-white/10 hover:bg-[#FFC107] hover:text-[#0c0e14] transition-all active:scale-95"
+                          className="w-full bg-[#FFC107] text-[#0c0e14] py-1.5 rounded-full text-[9px] font-black uppercase tracking-[0.2em] shadow-lg border border-[#FFC107]/20 hover:bg-white transition-all active:scale-95"
                         >
                           Apply Now
                         </button>
@@ -224,6 +246,18 @@ function LatestJobs({ searchQuery }) {
                       <div className="absolute inset-0 bg-gradient-to-t from-[#FFC107]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
                     </motion.div>
                   ))}
+                  
+                  {/* Mobile View More for Clinical */}
+                  {jobs.filter(j => j.category === 'clinician').length > 3 && (
+                    <div className="sm:hidden flex justify-center pt-2">
+                       <button 
+                        onClick={() => setShowAllClinical(!showAllClinical)}
+                        className="text-[11px] font-black uppercase tracking-widest text-[#FFC107] bg-white/5 border border-white/10 px-6 py-3 rounded-full hover:bg-white/10 transition-all active:scale-95"
+                       >
+                         {showAllClinical ? 'View Less' : `View More (${jobs.filter(j => j.category === 'clinician').length - 3} more)`}
+                       </button>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -233,34 +267,54 @@ function LatestJobs({ searchQuery }) {
               {/* Non-Clinical Column */}
               <div className="flex-1">
                 <div className="flex items-center gap-4 mb-8 pb-4 border-b border-white/10">
-                  <h3 className="text-[#FFC107] font-serif font-black text-4xl drop-shadow-md">Non-Clinician Jobs</h3>
+                  <h3 className="text-[#FFC107] font-serif font-black text-4xl drop-shadow-md text-slate-100">Non-Clinical Jobs</h3>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-3 gap-3 auto-rows-min max-h-[500px] md:max-h-[800px] overflow-y-auto pt-6 pb-20 pr-4 custom-scrollbar">
-                  {jobs.filter(j => j.category !== 'clinician').slice(0, 9).map((job) => (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-3 gap-3 auto-rows-min max-h-[none] lg:max-h-[800px] overflow-y-auto pt-6 pb-10 sm:pb-20 pr-0 sm:pr-4 custom-scrollbar px-1 sm:px-0">
+                  {jobs.filter(j => j.category !== 'clinician').slice(0, showAllNonClinical ? undefined : 3).map((job) => (
                     <motion.div 
                       key={job.id}
-                      whileHover={{ y: -10, scale: 1.02 }}
+                      whileHover={{ y: -5, scale: 1.02 }}
                       onClick={() => { setSelectedJob(job); setIsDetailsModalOpen(true); }}
-                      className="relative z-10 aspect-[1.5/1] bg-white/90 backdrop-blur-xl p-4 text-[#0c0e14] rounded-[1.5rem] shadow-2xl flex flex-col items-center text-center group cursor-pointer overflow-hidden border border-[#0c0e14]/5 hover:border-[#FFC107]/50 transition-all duration-100 hover:z-50"
+                      className="relative z-10 aspect-[3/1] sm:aspect-[1.5/1] bg-white p-3 sm:p-4 text-[#0c0e14] rounded-xl sm:rounded-[1.5rem] shadow-xl shadow-black/20 flex flex-row sm:flex-col items-center text-left sm:text-center group cursor-pointer overflow-hidden border border-[#0c0e14]/5 hover:border-[#FFC107]/50 transition-all duration-100 hover:z-50"
                     >
-                      {/* Info Centered */}
-                      <div className="flex-1 flex flex-col items-center justify-between relative z-10 w-full pt-1 pb-1 group-hover:translate-y-[-2px] transition-transform duration-100">
+                      {/* Info for Tab View (Mobile) */}
+                      <div className="sm:hidden flex-1 flex flex-col justify-center">
+                         <h4 className="text-[14px] font-black leading-tight text-[#0c0e14] mb-1">{job.title}</h4>
+                         <div className="flex items-center gap-2">
+                           <span className="text-[10px] font-bold text-[#FFC107] bg-[#0c0e14] px-3 py-0.5 rounded-full">{formatSalary(job.salary_range)}</span>
+                           <span className="text-[9px] text-slate-400 font-bold uppercase tracking-widest">{job.location}</span>
+                         </div>
+                      </div>
+
+                      {/* Desktop View Content (Hidden on Mobile) */}
+                      <div className="hidden sm:flex flex-1 flex-col items-center justify-between relative z-10 w-full pt-1 pb-1 group-hover:translate-y-[-2px] transition-transform duration-100">
                         <div className="flex-1 flex items-center">
                           <h3 className="text-[12px] md:text-[13px] font-serif font-black text-[#0c0e14] leading-tight group-hover:transition-colors duration-100">
                             {job.title}
                           </h3>
                         </div>
                         
-                        <div className="text-[#0c0e14] bg-[#FFC107] font-serif font-black text-[8px] px-3 py-0.5 rounded-full tracking-tight shadow-md border border-[#FFC107]/20 group-hover:opacity-0 transition-all duration-100">
+                        <div className="text-[#0c0e14] bg-[#FFC107] font-black text-[10px] md:text-[12px] px-4 py-1 rounded-full tracking-tight shadow-md border border-[#FFC107]/20 group-hover:opacity-0 transition-all duration-100">
                           {formatSalary(job.salary_range)}
                         </div>
                       </div>
 
-                      {/* Apply Now Hover Action */}
-                      <div className="absolute inset-x-0 bottom-3 flex justify-center z-30 opacity-0 group-hover:opacity-100 group-hover:translate-y-[-4px] transition-all duration-100 pointer-events-none group-hover:pointer-events-auto">
+                      {/* Right side icon for mobile tab */}
+                      <div className="sm:hidden w-8 h-8 rounded-full border border-slate-100 flex items-center justify-center text-slate-300">
+                         <ChevronRight size={16} />
+                      </div>
+
+                      {/* Apply Now Hover Action (Desktop) */}
+                      <div className="absolute inset-x-0 bottom-4 hidden sm:flex flex-col gap-2 px-4 z-30 opacity-0 group-hover:opacity-100 group-hover:translate-y-[-4px] transition-all duration-100 pointer-events-none group-hover:pointer-events-auto">
+                        <button 
+                          onClick={(e) => { e.stopPropagation(); setSelectedJob(job); setIsDetailsModalOpen(true); }}
+                          className="w-full bg-[#0c0e14] text-white py-1.5 rounded-full text-[9px] font-black uppercase tracking-[0.2em] shadow-lg border border-white/10 hover:bg-[#FFC107] hover:text-[#0c0e14] transition-all active:scale-95"
+                        >
+                          View Details
+                        </button>
                         <button 
                           onClick={(e) => { e.stopPropagation(); setSelectedJob(job); setIsApplyModalOpen(true); }}
-                          className="bg-[#0c0e14] text-white px-6 py-1.5 rounded-full text-[8px] font-black uppercase tracking-[0.2em] shadow-2xl border border-white/10 hover:bg-[#FFC107] hover:text-[#0c0e14] transition-all active:scale-95"
+                          className="w-full bg-[#FFC107] text-[#0c0e14] py-1.5 rounded-full text-[9px] font-black uppercase tracking-[0.2em] shadow-lg border border-[#FFC107]/20 hover:bg-white transition-all active:scale-95"
                         >
                           Apply Now
                         </button>
@@ -270,6 +324,18 @@ function LatestJobs({ searchQuery }) {
                       <div className="absolute inset-0 bg-gradient-to-t from-[#FFC107]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
                     </motion.div>
                   ))}
+
+                  {/* Mobile View More for Non-Clinical */}
+                  {jobs.filter(j => j.category !== 'clinician').length > 3 && (
+                    <div className="sm:hidden flex justify-center pt-2">
+                       <button 
+                        onClick={() => setShowAllNonClinical(!showAllNonClinical)}
+                        className="text-[11px] font-black uppercase tracking-widest text-[#FFC107] bg-white/5 border border-white/10 px-6 py-3 rounded-full hover:bg-white/10 transition-all active:scale-95"
+                       >
+                         {showAllNonClinical ? 'View Less' : `View More (${jobs.filter(j => j.category !== 'clinician').length - 3} more)`}
+                       </button>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

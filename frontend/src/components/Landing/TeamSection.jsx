@@ -7,7 +7,7 @@ function TeamSection() {
   const team = [
     { name: "Sahitya Saini", role: "Managing Director", image: "/Founder-New.png", linkedin_url: "https://www.linkedin.com/in/sahitya-saini-7b104a98" },
     { name: "Mansi Agrawal", role: "Team Lead - Senior Leadership", image: "/Mansi-Agrawal.jpeg", linkedin_url: "https://www.linkedin.com/in/mansi-agrawal-034b041b5" },
-    { name: "Prerana Agrawal", role: "Team Lead - Clinician", image: "/Prerana-Agrawal.png", linkedin_url: "https://www.linkedin.com/in/prerna-agrawal-24b87b135" },
+    { name: "Prerana Agrawal", role: "Team Lead - Clinical", image: "/Prerana-Agrawal.png", linkedin_url: "https://www.linkedin.com/in/prerna-agrawal-24b87b135" },
     { name: "Kratika Singh", role: "Team Lead - Healthcare", image: "/Kratika-Singh.jpeg", linkedin_url: "https://www.linkedin.com/in/kratika-singh-591b0a231" }
   ];
 

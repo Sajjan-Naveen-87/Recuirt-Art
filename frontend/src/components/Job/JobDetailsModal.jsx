@@ -102,67 +102,71 @@ const JobDetailsModal = ({ job, isOpen, onClose, onApply }) => {
               {/* Header */}
               <div className="p-8 md:p-12 lg:p-16 border-b border-[#0c0e14]/5 flex items-start justify-between flex-shrink-0 bg-white/60">
                 <div className="flex-1">
-                  <h2 className="text-2xl md:text-4xl lg:text-5xl font-serif font-black text-[#0c0e14] leading-tight mb-3 tracking-tight">
+                  <h2 className="text-3xl md:text-5xl lg:text-6xl font-black text-[#0c0e14] leading-tight mb-4 tracking-tight">
                     {jobData.title}
                   </h2>
-                  <div className="flex flex-wrap items-center gap-4 text-[#FFC107]">
+                  <div className="flex flex-wrap items-center gap-4 text-[#0c0e14]">
                     <p className="text-[10px] md:text-sm font-black uppercase tracking-[0.3em] flex items-center gap-2">
-                       <Building2 size={16} />
                        <span className="truncate">{jobData.company_name}</span>
-                    </p>
-                    <span className="w-1.5 h-1.5 bg-[#FFC107]/20 rounded-full hidden md:block" />
-                    <p className="text-[10px] md:text-sm font-serif font-black italic text-slate-400">
-                       Position Opening
                     </p>
                   </div>
                 </div>
-                <button
-                  onClick={onClose}
-                  className="w-10 h-10 md:w-14 md:h-14 bg-white rounded-full flex items-center justify-center text-slate-300 hover:text-[#0c0e14] hover:shadow-xl transition-all border border-slate-100 shrink-0 ml-6"
-                >
-                  <X size={20} md:size={24} />
-                </button>
+                <div className="flex items-center gap-3 md:gap-4 shrink-0 ml-6">
+                  {jobData.is_active && (
+                    <button
+                      onClick={handleApplyClick}
+                      className="px-6 md:px-10 py-3 md:py-4 bg-[#0c0e14] text-white rounded-xl md:rounded-2xl font-black uppercase tracking-widest text-[9px] md:text-[10px] shadow-2xl shadow-[#0c0e14]/20 hover:bg-[#FFC107] hover:text-[#0c0e14] transition-all flex items-center justify-center gap-3 group"
+                    >
+                      Apply Now <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                    </button>
+                  )}
+                  <button
+                    onClick={onClose}
+                    className="w-10 h-10 md:w-14 md:h-14 bg-white rounded-full flex items-center justify-center text-slate-300 hover:text-[#0c0e14] hover:shadow-xl transition-all border border-slate-100"
+                  >
+                    <X size={20} md:size={24} />
+                  </button>
+                </div>
               </div>
 
               {/* Content */}
-              <div className="flex-1 overflow-y-auto p-6 md:p-10 lg:p-12">
+              <div className="flex-1 overflow-y-auto p-10 md:p-14 lg:p-20">
                 {/* Job Meta */}
                 <div className="flex flex-wrap gap-2 md:gap-4 mb-8 md:mb-12">
-                  <div className="flex items-center gap-2 bg-white px-4 md:px-5 py-2 md:py-3 rounded-xl md:rounded-2xl shadow-sm border border-slate-100">
+                  <div className="flex items-center gap-2 bg-white px-5 md:px-6 py-3 md:py-4 rounded-xl md:rounded-2xl shadow-sm border border-slate-100">
                     <MapPin size={16} md:size={18} className="text-[#FFC107]" />
-                    <span className="text-[9px] md:text-[11px] font-black uppercase tracking-widest text-slate-500">{jobData.location}</span>
+                    <span className="text-[10px] md:text-[12px] font-black uppercase tracking-widest text-slate-500">{jobData.location}</span>
                   </div>
-                  <div className="flex items-center gap-2 bg-white px-4 md:px-5 py-2 md:py-3 rounded-xl md:rounded-2xl shadow-sm border border-slate-100">
+                  <div className="flex items-center gap-2 bg-white px-5 md:px-6 py-3 md:py-4 rounded-xl md:rounded-2xl shadow-sm border border-slate-100">
                     <Briefcase size={16} md:size={18} className="text-[#FFC107]" />
-                    <span className="text-[9px] md:text-[11px] font-black uppercase tracking-widest text-slate-500">{formatJobType(jobData.job_type)}</span>
+                    <span className="text-[10px] md:text-[12px] font-black uppercase tracking-widest text-slate-500">{formatJobType(jobData.job_type)}</span>
                   </div>
-                    <div className="flex items-center gap-2 bg-[#0c0e14] px-4 md:px-5 py-2 md:py-3 rounded-xl md:rounded-2xl shadow-lg border border-white/5">
-                      <IndianRupee size={16} md:size={18} className="text-[#FFC107]" />
-                      <span className="text-[9px] md:text-[11px] font-black uppercase tracking-widest text-[#FFC107]">
-                        {(() => {
-                          const s = (jobData.salary_range || 'Negotiable').toString();
-                          const cleanS = s.replace(/,/g, '');
-                          return cleanS.replace(/([$₹])?\s?(\d+)/g, (match, symbol, num) => {
-                            const n = parseInt(num);
-                            const curSymbol = symbol === '$' ? '₹' : (symbol || '₹');
-                            return n >= 1000 ? `${curSymbol}${Math.floor(n / 1000)}K` : `${curSymbol}${n}`;
-                          }).replace(/\s?-\s?/g, ' - ');
-                        })()}
-                      </span>
-                    </div>
+                  <div className="flex items-center gap-2 bg-[#FFC107] px-5 md:px-6 py-3 md:py-4 rounded-xl md:rounded-2xl shadow-lg border border-[#FFC107]/20">
+                    <IndianRupee size={16} md:size={18} className="text-[#0c0e14]" />
+                    <span className="text-[10px] md:text-[12px] font-black uppercase tracking-widest text-[#0c0e14]">
+                      {(() => {
+                        const s = (jobData.salary_range || 'Negotiable').toString();
+                        const cleanS = s.replace(/,/g, '');
+                        return cleanS.replace(/([$₹])?\s?(\d+)/g, (match, symbol, num) => {
+                          const n = parseInt(num);
+                          const curSymbol = symbol === '$' ? '₹' : (symbol || '₹');
+                          return n >= 1000 ? `${curSymbol}${Math.floor(n / 1000)}K` : `${curSymbol}${n}`;
+                        }).replace(/\s?-\s?/g, ' - ');
+                      })()}
+                    </span>
+                  </div>
                   {jobData.apply_deadline && (
-                    <div className="flex items-center gap-2 bg-white px-4 md:px-5 py-2 md:py-3 rounded-xl md:rounded-2xl shadow-sm border border-emerald-100">
+                    <div className="flex items-center gap-2 bg-white px-5 md:px-6 py-3 md:py-4 rounded-xl md:rounded-2xl shadow-sm border border-emerald-100">
                       <Clock size={16} md:size={18} className="text-emerald-500" />
-                      <span className="text-[9px] md:text-[11px] font-black uppercase tracking-widest text-emerald-600">Until {formatDate(jobData.apply_deadline)}</span>
+                      <span className="text-[10px] md:text-[12px] font-black uppercase tracking-widest text-emerald-600">Until {formatDate(jobData.apply_deadline)}</span>
                     </div>
                   )}
                 </div>
 
-                {/* Description */}
-                <div className="mb-8 md:mb-12">
-                  <h3 className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.4em] text-slate-400 mb-4 md:mb-6">Job Description</h3>
+                <div className="mb-12 md:mb-16">
+                  <h3 className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.4em] text-slate-400 mb-6 md:mb-8">Job Description</h3>
                   <div className="prose prose-slate max-w-none">
-                    <p className="text-lg md:text-xl font-serif text-[#0c0e14]/80 leading-relaxed whitespace-pre-wrap">
+                    <p className="text-xl md:text-2xl text-[#0c0e14]/80 leading-relaxed whitespace-pre-wrap">
                       {jobData.description}
                     </p>
                   </div>
@@ -170,13 +174,13 @@ const JobDetailsModal = ({ job, isOpen, onClose, onApply }) => {
 
                 {/* Skills Required */}
                 {getSkillsList().length > 0 && (
-                  <div className="mb-8 md:mb-12">
-                    <h3 className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.4em] text-slate-400 mb-4 md:mb-6">Expertise Required</h3>
-                    <div className="flex flex-wrap gap-2 md:gap-3">
+                  <div className="mb-12 md:mb-16">
+                    <h3 className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.4em] text-slate-400 mb-6 md:mb-8">Skills Required</h3>
+                    <div className="flex flex-wrap gap-3 md:gap-4">
                       {getSkillsList().map((skill, index) => (
                         <span
                           key={index}
-                          className="px-4 md:px-5 py-2 md:py-2.5 bg-white text-[#0c0e14] rounded-lg md:rounded-xl text-[9px] md:text-[10px] font-black uppercase tracking-widest border border-slate-200 shadow-sm hover:border-[#FFC107]/30 transition-colors"
+                          className="px-5 md:px-7 py-2.5 md:py-3.5 bg-white text-[#0c0e14] rounded-lg md:rounded-xl text-[10px] md:text-[12px] font-black uppercase tracking-widest border border-slate-200 shadow-sm hover:border-[#FFC107]/30 transition-colors"
                         >
                           {skill}
                         </span>
@@ -187,41 +191,17 @@ const JobDetailsModal = ({ job, isOpen, onClose, onApply }) => {
 
                 {/* Experience */}
                 {jobData.experience_required && (
-                  <div className="mb-8 md:mb-12">
-                    <h3 className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.4em] text-slate-400 mb-3 md:mb-4">Experience</h3>
-                    <p className="text-base md:text-lg font-serif text-[#0c0e14]/70 italic">{jobData.experience_required}</p>
+                  <div className="mb-12 md:mb-16">
+                    <h3 className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.4em] text-slate-400 mb-5 md:mb-6">Experience</h3>
+                    <p className="text-lg md:text-xl text-[#0c0e14]/70 italic font-medium">{jobData.experience_required}</p>
                   </div>
                 )}
 
-                {/* Status Badge */}
-                <div className="flex items-center gap-2">
-                  <span className={`flex items-center gap-3 px-5 md:px-6 py-2.5 md:py-3 rounded-xl md:rounded-2xl font-black uppercase tracking-[0.2em] text-[9px] md:text-[10px] border shadow-sm ${
-                    jobData.is_active 
-                      ? 'bg-[#FFC107]/10 text-[#0c0e14] border-[#FFC107]/30' 
-                      : 'bg-rose-50 text-rose-500 border-rose-100'
-                   }`}>
-                    {jobData.is_active ? <CheckCircle size={14} className="text-[#FFC107]" /> : <X size={14} />}
-                    {jobData.is_active ? 'Position Open' : 'Filled'}
-                  </span>
-                </div>
               </div>
 
               {/* Footer */}
-              <div className="p-6 md:p-10 lg:p-12 border-t border-[#0c0e14]/5 flex flex-col md:flex-row md:justify-end gap-4 md:gap-6 flex-shrink-0 bg-white/60">
-                <button
-                  onClick={onClose}
-                  className="order-2 md:order-1 px-8 py-4 rounded-xl md:rounded-2xl font-black uppercase tracking-widest text-[10px] text-slate-400 hover:text-[#0c0e14] transition-colors"
-                >
-                  Go Back
-                </button>
-                {jobData.is_active && (
-                  <button
-                    onClick={handleApplyClick}
-                    className="order-1 md:order-2 px-8 md:px-10 py-4 bg-[#0c0e14] text-white rounded-xl md:rounded-2xl font-black uppercase tracking-widest text-[10px] shadow-2xl shadow-[#0c0e14]/20 hover:bg-[#FFC107] hover:text-[#0c0e14] transition-all flex items-center justify-center gap-3 group"
-                  >
-                    Apply Now <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-                  </button>
-                )}
+              <div className="p-8 md:p-12 lg:p-16 border-t border-[#0c0e14]/5 flex justify-center bg-white/60">
+                 <p className="text-[10px] font-black uppercase tracking-widest text-[#0c0e14]/30">© Recruit Art 2026</p>
               </div>
             </motion.div>
           </>

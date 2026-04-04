@@ -179,7 +179,7 @@ function AboutUs() {
             
             <div className="space-y-6 md:space-y-8">
               <p className="text-slate-400 text-base md:text-lg leading-relaxed font-medium">
-                Today, Recruit Art is strategically aligned toward comprehensive hospital hiring solutions. Our primary focus is on Clinicians, Super-Specialists, Nursing Professionals, and Hospital Operations leadership.
+                Today, Recruit Art is strategically aligned toward comprehensive hospital hiring solutions. Our primary focus is on Clinical Professionals, Super-Specialists, Nursing Professionals, and Hospital Operations leadership.
               </p>
               <p className="text-slate-400 text-base md:text-lg leading-relaxed font-medium">
                 We work closely with multi-speciality hospitals and diagnostic chains to close critical, time-sensitive roles with precision and confidentiality.

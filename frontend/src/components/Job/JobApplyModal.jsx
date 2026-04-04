@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Upload, FileText, CheckCircle, AlertCircle, Loader2, ArrowRight, MapPin } from 'lucide-react';
+import { X, Upload, FileText, CheckCircle, AlertCircle, Loader2, ArrowRight, MapPin, Briefcase, IndianRupee } from 'lucide-react';
 import { jobsService } from '../../services/jobs';
 
 const JobApplyModal = ({ job, isOpen, onClose, onSuccess }) => {
@@ -181,6 +181,22 @@ const JobApplyModal = ({ job, isOpen, onClose, onSuccess }) => {
                >
                  <X size={24} />
                </button>
+            </div>
+
+            {/* Job Summary Banner */}
+            <div className="px-8 py-4 bg-slate-50 border-b border-slate-100 flex flex-wrap items-center gap-6">
+              <div className="flex items-center gap-2">
+                <Briefcase size={16} className="text-blue-600" />
+                <span className="text-xs font-bold uppercase tracking-widest text-slate-700">{job.title}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <MapPin size={16} className="text-blue-600" />
+                <span className="text-xs font-bold uppercase tracking-widest text-slate-700">{job.location}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <IndianRupee size={16} className="text-blue-600" />
+                <span className="text-xs font-bold uppercase tracking-widest text-slate-700">{job.salary_range || 'Negotiable'}</span>
+              </div>
             </div>
 
             {/* Content */}

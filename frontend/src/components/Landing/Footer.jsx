@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import VisitorCounter from './VisitorCounter';
 
 function Footer() {
   return (
@@ -85,10 +86,13 @@ function Footer() {
           </a>
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 items-center font-black uppercase tracking-widest text-[9px] md:text-[10px]">
-          <span>&copy; 2019 Recruit Art - Hiring Experts</span>
-          <span className="hidden sm:inline opacity-20">|</span>
-          <Link to="/privacy" className="hover:text-[#FFC107] transition-colors">Privacy policy</Link>
+        <div className="flex flex-col sm:flex-row gap-4 sm:gap-12 items-center">
+          <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 items-center font-black uppercase tracking-widest text-[9px] md:text-[10px]">
+            <span>&copy; 2019 Recruit Art - Hiring Experts</span>
+            <span className="hidden sm:inline opacity-20">|</span>
+            <Link to="/privacy" className="hover:text-[#FFC107] transition-colors">Privacy policy</Link>
+          </div>
+          <VisitorCounter />
         </div>
 
       </div>

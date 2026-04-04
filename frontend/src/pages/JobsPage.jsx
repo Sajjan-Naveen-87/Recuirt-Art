@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Search, MapPin, Briefcase, IndianRupee, Clock, ArrowRight, ChevronLeft } from 'lucide-react';
+import { Search, MapPin, Briefcase, IndianRupee, Clock, ArrowRight, ChevronLeft, Upload } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { jobsService } from '../services/jobs';
 import Navbar from '../components/Landing/Navbar';
@@ -12,21 +12,31 @@ const JobsPage = () => {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
   const [jobCategory, setJobCategory] = useState('all');
-  const [selectedJob, setSelectedJob] = useState(null);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [suggestions, setSuggestions] = useState([]);
   const [showDetails, setShowDetails] = useState(false);
   const [showApply, setShowApply] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(10);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearch(searchQuery);
+    }, 300);
+    return () => clearTimeout(handler);
+  }, [searchQuery]);
 
   useEffect(() => {
     fetchJobs();
     window.scrollTo(0, 0);
-  }, [searchQuery, jobCategory]);
+  }, [debouncedSearch, jobCategory]);
 
   const fetchJobs = async () => {
     try {
       setLoading(true);
       const params = { 
-        search: searchQuery || '' 
+        search: debouncedSearch || '' 
       };
 
       if (jobCategory && jobCategory !== 'all') {
@@ -59,6 +69,15 @@ const JobsPage = () => {
     }
   };
 
+  // Generate suggestions based on unique job titles and locations
+  useEffect(() => {
+    if (jobs.length > 0) {
+      const titles = [...new Set(jobs.map(j => j.title))];
+      const locations = [...new Set(jobs.map(j => j.location))];
+      setSuggestions([...titles, ...locations].slice(0, 10));
+    }
+  }, [jobs]);
+
   const truncate = (str, len) => str?.length > len ? str.substring(0, len) + "..." : str;
 
   return (
@@ -80,21 +99,48 @@ const JobsPage = () => {
             Available <span className="text-[#FFC107]">Jobs </span> With Us.
           </h1>
           <p className="text-white/50 text-lg md:text-xl font-medium max-w-2xl italic">
-            Discover a wide range of clinician and non-clinician roles within elite healthcare institutions.
+             Discover a wide range of clinical and non-clinical roles within elite healthcare institutions.
           </p>
         </div>
 
         {/* Search Bar & Filters */}
         <div className="flex flex-col lg:flex-row lg:items-center gap-6 md:gap-10 mb-12">
-          <div className="bg-[#FFC107] p-1.5 md:p-3 rounded-[2rem] md:rounded-3xl flex items-center shadow-2xl border border-white/5 max-w-3xl flex-1">
-             <div className="p-2.5 md:p-4 bg-[#0c0e14] rounded-xl md:rounded-2xl text-white shadow-lg shrink-0"><Search size={18} /></div>
-             <input 
-                type="text" 
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search for roles, skills, or locations..." 
-                className="flex-1 px-3 md:px-8 outline-none text-sm md:text-xl font-serif font-black placeholder:text-[#0c0e14]/40 bg-transparent text-[#0c0e14] w-full" 
-             />
+          <div className="relative flex-1 max-w-3xl">
+            <div className="bg-[#FFC107] p-1.5 md:p-3 rounded-[2rem] md:rounded-3xl flex items-center shadow-2xl border border-white/5 w-full">
+               <div className="p-2.5 md:p-4 bg-[#0c0e14] rounded-xl md:rounded-2xl text-white shadow-lg shrink-0"><Search size={18} /></div>
+               <input 
+                  type="text" 
+                  value={searchQuery}
+                  onChange={(e) => {
+                    setSearchQuery(e.target.value);
+                    setShowSuggestions(true);
+                  }}
+                  onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+                  onFocus={() => setShowSuggestions(true)}
+                  placeholder="Search for roles, skills, or locations..." 
+                  className="flex-1 px-3 md:px-8 outline-none text-sm md:text-xl font-serif font-black placeholder:text-[#0c0e14]/40 bg-transparent text-[#0c0e14] w-full" 
+               />
+            </div>
+            
+            {/* Autocomplete Suggestions */}
+            {showSuggestions && searchQuery.length > 1 && (
+              <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-2xl overflow-hidden z-[100] border border-slate-100">
+                {suggestions
+                  .filter(s => s.toLowerCase().includes(searchQuery.toLowerCase()))
+                  .map((suggestion, index) => (
+                    <button
+                      key={index}
+                      onClick={() => {
+                        setSearchQuery(suggestion);
+                        setShowSuggestions(false);
+                      }}
+                      className="w-full text-left px-6 py-4 hover:bg-[#FFC107]/10 text-sm font-black text-[#0c0e14] border-b border-slate-50 last:border-0 transition-colors"
+                    >
+                      {suggestion}
+                    </button>
+                  ))}
+              </div>
+            )}
           </div>
           
           {/* Category Radio Buttons */}
@@ -142,23 +188,45 @@ const JobsPage = () => {
              <p className="text-white/20 font-serif text-2xl italic">No positions matching your search were found.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 pt-6 pb-20">
-            {jobs.map((job) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6 pt-6 pb-10 sm:pb-20">
+            {jobs.slice(0, visibleCount).map((job) => (
               <motion.div 
                 key={job.id}
-                whileHover={{ y: -10, scale: 1.02 }}
+                whileHover={{ y: -5, scale: 1.02 }}
                 onClick={() => { setSelectedJob(job); setShowDetails(true); }}
-                className="relative z-10 aspect-[1.5/1] bg-white/90 backdrop-blur-xl p-4 text-[#0c0e14] rounded-[1.5rem] shadow-2xl flex flex-col items-center text-center group cursor-pointer overflow-hidden border border-[#0c0e14]/5 hover:border-[#FFC107]/50 transition-all duration-100 hover:z-50"
+                className="relative z-10 aspect-[3/1] sm:aspect-[1.5/1] bg-white/95 backdrop-blur-xl p-3 sm:p-4 text-[#0c0e14] rounded-xl sm:rounded-[1.5rem] shadow-2xl flex flex-row sm:flex-col items-center text-left sm:text-center group cursor-pointer overflow-hidden border border-[#0c0e14]/5 hover:border-[#FFC107]/50 transition-all duration-100 hover:z-50"
               >
-                {/* Category Label at Top */}
-                <div className="absolute top-3 left-1/2 -translate-x-1/2 z-10 w-full px-4">
+                {/* Mobile Tab Info */}
+                <div className="sm:hidden flex-1 flex flex-col justify-center">
+                   <span className="text-[7px] font-black uppercase tracking-[0.2em] text-[#FFC107] bg-[#0c0e14] px-2 py-0.5 rounded-full w-fit mb-1">
+                      {job.category === 'clinician' ? 'Clinical' : 'Non-Clinical'}
+                   </span>
+                   <h4 className="text-[14px] font-black leading-tight text-[#0c0e14] mb-0.5">{job.title}</h4>
+                   <div className="flex items-center gap-2">
+                     <span className="text-[10px] font-black text-[#0c0e14] tracking-tight">
+                        {(() => {
+                           const s = (job.salary_range || 'Negotiable').toString();
+                           return s.replace(/([$₹])?\s?(\d+)/g, (match, symbol, num) => {
+                             const n = parseInt(num);
+                             const curSymbol = symbol === '$' ? '₹' : (symbol || '₹');
+                             return n >= 1000 ? `${curSymbol}${Math.floor(n / 1000)}K` : `${curSymbol}${n}`;
+                           });
+                        })()}
+                     </span>
+                     <span className="text-[8px] text-slate-400 font-bold uppercase tracking-widest">{job.location}</span>
+                   </div>
+                </div>
+
+                {/* Desktop Category Label */}
+                <div className="hidden sm:block absolute top-3 left-1/2 -translate-x-1/2 z-10 w-full px-4">
                    <span className="px-2.5 py-0.5 bg-[#0c0e14]/5 text-[#0c0e14]/60 text-[6px] font-black uppercase tracking-[0.3em] rounded-full border border-[#0c0e14]/10 block w-fit mx-auto group-hover:transition-colors duration-100">
                       {job.category === 'clinician' ? 'Clinical' : 
                        job.category === 'non_clinician' ? 'Non-Clinical' : 'Specialized'}
                    </span>
                 </div>
-                {/* Main Info Centered */}
-                <div className="flex-1 flex flex-col items-center justify-between relative z-10 w-full mt-7 pb-1 group-hover:translate-y-[-2px] transition-transform duration-100">
+
+                {/* Desktop Main Info */}
+                <div className="hidden sm:flex flex-1 flex flex-col items-center justify-between relative z-10 w-full mt-7 pb-1 group-hover:translate-y-[-2px] transition-transform duration-100">
                   <div className="flex flex-col items-center gap-1">
                     <h3 className="text-[12px] md:text-[13px] font-serif font-black text-[#0c0e14] leading-[1.1] group-hover:transition-colors duration-100">
                       {job.title}
@@ -169,7 +237,7 @@ const JobsPage = () => {
                     </div>
                   </div>
                   
-                  <div className="text-[#0c0e14] bg-[#FFC107] font-serif font-black text-[8px] px-3 py-0.5 rounded-full tracking-tight shadow-md border border-[#FFC107]/20 group-hover:opacity-0 transition-all duration-100">
+                  <div className="text-[#0c0e14] bg-[#FFC107] font-black text-[10px] md:text-[12px] px-4 py-1 rounded-full tracking-tight shadow-md border border-[#FFC107]/20 group-hover:opacity-0 transition-all duration-100">
                     {(() => {
                       const s = (job.salary_range || 'Negotiable').toString();
                       const cleanS = s.replace(/,/g, '');
@@ -182,20 +250,43 @@ const JobsPage = () => {
                   </div>
                 </div>
 
-                {/* Apply Now Hover Action */}
-                <div className="absolute inset-x-0 bottom-3 flex justify-center z-30 opacity-0 group-hover:opacity-100 group-hover:translate-y-[-4px] transition-all duration-100 pointer-events-none group-hover:pointer-events-auto">
-                   <button 
+                {/* Mobile Arrow Icon */}
+                <div className="sm:hidden w-8 h-8 rounded-full border border-slate-100 flex items-center justify-center text-slate-300">
+                   <ChevronLeft size={16} className="rotate-180" />
+                </div>
+
+                {/* Action Overlay (Desktop Only) */}
+                <div className="absolute inset-x-0 bottom-4 hidden sm:flex flex-col gap-2 px-4 z-30 opacity-0 group-hover:opacity-100 group-hover:translate-y-[-4px] transition-all duration-100 pointer-events-none group-hover:pointer-events-auto">
+                  <button 
+                    onClick={(e) => { e.stopPropagation(); setSelectedJob(job); setShowDetails(true); }}
+                    className="w-full bg-[#0c0e14] text-white py-1.5 rounded-full text-[9px] font-black uppercase tracking-[0.2em] shadow-lg border border-white/10 hover:bg-[#FFC107] hover:text-[#0c0e14] transition-all active:scale-95"
+                  >
+                    View Details
+                  </button>
+                  <button 
                     onClick={(e) => { e.stopPropagation(); setSelectedJob(job); setShowApply(true); }}
-                    className="bg-[#0c0e14] text-white px-6 py-1.5 rounded-full text-[8px] font-black uppercase tracking-[0.2em] shadow-2xl border border-white/10 hover:bg-[#FFC107] hover:text-[#0c0e14] transition-all active:scale-95"
-                   >
-                     Apply Now
-                   </button>
+                    className="w-full bg-[#FFC107] text-[#0c0e14] py-1.5 rounded-full text-[9px] font-black uppercase tracking-[0.2em] shadow-lg border border-[#FFC107]/20 hover:bg-white transition-all active:scale-95"
+                  >
+                    Apply Now
+                  </button>
                 </div>
 
                 {/* Subtle Glow Effect on Hover */}
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#FFC107]/5 to-[#FFC107]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
               </motion.div>
             ))}
+          </div>
+        )}
+
+        {/* View More Button for Mobile (Pagination) */}
+        {!loading && jobs.length > visibleCount && (
+          <div className="flex justify-center mt-4 mb-20">
+            <button 
+              onClick={() => setVisibleCount(prev => prev + 10)}
+              className="bg-[#FFC107] text-[#0c0e14] px-12 py-5 rounded-full font-black uppercase tracking-[0.2em] text-xs shadow-2xl shadow-black/50 hover:scale-105 active:scale-95 transition-all"
+            >
+              View More Jobs ({jobs.length - visibleCount} Left)
+            </button>
           </div>
         )}
 
@@ -211,7 +302,8 @@ const JobsPage = () => {
               className="group cursor-pointer flex flex-col items-center gap-3"
             >
               <p className="text-white/90 text-md uppercase tracking-widest font-black">Can't find your specialization?</p>
-              <div className="bg-[#FFC107] border border-white/10 text-md px-10 py-5 rounded-3xl font-black uppercase tracking-[0.2em] shadow-2xl hover:scale-105 transition-all text-[#0c0e14]">
+              <div className="bg-[#FFC107] border border-white/10 text-md px-10 py-6 rounded-3xl font-black uppercase tracking-[0.2em] shadow-2xl hover:scale-105 hover:shadow-black transition-all text-[#0c0e14] flex items-center gap-3">
+                <Upload size={20} />
                 Submit Resume for Future Opportunities
               </div>
             </div>

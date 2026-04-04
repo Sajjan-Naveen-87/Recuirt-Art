@@ -1,10 +1,21 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Heart, ChevronDown, Search, Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 function Navbar({ searchQuery, setSearchQuery, onSearchFocus }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [suggestions, setSuggestions] = useState([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+
+  useEffect(() => {
+    // Fetch a few common roles and locations for suggestions
+    const commonSuggestions = [
+      'Cardiology', 'Neurology', 'Pediatrics', 'Nursing', 
+      'Resident', 'Consultant', 'London', 'Manchester', 'Remote'
+    ];
+    setSuggestions(commonSuggestions);
+  }, []);
 
   return (
     <nav className="bg-[#0c0e14] px-4 md:px-8 py-2 md:py-0 flex items-center justify-between sticky top-0 z-50 shadow-md transition-all duration-300">
@@ -19,19 +30,46 @@ function Navbar({ searchQuery, setSearchQuery, onSearchFocus }) {
 
         {/* Search Bar - Visible on all screens, responsive width */}
         {setSearchQuery && (
-          <div className="flex flex-1 items-center bg-white/10 backdrop-blur-md rounded-full px-4 md:px-6 py-2 md:py-3 border border-white/10 focus-within:border-[#FFC107]/50 transition-all max-w-[12rem] sm:max-w-xs md:max-w-sm lg:max-w-[32rem] shadow-sm ml-auto sm:ml-0">
-            <Search size={18} className="text-slate-400 mr-2 md:mr-3 flex-shrink-0" />
-            <input 
-              type="text" 
-              value={searchQuery}
-              onChange={(e) => {
-                setSearchQuery(e.target.value);
-                if (onSearchFocus) onSearchFocus();
-              }}
-              onFocus={onSearchFocus}
-              placeholder="Search jobs..." 
-              className="bg-transparent border-none outline-none text-xs md:text-base font-semibold text-white placeholder:text-slate-500 w-full"
-            />
+          <div className="relative flex-1 max-w-[12rem] sm:max-w-xs md:max-w-sm lg:max-w-[32rem] ml-auto sm:ml-0">
+            <div className="flex items-center bg-white/10 backdrop-blur-md rounded-full px-4 md:px-6 py-2 md:py-3 border border-white/10 focus-within:border-[#FFC107]/50 transition-all shadow-sm">
+              <Search size={18} className="text-slate-400 mr-2 md:mr-3 flex-shrink-0" />
+              <input 
+                type="text" 
+                value={searchQuery}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value);
+                  setShowSuggestions(true);
+                  if (onSearchFocus) onSearchFocus();
+                }}
+                onFocus={() => {
+                  setShowSuggestions(true);
+                  if (onSearchFocus) onSearchFocus();
+                }}
+                onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+                placeholder="Search jobs..." 
+                className="bg-transparent border-none outline-none text-xs md:text-base font-semibold text-white placeholder:text-slate-500 w-full"
+              />
+            </div>
+
+            {/* Suggestions Dropdown */}
+            {showSuggestions && searchQuery && searchQuery.length > 0 && (
+              <div className="absolute top-full left-0 right-0 mt-2 bg-[#1a1c23] border border-white/10 rounded-2xl shadow-2xl overflow-hidden z-[100]">
+                {suggestions
+                  .filter(s => s.toLowerCase().includes(searchQuery.toLowerCase()))
+                  .map((suggestion, index) => (
+                    <button
+                      key={index}
+                      onClick={() => {
+                        setSearchQuery(suggestion);
+                        setShowSuggestions(false);
+                      }}
+                      className="w-full text-left px-6 py-3 hover:bg-[#FFC107] hover:text-[#0c0e14] text-white text-sm font-bold transition-colors border-b border-white/5 last:border-0"
+                    >
+                      {suggestion}
+                    </button>
+                  ))}
+              </div>
+            )}
           </div>
         )}
       </div>

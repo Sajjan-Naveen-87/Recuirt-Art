@@ -146,6 +146,13 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         null=True,
         help_text="Reference to Firebase Firestore document"
     )
+
+    # Security: Single Session Tracking
+    token_version = models.IntegerField(
+        'Token Version',
+        default=0,
+        help_text="Incremented on login to invalidate previous tokens"
+    )
     
     objects = CustomUserManager()
     

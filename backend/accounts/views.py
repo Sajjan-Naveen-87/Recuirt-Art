@@ -64,7 +64,10 @@ class RegistrationView(APIView):
             user = serializer.save()
 
             # Generate tokens immediately (OTP removed for registration)
+            user.token_version += 1
+            user.save()
             refresh = RefreshToken.for_user(user)
+            refresh['token_version'] = user.token_version
 
             return Response({
                 'message': 'User registered successfully.',
@@ -111,9 +114,11 @@ class OTPVerificationView(APIView):
                     if otp_type == 'registration':
                         user = otp.user
                         user.is_active = True
+                        user.token_version += 1
                         user.save()
                         
                         refresh = RefreshToken.for_user(user)
+                        refresh['token_version'] = user.token_version
 
                         return Response({
                             'message': 'Registration completed successfully.',
@@ -128,11 +133,11 @@ class OTPVerificationView(APIView):
                         user = User.objects.get(mobile=mobile)
                         
                         # Ensure user is active if they verify OTP
-                        if not user.is_active:
-                             user.is_active = True
-                             user.save()
+                        user.token_version += 1
+                        user.save()
                              
                         refresh = RefreshToken.for_user(user)
+                        refresh['token_version'] = user.token_version
 
                         return Response({
                             'message': 'Login successful.',
@@ -272,7 +277,10 @@ class LoginView(APIView):
 
                 if user:
                     if user.is_active:
+                        user.token_version += 1
+                        user.save()
                         refresh = RefreshToken.for_user(user)
+                        refresh['token_version'] = user.token_version
 
                         return Response({
                             'message': 'Login successful.',
@@ -310,7 +318,10 @@ class LoginView(APIView):
                             otp.save()
 
                             user = otp.user
+                            user.token_version += 1
+                            user.save()
                             refresh = RefreshToken.for_user(user)
+                            refresh['token_version'] = user.token_version
 
                             return Response({
                                 'message': 'Login successful.',
@@ -409,11 +420,11 @@ class LoginView(APIView):
                             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
                     
                     # Activate user if not active
-                    if not user.is_active:
-                         user.is_active = True
-                         user.save()
+                    user.token_version += 1
+                    user.save()
                     
                     refresh = RefreshToken.for_user(user)
+                    refresh['token_version'] = user.token_version
                     return Response({
                         'message': 'Login successful.',
                         'user': UserSerializer(user).data,

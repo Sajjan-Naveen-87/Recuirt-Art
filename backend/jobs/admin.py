@@ -44,6 +44,7 @@ class JobApplicationResource(resources.ModelResource):
     expected_salary = fields.Field(attribute='expected_salary', column_name='Expected Salary')
     notice_period = fields.Field(attribute='notice_period', column_name='Notice Period')
     resume_file = fields.Field(attribute='resume_file_name', column_name='Resume File')
+    resume_url = fields.Field(column_name='Resume Link')
     cover_letter = fields.Field(attribute='cover_letter', column_name='Cover Letter')
     responses = fields.Field(column_name='Custom Questionnaire Responses')
 
@@ -53,12 +54,32 @@ class JobApplicationResource(resources.ModelResource):
             'id', 'job_title', 'job_category', 'full_name', 'email', 'mobile',
             'alternative_mobile', 'preferred_job_designation', 'preferred_job_location',
             'total_experience', 'join_after', 'status', 'applied_at', 
-            'expected_salary', 'notice_period', 'resume_file', 'cover_letter', 'responses'
+            'expected_salary', 'notice_period', 'resume_file', 'resume_url', 'cover_letter', 'responses'
         )
         export_order = fields
 
     def dehydrate_applied_at(self, obj):
         return obj.applied_at.strftime('%Y-%m-%d %H:%M:%S') if obj.applied_at else ''
+
+    def dehydrate_resume_url(self, obj):
+        """Provide a clean absolute URL for the resume in Excel."""
+        if not obj.resume:
+            return "No resume"
+        
+        try:
+            resume_url = obj.resume.url
+            from django.conf import settings as django_settings
+            
+            # Use same fallback logic as resume_link for robustness
+            if resume_url.startswith('/media/') and not django_settings.DEBUG:
+                cloud_name = getattr(django_settings, 'CLOUDINARY_STORAGE', {}).get('CLOUD_NAME')
+                if cloud_name:
+                    path = resume_url.replace('/media/', '')
+                    resume_url = f"https://res.cloudinary.com/{cloud_name}/raw/upload/{path}"
+            
+            return resume_url
+        except:
+            return "Link Error"
 
     def dehydrate_responses(self, obj):
         """Concatenate all custom responses into a readable string for Excel."""

@@ -135,8 +135,8 @@ function LatestJobs({ searchQuery }) {
                 alt="Clinical Opportunities" 
                 className="absolute inset-0 w-full h-full object-cover"
               />
-              {/* Dark gradient overlay to make text readable */}
-              <div className="absolute inset-0 bg-gradient-to-r from-[#0c0e14]/40 via-[#0c0e14]/10 to-transparent" />
+              {/* Enhanced dark gradient overlay for better contrast */}
+              <div className="absolute inset-0 bg-gradient-to-r from-[#0c0e14]/80 via-[#0c0e14]/60 to-[#0c0e14]/40" />
               
               {/* Very large subtle background text */}
               <div className="absolute inset-y-0 left-0 flex items-center pl-8 lg:pl-16 opacity-[0.05] pointer-events-none overflow-hidden">
@@ -155,8 +155,8 @@ function LatestJobs({ searchQuery }) {
                 alt="Non-Clinical Opportunities" 
                 className="absolute inset-0 w-full h-full object-cover"
               />
-              {/* Dark gradient overlay to make text readable */}
-              <div className="absolute inset-0 bg-gradient-to-l from-[#0c0e14]/40 via-[#0c0e14]/10 to-transparent" />
+              {/* Enhanced dark gradient overlay for better contrast */}
+              <div className="absolute inset-0 bg-gradient-to-l from-[#0c0e14]/80 via-[#0c0e14]/60 to-[#0c0e14]/40" />
               
               {/* Very large subtle background text */}
               <div className="absolute inset-y-0 right-0 flex items-center pr-8 lg:pr-16 opacity-[0.05] pointer-events-none overflow-hidden">
@@ -167,6 +167,9 @@ function LatestJobs({ searchQuery }) {
             </div>
           </div>
         </div>
+        
+        {/* Global Dark Overaly between BG and Content */}
+        <div className="absolute inset-0 bg-black/60 z-[5] pointer-events-none" />
 
         {/* Content Layer */}
         <div className="relative z-10 w-full h-full flex flex-col p-8 md:p-12 lg:p-20">
@@ -195,7 +198,7 @@ function LatestJobs({ searchQuery }) {
                   {jobs.filter(j => j.category === 'clinician').slice(0, showAllClinical ? undefined : 3).map((job) => (
                     <motion.div 
                       key={job.id}
-                      whileHover={{ y: -5, scale: 1.02 }}
+                      whileHover={{ y: -5, scale: 1.02, boxShadow: "0 0 25px rgba(255, 255, 255, 0.4)" }}
                       onClick={() => { setSelectedJob(job); setIsDetailsModalOpen(true); }}
                       className="relative z-10 aspect-[3/1] sm:aspect-[1.5/1] bg-white p-3 sm:p-4 text-[#0c0e14] rounded-xl sm:rounded-[1.5rem] shadow-xl shadow-black/20 flex flex-row sm:flex-col items-center text-left sm:text-center group cursor-pointer overflow-hidden border border-[#0c0e14]/5 hover:border-[#FFC107]/50 transition-all duration-100 hover:z-50"
                     >
@@ -230,13 +233,7 @@ function LatestJobs({ searchQuery }) {
                       <div className="absolute inset-x-0 bottom-4 hidden sm:flex flex-col gap-2 px-4 z-30 opacity-0 group-hover:opacity-100 group-hover:translate-y-[-4px] transition-all duration-100 pointer-events-none group-hover:pointer-events-auto">
                         <button 
                           onClick={(e) => { e.stopPropagation(); setSelectedJob(job); setIsDetailsModalOpen(true); }}
-                          className="w-full bg-[#0c0e14] text-white py-1.5 rounded-full text-[9px] font-black uppercase tracking-[0.2em] shadow-lg border border-white/10 hover:bg-[#FFC107] hover:text-[#0c0e14] transition-all active:scale-95"
-                        >
-                          View Details
-                        </button>
-                        <button 
-                          onClick={(e) => { e.stopPropagation(); setSelectedJob(job); setIsApplyModalOpen(true); }}
-                          className="w-full bg-[#FFC107] text-[#0c0e14] py-1.5 rounded-full text-[9px] font-black uppercase tracking-[0.2em] shadow-lg border border-[#FFC107]/20 hover:bg-white transition-all active:scale-95"
+                          className="w-full bg-[#FFC107] text-[#0c0e14] py-1.5 rounded-full text-[9px] font-black uppercase tracking-[0.2em] shadow-lg border border-[#FFC107]/20 transition-all active:scale-95"
                         >
                           Apply Now
                         </button>
@@ -273,7 +270,7 @@ function LatestJobs({ searchQuery }) {
                   {jobs.filter(j => j.category !== 'clinician').slice(0, showAllNonClinical ? undefined : 3).map((job) => (
                     <motion.div 
                       key={job.id}
-                      whileHover={{ y: -5, scale: 1.02 }}
+                      whileHover={{ y: -5, scale: 1.02, boxShadow: "0 0 25px rgba(255, 255, 255, 0.4)" }}
                       onClick={() => { setSelectedJob(job); setIsDetailsModalOpen(true); }}
                       className="relative z-10 aspect-[3/1] sm:aspect-[1.5/1] bg-white p-3 sm:p-4 text-[#0c0e14] rounded-xl sm:rounded-[1.5rem] shadow-xl shadow-black/20 flex flex-row sm:flex-col items-center text-left sm:text-center group cursor-pointer overflow-hidden border border-[#0c0e14]/5 hover:border-[#FFC107]/50 transition-all duration-100 hover:z-50"
                     >
@@ -308,13 +305,7 @@ function LatestJobs({ searchQuery }) {
                       <div className="absolute inset-x-0 bottom-4 hidden sm:flex flex-col gap-2 px-4 z-30 opacity-0 group-hover:opacity-100 group-hover:translate-y-[-4px] transition-all duration-100 pointer-events-none group-hover:pointer-events-auto">
                         <button 
                           onClick={(e) => { e.stopPropagation(); setSelectedJob(job); setIsDetailsModalOpen(true); }}
-                          className="w-full bg-[#0c0e14] text-white py-1.5 rounded-full text-[9px] font-black uppercase tracking-[0.2em] shadow-lg border border-white/10 hover:bg-[#FFC107] hover:text-[#0c0e14] transition-all active:scale-95"
-                        >
-                          View Details
-                        </button>
-                        <button 
-                          onClick={(e) => { e.stopPropagation(); setSelectedJob(job); setIsApplyModalOpen(true); }}
-                          className="w-full bg-[#FFC107] text-[#0c0e14] py-1.5 rounded-full text-[9px] font-black uppercase tracking-[0.2em] shadow-lg border border-[#FFC107]/20 hover:bg-white transition-all active:scale-95"
+                          className="w-full bg-[#FFC107] text-[#0c0e14] py-1.5 rounded-full text-[9px] font-black uppercase tracking-[0.2em] shadow-lg border border-[#FFC107]/20 transition-all active:scale-95"
                         >
                           Apply Now
                         </button>

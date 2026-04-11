@@ -2,6 +2,9 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Heart, ChevronDown, Search, Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import VisitorCounter from './VisitorCounter';
+import { jobsService } from '../../services/jobs';
+import { generateJobKeywords } from '../../utils/searchUtils';
 
 function Navbar({ searchQuery, setSearchQuery, onSearchFocus }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -9,29 +12,52 @@ function Navbar({ searchQuery, setSearchQuery, onSearchFocus }) {
   const [showSuggestions, setShowSuggestions] = useState(false);
 
   useEffect(() => {
-    // Fetch a few common roles and locations for suggestions
-    const commonSuggestions = [
-      'Cardiology', 'Neurology', 'Pediatrics', 'Nursing', 
-      'Resident', 'Consultant', 'London', 'Manchester', 'Remote'
-    ];
-    setSuggestions(commonSuggestions);
+    // Fetch jobs to build dynamic suggestions
+    const fetchSuggestions = async () => {
+      try {
+        const data = await jobsService.getJobs({ page_size: 100 }); // Get a good sample for keywords
+        const allJobs = data.results || data || [];
+        const keywords = generateJobKeywords(allJobs);
+        setSuggestions(keywords);
+      } catch (err) {
+        console.error("Failed to build suggestions:", err);
+        // Fallback or empty is fine
+      }
+    };
+    fetchSuggestions();
   }, []);
 
   return (
-    <nav className="bg-[#0c0e14] px-4 md:px-8 py-2 md:py-0 flex items-center justify-between sticky top-0 z-50 shadow-md transition-all duration-300">
-      <div className="flex items-center flex-1 gap-2 md:gap-6 lg:gap-16">
-        <Link 
-          to="/" 
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="w-28 sm:w-32 md:w-48 lg:w-64 h-12 sm:h-16 md:h-20 lg:h-28 overflow-hidden flex-shrink-0 flex items-center hover:opacity-90 transition-opacity cursor-pointer"
-        >
-          <img src="/Logo.png" alt="Recruit Art Logo" className="w-full h-full object-contain object-left" />
-        </Link>
+    <nav className="bg-[#0c0e14] px-4 md:px-8 flex items-center justify-between sticky top-0 z-50 shadow-md transition-all duration-300 h-16 md:h-20 lg:h-24">
+      <div className="flex items-center gap-2 md:gap-3 flex-grow">
+        <div className="flex items-center gap-1 md:gap-2 shrink-0">
+
+
+
+
+          <Link 
+            to="/" 
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            className="w-36 sm:w-48 md:w-56 lg:w-72 h-12 sm:h-16 md:h-20 lg:h-24 overflow-hidden flex-shrink-0 flex items-center hover:opacity-90 transition-opacity cursor-pointer"
+          >
+            <img src="/Logo.png" alt="Recruit Art Logo" className="w-full h-full object-contain object-left" />
+          </Link>
+
+          {/* Visitor Counter next to Logo on md+ screens */}
+          <div className="flex flex-shrink-0 ml-1">
+             <VisitorCounter compact={true} />
+          </div>
+        </div>
+
 
         {/* Search Bar - Visible on all screens, responsive width */}
         {setSearchQuery && (
-          <div className="relative flex-1 max-w-[12rem] sm:max-w-xs md:max-w-sm lg:max-w-[32rem] ml-auto sm:ml-0">
-            <div className="flex items-center bg-white/10 backdrop-blur-md rounded-full px-4 md:px-6 py-2 md:py-3 border border-white/10 focus-within:border-[#FFC107]/50 transition-all shadow-sm">
+          <div className="relative flex-grow max-w-[12rem] sm:max-w-md md:max-w-2xl lg:max-w-4xl xl:max-w-5xl ml-1 sm:ml-2">
+            <div className="flex items-center bg-white/5 backdrop-blur-md rounded-full px-4 py-2 md:py-3 border border-white/10 focus-within:border-[#FFC107]/50 transition-all shadow-sm">
+
+
+
+
               <Search size={18} className="text-slate-400 mr-2 md:mr-3 flex-shrink-0" />
               <input 
                 type="text" 
@@ -63,9 +89,10 @@ function Navbar({ searchQuery, setSearchQuery, onSearchFocus }) {
                         setSearchQuery(suggestion);
                         setShowSuggestions(false);
                       }}
-                      className="w-full text-left px-6 py-3 hover:bg-[#FFC107] hover:text-[#0c0e14] text-white text-sm font-bold transition-colors border-b border-white/5 last:border-0"
+                      className="w-full text-left px-6 py-3.5 hover:bg-[#FFC107] hover:text-[#0c0e14] text-white text-[13px] font-bold transition-all border-b border-white/5 last:border-0 group flex items-center justify-between"
                     >
-                      {suggestion}
+                      <span>{suggestion}</span>
+                      <Search size={12} className="opacity-0 group-hover:opacity-40 transition-opacity" />
                     </button>
                   ))}
               </div>
@@ -75,9 +102,12 @@ function Navbar({ searchQuery, setSearchQuery, onSearchFocus }) {
       </div>
 
       {/* Desktop Links */}
-      <div className="hidden xl:flex items-center gap-2 text-[#0c0e14] font-black text-[14px] h-full py-4 px-4 pr-0">
+      <div className="hidden xl:flex items-center gap-2 text-[#0c0e14] font-black text-[13px] px-4">
+
+
+
         <div className="group relative">
-          <div className="flex items-center gap-1.5 px-6 py-3 rounded-xl bg-[#FFC107] border border-[#FFC107] cursor-pointer hover:scale-105 transition-all duration-300">
+          <div className="flex items-center gap-1.5 px-5 py-3 rounded-xl bg-[#FFC107] border border-[#FFC107] cursor-pointer hover:scale-105 transition-all duration-300">
             About Us <ChevronDown size={14} strokeWidth={3} className="transition-transform group-hover:rotate-180" />
           </div>
           <div className="absolute top-[calc(100%+8px)] left-0 w-48 opacity-0 invisible group-hover:visible group-hover:opacity-100 transition-all duration-200 shadow-2xl border border-white/10 flex flex-col z-50 rounded-xl overflow-hidden bg-[#1a1c23]">
@@ -89,7 +119,7 @@ function Navbar({ searchQuery, setSearchQuery, onSearchFocus }) {
         </div>
 
         <div className="group relative">
-          <div className="flex items-center gap-1.5 px-6 py-3 rounded-xl bg-[#FFC107] border border-[#FFC107] cursor-pointer hover:scale-105 transition-all duration-300">
+          <div className="flex items-center gap-1.5 px-5 py-3 rounded-xl bg-[#FFC107] border border-[#FFC107] cursor-pointer hover:scale-105 transition-all duration-300">
             Employers <ChevronDown size={14} strokeWidth={3} className="transition-transform group-hover:rotate-180" />
           </div>
           <div className="absolute top-[calc(100%+8px)] left-0 w-56 opacity-0 invisible group-hover:visible group-hover:opacity-100 transition-all duration-200 shadow-2xl bg-[#1a1c23] border border-white/10 flex flex-col z-50 rounded-xl overflow-hidden">
@@ -99,7 +129,7 @@ function Navbar({ searchQuery, setSearchQuery, onSearchFocus }) {
         </div>
 
         <div className="group relative">
-          <div className="flex items-center gap-1.5 px-6 py-3 rounded-xl bg-[#FFC107] border border-[#FFC107] cursor-pointer hover:scale-105 transition-all duration-300">
+          <div className="flex items-center gap-1.5 px-5 py-3 rounded-xl bg-[#FFC107] border border-[#FFC107] cursor-pointer hover:scale-105 transition-all duration-300">
             Job Seekers <ChevronDown size={14} strokeWidth={3} className="transition-transform group-hover:rotate-180" />
           </div>
           <div className="absolute top-[calc(100%+8px)] left-0 w-48 opacity-0 invisible group-hover:visible group-hover:opacity-100 transition-all duration-200 shadow-2xl bg-[#1a1c23] border border-white/10 flex flex-col z-50 rounded-xl overflow-hidden">
@@ -114,10 +144,10 @@ function Navbar({ searchQuery, setSearchQuery, onSearchFocus }) {
           </div>
         </div>
 
-        <a href="/#insights" className="flex items-center px-6 py-3 rounded-xl bg-[#FFC107] text-[#0c0e14] border border-[#FFC107] hover:scale-105 transition-all duration-300 text-sm whitespace-nowrap">
+        <a href="/#insights" className="flex items-center px-5 py-3 rounded-xl bg-[#FFC107] text-[#0c0e14] border border-[#FFC107] hover:scale-105 transition-all duration-300 text-[13px] whitespace-nowrap">
           News & Insights
         </a>
-        <a href="/#footer" className="flex items-center px-6 py-3 rounded-xl bg-[#FFC107] text-[#0c0e14] border border-[#FFC107] hover:scale-105 transition-all duration-300 text-sm shrink-0">
+        <a href="/#footer" className="flex items-center px-5 py-3 rounded-xl bg-[#FFC107] text-[#0c0e14] border border-[#FFC107] hover:scale-105 transition-all duration-300 text-[13px] shrink-0">
           Contact
         </a>
       </div>

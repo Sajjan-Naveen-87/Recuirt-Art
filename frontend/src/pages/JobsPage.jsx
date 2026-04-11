@@ -7,6 +7,7 @@ import Navbar from '../components/Landing/Navbar';
 import Footer from '../components/Landing/Footer';
 import JobDetailsModal from '../components/Job/JobDetailsModal';
 import JobApplyModal from '../components/Job/JobApplyModal';
+import { generateJobKeywords } from '../utils/searchUtils';
 
 const JobsPage = () => {
   const [jobs, setJobs] = useState([]);
@@ -18,6 +19,7 @@ const JobsPage = () => {
   const [suggestions, setSuggestions] = useState([]);
   const [showDetails, setShowDetails] = useState(false);
   const [showApply, setShowApply] = useState(false);
+  const [selectedJob, setSelectedJob] = useState(null);
   const [visibleCount, setVisibleCount] = useState(10);
 
   useEffect(() => {
@@ -69,12 +71,11 @@ const JobsPage = () => {
     }
   };
 
-  // Generate suggestions based on unique job titles and locations
+  // Generate suggestions based on all job data
   useEffect(() => {
     if (jobs.length > 0) {
-      const titles = [...new Set(jobs.map(j => j.title))];
-      const locations = [...new Set(jobs.map(j => j.location))];
-      setSuggestions([...titles, ...locations].slice(0, 10));
+      const keywords = generateJobKeywords(jobs);
+      setSuggestions(keywords);
     }
   }, [jobs]);
 
@@ -124,7 +125,7 @@ const JobsPage = () => {
             
             {/* Autocomplete Suggestions */}
             {showSuggestions && searchQuery.length > 1 && (
-              <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-2xl overflow-hidden z-[100] border border-slate-100">
+              <div className="absolute top-full left-0 right-0 mt-4 bg-white rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] overflow-hidden z-[100] border border-slate-200">
                 {suggestions
                   .filter(s => s.toLowerCase().includes(searchQuery.toLowerCase()))
                   .map((suggestion, index) => (
@@ -134,9 +135,10 @@ const JobsPage = () => {
                         setSearchQuery(suggestion);
                         setShowSuggestions(false);
                       }}
-                      className="w-full text-left px-6 py-4 hover:bg-[#FFC107]/10 text-sm font-black text-[#0c0e14] border-b border-slate-50 last:border-0 transition-colors"
+                      className="w-full text-left px-8 py-5 hover:bg-[#FFC107] hover:text-[#0c0e14] text-base font-black text-[#0c0e14] border-b border-slate-100 last:border-0 transition-all flex items-center justify-between group"
                     >
-                      {suggestion}
+                      <span>{suggestion}</span>
+                      <ArrowRight size={18} className="opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all" />
                     </button>
                   ))}
               </div>
@@ -192,7 +194,7 @@ const JobsPage = () => {
             {jobs.slice(0, visibleCount).map((job) => (
               <motion.div 
                 key={job.id}
-                whileHover={{ y: -5, scale: 1.02 }}
+                whileHover={{ y: -5, scale: 1.02, boxShadow: "0 0 25px rgba(255, 255, 255, 0.4)" }}
                 onClick={() => { setSelectedJob(job); setShowDetails(true); }}
                 className="relative z-10 aspect-[3/1] sm:aspect-[1.5/1] bg-white/95 backdrop-blur-xl p-3 sm:p-4 text-[#0c0e14] rounded-xl sm:rounded-[1.5rem] shadow-2xl flex flex-row sm:flex-col items-center text-left sm:text-center group cursor-pointer overflow-hidden border border-[#0c0e14]/5 hover:border-[#FFC107]/50 transition-all duration-100 hover:z-50"
               >
@@ -259,13 +261,7 @@ const JobsPage = () => {
                 <div className="absolute inset-x-0 bottom-4 hidden sm:flex flex-col gap-2 px-4 z-30 opacity-0 group-hover:opacity-100 group-hover:translate-y-[-4px] transition-all duration-100 pointer-events-none group-hover:pointer-events-auto">
                   <button 
                     onClick={(e) => { e.stopPropagation(); setSelectedJob(job); setShowDetails(true); }}
-                    className="w-full bg-[#0c0e14] text-white py-1.5 rounded-full text-[9px] font-black uppercase tracking-[0.2em] shadow-lg border border-white/10 hover:bg-[#FFC107] hover:text-[#0c0e14] transition-all active:scale-95"
-                  >
-                    View Details
-                  </button>
-                  <button 
-                    onClick={(e) => { e.stopPropagation(); setSelectedJob(job); setShowApply(true); }}
-                    className="w-full bg-[#FFC107] text-[#0c0e14] py-1.5 rounded-full text-[9px] font-black uppercase tracking-[0.2em] shadow-lg border border-[#FFC107]/20 hover:bg-white transition-all active:scale-95"
+                    className="w-full bg-[#FFC107] text-[#0c0e14] py-1.5 rounded-full text-[9px] font-black uppercase tracking-[0.2em] shadow-lg border border-[#FFC107]/20 transition-all active:scale-95"
                   >
                     Apply Now
                   </button>

@@ -165,148 +165,156 @@ const JobApplyModal = ({ job, isOpen, onClose, onSuccess }) => {
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="fixed inset-0 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-full md:max-w-5xl md:max-h-[95vh] bg-white md:rounded-[1rem] shadow-2xl overflow-hidden z-[101] flex flex-col border-[3px] border-blue-500"
+            className="fixed inset-0 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-full md:max-w-4xl md:max-h-[92vh] bg-white md:rounded-[2.5rem] shadow-2xl overflow-hidden z-[101] flex flex-col border border-[#0c0e14]/5"
           >
+
             {/* Header */}
-            <div className="px-8 py-6 border-b border-slate-200 flex items-center justify-between flex-shrink-0">
-               <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
-                 Fill your job information for {job.title} 
-                 <span className="flex items-center gap-1 text-slate-500 font-normal text-lg ml-2">
-                   <MapPin size={18} className="text-blue-600" /> {job.location}
-                 </span>
-               </h2>
+            <div className="px-6 py-5 md:px-12 md:py-8 border-b border-slate-100 flex items-center justify-between flex-shrink-0 bg-white sticky top-0 z-20">
+               <div className="flex-1 min-w-0 pr-4">
+                 <h2 className="text-lg md:text-2xl font-serif font-black text-[#0c0e14] leading-tight tracking-tight">
+                   Apply for Position
+                 </h2>
+                 <p className="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">
+                   {job.title} • {job.location}
+                 </p>
+               </div>
                <button
                  onClick={handleClose}
-                 className="text-slate-400 hover:text-slate-900 transition-colors"
+                 className="w-10 h-10 md:w-12 md:h-12 bg-slate-50 rounded-full flex items-center justify-center text-slate-400 hover:text-[#0c0e14] transition-all border border-slate-100 shadow-sm"
                >
-                 <X size={24} />
+                 <X size={20} md:size={24} />
                </button>
             </div>
 
-            {/* Job Summary Banner */}
-            <div className="px-8 py-4 bg-slate-50 border-b border-slate-100 flex flex-wrap items-center gap-6">
+            {/* Quick Summary Bar */}
+            <div className="hidden md:flex px-12 py-3 bg-[#0c0e14] border-b border-white/10 items-center gap-8 overflow-x-auto whitespace-nowrap scroll-hide">
               <div className="flex items-center gap-2">
-                <Briefcase size={16} className="text-blue-600" />
-                <span className="text-xs font-bold uppercase tracking-widest text-slate-700">{job.title}</span>
+                <Briefcase size={14} className="text-[#FFC107]" />
+                <span className="text-[9px] font-black uppercase tracking-widest text-white/70">{job.title}</span>
               </div>
               <div className="flex items-center gap-2">
-                <MapPin size={16} className="text-blue-600" />
-                <span className="text-xs font-bold uppercase tracking-widest text-slate-700">{job.location}</span>
+                <MapPin size={14} className="text-[#FFC107]" />
+                <span className="text-[9px] font-black uppercase tracking-widest text-white/70">{job.location}</span>
               </div>
               <div className="flex items-center gap-2">
-                <IndianRupee size={16} className="text-blue-600" />
-                <span className="text-xs font-bold uppercase tracking-widest text-slate-700">{job.salary_range || 'Negotiable'}</span>
+                <IndianRupee size={14} className="text-[#FFC107]" />
+                <span className="text-[9px] font-black uppercase tracking-widest text-white/70">{job.salary_range || 'Negotiable'}</span>
               </div>
             </div>
 
-            {/* Content */}
-            <div className="flex-1 overflow-y-auto p-8">
+
+            <div className="flex-1 overflow-y-auto px-6 py-8 md:px-12 md:py-12 bg-slate-50/30">
               {success ? (
                 <motion.div
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   className="text-center py-20"
                 >
-                  <div className="w-20 h-20 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-8">
-                    <CheckCircle size={40} className="text-green-500" />
+                  <div className="w-20 h-20 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-8">
+                    <CheckCircle size={40} className="text-emerald-500" />
                   </div>
-                  <h3 className="text-3xl font-bold text-slate-900 mb-4">Application Submitted!</h3>
-                  <p className="text-lg text-slate-500">Your information has been successfully shared with the recruitment team.</p>
+                  <h3 className="text-3xl font-serif font-black text-[#0c0e14] mb-4 tracking-tight">Application Submitted!</h3>
+                  <p className="text-lg text-slate-500 font-medium">Your request has been successfully queued for our recruitment team.</p>
                 </motion.div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <form onSubmit={handleSubmit} className="space-y-8">
                   {error && (
-                    <div className="p-4 bg-red-50 border border-red-100 rounded-lg text-red-600 text-sm flex items-center gap-3">
+                    <div className="p-4 bg-red-50 border border-red-100 rounded-2xl text-red-600 text-sm font-bold flex items-center gap-3">
                       <AlertCircle size={20} />
                       {error}
                     </div>
                   )}
 
                   {/* 3-Column Grid */}
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-6">
-                    {/* Conditional other job fields removed by user */}
-
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-5">
                     {/* Name */}
                     <div className="space-y-1">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 pl-1">Full Name *</label>
                       <input
                         type="text"
                         name="full_name"
                         value={formData.full_name}
                         onChange={handleChange}
-                        className={`w-full border border-slate-300 rounded-md py-2.5 px-4 text-slate-700 placeholder:text-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all ${errors.full_name ? 'border-red-500 bg-red-50' : ''}`}
-                        placeholder="Name *"
+                        className={`w-full border border-slate-200 bg-white rounded-xl py-3 px-4 text-[#0c0e14] placeholder:text-slate-300 focus:ring-2 focus:ring-[#FFC107]/20 focus:border-[#FFC107] outline-none transition-all font-medium ${errors.full_name ? 'border-red-500 bg-red-50' : ''}`}
+                        placeholder="e.g. John Doe"
                       />
                     </div>
 
                     {/* Mobile No */}
                     <div className="space-y-1">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 pl-1">Mobile No *</label>
                       <input
                         type="tel"
                         name="mobile"
                         value={formData.mobile}
                         onChange={handleChange}
-                        className={`w-full border border-slate-300 rounded-md py-2.5 px-4 text-slate-700 placeholder:text-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all ${errors.mobile ? 'border-red-500 bg-red-50' : ''}`}
-                        placeholder="Mobile No *"
+                        className={`w-full border border-slate-200 bg-white rounded-xl py-3 px-4 text-[#0c0e14] placeholder:text-slate-300 focus:ring-2 focus:ring-[#FFC107]/20 focus:border-[#FFC107] outline-none transition-all font-medium ${errors.mobile ? 'border-red-500 bg-red-50' : ''}`}
+                        placeholder="Primary number"
                       />
                     </div>
 
                     {/* Alternative Mobile No */}
                     <div className="space-y-1">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 pl-1">Alternative No.</label>
                       <input
                         type="tel"
                         name="alternative_mobile"
                         value={formData.alternative_mobile}
                         onChange={handleChange}
-                        className="w-full border border-slate-300 rounded-md py-2.5 px-4 text-slate-700 placeholder:text-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
-                        placeholder="Alternative Mobile No."
+                        className="w-full border border-slate-200 bg-white rounded-xl py-3 px-4 text-[#0c0e14] placeholder:text-slate-300 focus:ring-2 focus:ring-[#FFC107]/20 focus:border-[#FFC107] outline-none transition-all font-medium"
+                        placeholder="Secondary number"
                       />
                     </div>
 
                     {/* Email ID */}
                     <div className="space-y-1">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 pl-1">Email ID *</label>
                       <input
                         type="email"
                         name="email"
                         value={formData.email}
                         onChange={handleChange}
-                        className={`w-full border border-slate-300 rounded-md py-2.5 px-4 text-slate-700 placeholder:text-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all ${errors.email ? 'border-red-500 bg-red-50' : ''}`}
-                        placeholder="Email ID *"
+                        className={`w-full border border-slate-200 bg-white rounded-xl py-3 px-4 text-[#0c0e14] placeholder:text-slate-300 focus:ring-2 focus:ring-[#FFC107]/20 focus:border-[#FFC107] outline-none transition-all font-medium ${errors.email ? 'border-red-500 bg-red-50' : ''}`}
+                        placeholder="Email for correspondence"
                       />
                     </div>
 
                     {/* Job Designation */}
                     <div className="space-y-1">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 pl-1">Current Designation *</label>
                       <input
                         type="text"
                         name="preferred_job_designation"
                         value={formData.preferred_job_designation}
                         onChange={handleChange}
-                        className={`w-full border border-slate-300 rounded-md py-2.5 px-4 text-slate-700 placeholder:text-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all ${errors.preferred_job_designation ? 'border-red-500 bg-red-50' : ''}`}
-                        placeholder="Preferred Job Designation *"
+                        className={`w-full border border-slate-200 bg-white rounded-xl py-3 px-4 text-[#0c0e14] placeholder:text-slate-300 focus:ring-2 focus:ring-[#FFC107]/20 focus:border-[#FFC107] outline-none transition-all font-medium ${errors.preferred_job_designation ? 'border-red-500 bg-red-50' : ''}`}
+                        placeholder="e.g. Senior Staff Nurse"
                       />
                     </div>
 
                     {/* Job Location */}
                     <div className="space-y-1">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 pl-1">Current Location *</label>
                       <input
                         type="text"
                         name="preferred_job_location"
                         value={formData.preferred_job_location}
                         onChange={handleChange}
-                        className={`w-full border border-slate-300 rounded-md py-2.5 px-4 text-slate-700 placeholder:text-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all ${errors.preferred_job_location ? 'border-red-500 bg-red-50' : ''}`}
-                        placeholder="Preferred Job Location *"
+                        className={`w-full border border-slate-200 bg-white rounded-xl py-3 px-4 text-[#0c0e14] placeholder:text-slate-300 focus:ring-2 focus:ring-[#FFC107]/20 focus:border-[#FFC107] outline-none transition-all font-medium ${errors.preferred_job_location ? 'border-red-500 bg-red-50' : ''}`}
+                        placeholder="City, State"
                       />
                     </div>
 
                     {/* Expected Salary */}
                     <div className="space-y-1">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 pl-1">Current Salary (₹) *</label>
                       <select
                         name="expected_salary"
                         value={formData.expected_salary}
                         onChange={handleChange}
-                        className={`w-full border border-slate-300 rounded-md py-2.5 px-4 text-slate-700 bg-white placeholder:text-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all ${errors.expected_salary ? 'border-red-500 bg-red-50' : ''}`}
+                        className={`w-full border border-slate-200 bg-white rounded-xl py-3.5 px-4 text-[#0c0e14] appearance-none focus:ring-2 focus:ring-[#FFC107]/20 focus:border-[#FFC107] outline-none transition-all font-medium ${errors.expected_salary ? 'border-red-500 bg-red-50' : ''}`}
                       >
-                        <option value="" disabled>Current Salary per Month (₹)*</option>
+                        <option value="" disabled>Select Range</option>
                         <option value="10,000 - 30,000">10,000 - 30,000</option>
                         <option value="30,000 - 50,000">30,000 - 50,000</option>
                         <option value="50,000 - 75,000">50,000 - 75,000</option>
@@ -322,25 +330,27 @@ const JobApplyModal = ({ job, isOpen, onClose, onSuccess }) => {
 
                     {/* Join After */}
                     <div className="space-y-1">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 pl-1">Notice Period *</label>
                       <input
                         type="text"
                         name="join_after"
                         value={formData.join_after}
                         onChange={handleChange}
-                        className={`w-full border border-slate-300 rounded-md py-2.5 px-4 text-slate-700 placeholder:text-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all ${errors.join_after ? 'border-red-500 bg-red-50' : ''}`}
-                        placeholder="Available to join after (Days or Month)"
+                        className={`w-full border border-slate-200 bg-white rounded-xl py-3 px-4 text-[#0c0e14] placeholder:text-slate-300 focus:ring-2 focus:ring-[#FFC107]/20 focus:border-[#FFC107] outline-none transition-all font-medium ${errors.join_after ? 'border-red-500 bg-red-50' : ''}`}
+                        placeholder="e.g. 30 Days"
                       />
                     </div>
 
                     {/* Total Experience */}
                     <div className="space-y-1">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 pl-1">Total Experience *</label>
                       <select
                         name="total_experience"
                         value={formData.total_experience}
                         onChange={handleChange}
-                        className={`w-full border border-slate-300 rounded-md py-2.5 px-4 text-slate-700 bg-white placeholder:text-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all ${errors.total_experience ? 'border-red-500 bg-red-50' : ''}`}
+                        className={`w-full border border-slate-200 bg-white rounded-xl py-3.5 px-4 text-[#0c0e14] appearance-none focus:ring-2 focus:ring-[#FFC107]/20 focus:border-[#FFC107] outline-none transition-all font-medium ${errors.total_experience ? 'border-red-500 bg-red-50' : ''}`}
                       >
-                        <option value="" disabled>Total Work Experience</option>
+                        <option value="" disabled>Select Level</option>
                         <option value="Fresher">Fresher</option>
                         <option value="Internship only">Internship only</option>
                         <option value="1 - 3 Years">1 - 3 Years</option>
@@ -353,23 +363,23 @@ const JobApplyModal = ({ job, isOpen, onClose, onSuccess }) => {
                   </div>
 
                   {/* Message (Cover Letter) */}
-                  <div className="space-y-1 pt-4">
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 pl-1">Quick Message</label>
                     <textarea
                       name="cover_letter"
                       value={formData.cover_letter}
                       onChange={handleChange}
-                      rows="4"
-                      className="w-full border border-slate-300 rounded-md py-3 px-4 text-slate-700 placeholder:text-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all resize-none"
-                      placeholder="Your message (Max 200 Words)"
+                      rows="3"
+                      className="w-full border border-slate-200 bg-white rounded-xl py-3 px-4 text-[#0c0e14] placeholder:text-slate-300 focus:ring-2 focus:ring-[#FFC107]/20 focus:border-[#FFC107] outline-none transition-all resize-none font-medium"
+                      placeholder="Tell us something about your expertise (Max 200 Words)"
                     />
                   </div>
 
-                  {/* Footer Flow */}
-                  <div className="flex flex-col md:flex-row md:items-center justify-between pt-6 gap-6">
-                    {/* Resume Upload */}
-                    <div className="flex flex-col gap-2">
-                       <p className="text-[12px] text-slate-500">Max File Size: 2 MB, File type: jpg, jpeg, png, gif, pdf</p>
-                       <div className="flex items-center gap-2">
+                  {/* Upload and Consent Section */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4 border-t border-slate-100">
+                    <div className="space-y-3">
+                       <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Upload Updated CV *</label>
+                       <div className="relative group">
                           <input
                             type="file"
                             id="resume-upload"
@@ -380,39 +390,55 @@ const JobApplyModal = ({ job, isOpen, onClose, onSuccess }) => {
                           />
                           <label 
                             htmlFor="resume-upload"
-                            className={`flex items-center gap-2 px-4 py-2 border rounded cursor-pointer hover:bg-slate-50 transition-colors ${errors.resume ? 'border-red-500 bg-red-50' : 'border-slate-300'}`}
+                            className={`flex items-center gap-4 px-5 py-4 bg-white border-2 border-dashed rounded-2xl cursor-pointer group-hover:bg-slate-50 transition-all ${errors.resume ? 'border-red-400' : 'border-slate-200 group-hover:border-[#FFC107]/50'}`}
                           >
-                             <span className="bg-slate-100 px-3 py-1 border border-slate-300 rounded text-sm text-slate-700">Choose File</span>
-                             <span className="text-sm text-slate-500 truncate max-w-[150px]">
-                               {formData.resume ? formData.resume.name : 'No file chosen'}
-                             </span>
+                             <div className="w-10 h-10 bg-[#FFC107]/10 text-[#FFC107] rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                                <Upload size={20} />
+                             </div>
+                             <div className="flex-1 min-w-0">
+                               <p className="text-xs font-black text-[#0c0e14] truncate">
+                                 {formData.resume ? formData.resume.name : 'Choose your file'}
+                               </p>
+                               <p className="text-[10px] text-slate-400 font-bold">Max 2MB • PDF, DOC, JPG</p>
+                             </div>
                           </label>
                        </div>
                     </div>
 
-                    {/* Privacy Policy */}
-                    <div className="flex items-center gap-3">
-                       <input
-                         type="checkbox"
-                         name="agree_to_policy"
-                         id="agree_to_policy"
-                         checked={formData.agree_to_policy}
-                         onChange={handleChange}
-                         className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
-                       />
-                       <label htmlFor="agree_to_policy" className="text-sm text-slate-600">
-                         By submitting this form, I agree to Inspire's One <a href="/privacy-policy" className="underline decoration-slate-400 underline-offset-4">privacy policy</a>.
-                       </label>
-                    </div>
+                    <div className="flex flex-col justify-end space-y-6">
+                      <div className="flex items-start gap-3 pl-1">
+                         <div className="relative flex items-center mt-1">
+                           <input
+                             type="checkbox"
+                             name="agree_to_policy"
+                             id="agree_to_policy"
+                             checked={formData.agree_to_policy}
+                             onChange={handleChange}
+                             className="w-4 h-4 rounded border-slate-300 text-[#0c0e14] focus:ring-[#FFC107]"
+                           />
+                         </div>
+                         <label htmlFor="agree_to_policy" className="text-[11px] leading-relaxed text-slate-500 font-medium">
+                           I confirm that the information provided is accurate and I agree to the <a href="/privacy-policy" className="text-[#0c0e14] font-black underline decoration-[#FFC107] underline-offset-4">Privacy Policy</a>.
+                         </label>
+                      </div>
 
-                    {/* Action Button */}
-                    <button
-                      onClick={handleSubmit}
-                      disabled={loading}
-                      className="bg-blue-600 text-white px-10 py-3 rounded-full font-bold text-lg shadow-lg hover:bg-blue-700 transition-all disabled:opacity-70 disabled:cursor-not-allowed"
-                    >
-                      {loading ? 'Submitting...' : 'Submit'}
-                    </button>
+                      <button
+                        onClick={handleSubmit}
+                        disabled={loading}
+                        className="w-full bg-[#0c0e14] text-white py-4 md:py-5 rounded-2xl font-black uppercase tracking-[0.2em] text-[11px] shadow-2xl hover:bg-[#0c0e14]/90 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+                      >
+                        {loading ? (
+                          <>
+                            <Loader2 size={16} className="animate-spin" />
+                            Processing...
+                          </>
+                        ) : (
+                          <>
+                            Submit Application <ArrowRight size={16} />
+                          </>
+                        )}
+                      </button>
+                    </div>
                   </div>
                 </form>
               )}

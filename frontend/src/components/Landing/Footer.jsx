@@ -73,8 +73,15 @@ function Footer() {
       {/* Bottom Bar */}
       <div className="max-w-7xl mx-auto mt-10 md:mt-12 flex flex-col md:flex-row justify-between items-center gap-8 md:gap-6 text-slate-500 text-sm font-medium">
         
-        {/* Social Icons */}
-        <div className="flex gap-1 md:gap-2">
+        <div className="flex flex-col items-center gap-4">
+          {/* Mobile Visitor Counter - Only visible on small screens */}
+          <div className="block lg:hidden">
+            <VisitorCounter compact={true} />
+          </div>
+
+          {/* Social Icons */}
+          <div className="flex gap-1 md:gap-2">
+
           <a href="https://www.facebook.com/people/Recruit-Art-Hiring-Experts/61585426577974/?ref=1" className="w-12 h-12 flex items-center justify-center hover:scale-110 transition-all" target="_blank">
             <img src="/Facebook.png" alt="Facebook" className="w-10 h-10 object-contain" />
           </a>
@@ -84,6 +91,7 @@ function Footer() {
           <a href="https://www.instagram.com/recruitart_hiring/" className="w-12 h-12 flex items-center justify-center hover:scale-110 transition-all" target="_blank">
             <img src="/Instagram.png" alt="Instagram" className="w-10 h-10 object-contain" />
           </a>
+          </div>
         </div>
 
         <div className="flex flex-col sm:flex-row gap-4 sm:gap-12 items-center">
@@ -92,7 +100,6 @@ function Footer() {
             <span className="hidden sm:inline opacity-20">|</span>
             <Link to="/privacy" className="hover:text-[#FFC107] transition-colors">Privacy policy</Link>
           </div>
-          <VisitorCounter />
         </div>
 
       </div>

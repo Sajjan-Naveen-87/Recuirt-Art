@@ -44,6 +44,7 @@
   body {
     @apply bg-[#f8f9fa] text-[#0c0e14] antialiased;
     font-family: var(--font-sans);
+    zoom: 90%;
   }
 
   h1,

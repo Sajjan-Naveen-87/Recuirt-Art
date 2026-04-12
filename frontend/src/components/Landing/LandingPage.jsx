@@ -8,7 +8,6 @@ import TeamSection from './TeamSection';
 import LatestJobs from './LatestJobs';
 import NewsSection from './NewsSection';
 import Testimonials from './Testimonials';
-import InsightsSection from './InsightsSection';
 import ScrollNav from './ScrollNav';
 import ContactSection from './ContactSection';
 
@@ -38,7 +37,6 @@ function LandingPage() {
         <Services />
         <LatestJobs searchQuery={searchQuery} />
         <NewsSection />
-        <InsightsSection />
         <ContactSection />
       </main>
 

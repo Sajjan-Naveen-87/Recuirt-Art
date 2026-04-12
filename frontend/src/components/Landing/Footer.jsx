@@ -37,6 +37,7 @@ function Footer() {
               <a href="/#portfolio" className="hover:text-[#FFC107] transition-colors text-sm md:text-base">Impact Portal</a>
               <a href="/#team" className="hover:text-[#FFC107] transition-colors text-sm md:text-base">Our Team</a>
               <a href="/#testimonials" className="hover:text-[#FFC107] transition-colors text-sm md:text-base">Testimonials</a>
+              <Link to="/news" className="hover:text-[#FFC107] transition-colors text-sm md:text-base">News & Updates</Link>
             </div>
           </div>
 

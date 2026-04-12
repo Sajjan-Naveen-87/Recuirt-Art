@@ -144,9 +144,9 @@ function Navbar({ searchQuery, setSearchQuery, onSearchFocus }) {
           </div>
         </div>
 
-        <a href="/#insights" className="flex items-center px-5 py-3 rounded-xl bg-[#FFC107] text-[#0c0e14] border border-[#FFC107] hover:scale-105 transition-all duration-300 text-[13px] whitespace-nowrap">
-          News & Insights
-        </a>
+        <Link to="/news" className="flex items-center px-5 py-3 rounded-xl bg-[#FFC107] text-[#0c0e14] border border-[#FFC107] hover:scale-105 transition-all duration-300 text-[13px] whitespace-nowrap">
+          News & Updates
+        </Link>
         <a href="/#footer" className="flex items-center px-5 py-3 rounded-xl bg-[#FFC107] text-[#0c0e14] border border-[#FFC107] hover:scale-105 transition-all duration-300 text-[13px] shrink-0">
           Contact
         </a>
@@ -218,7 +218,7 @@ function Navbar({ searchQuery, setSearchQuery, onSearchFocus }) {
                   <a href="/#jobs" onClick={() => setIsMobileMenuOpen(false)} className="px-6 py-4 rounded-xl bg-[#FFC107] border border-[#FFC107] hover:scale-105 transition-all">Jobs</a>
                   <a href="/#portfolio" onClick={() => setIsMobileMenuOpen(false)} className="px-6 py-4 rounded-xl bg-[#FFC107] border border-[#FFC107] hover:scale-105 transition-all">Portfolio</a>
                   <a href="/#testimonials" onClick={() => setIsMobileMenuOpen(false)} className="px-6 py-4 rounded-xl bg-[#FFC107] border border-[#FFC107] hover:scale-105 transition-all">Testimonials</a>
-                  <a href="/#insights" onClick={() => setIsMobileMenuOpen(false)} className="px-6 py-4 rounded-xl bg-[#FFC107] border border-[#FFC107] hover:scale-105 transition-all">News & Insights</a>
+                  <Link to="/news" onClick={() => setIsMobileMenuOpen(false)} className="px-6 py-4 rounded-xl bg-[#FFC107] border border-[#FFC107] hover:scale-105 transition-all">News & Updates</Link>
                   <a href="/#submit-resume" 
                     onClick={() => {
                       setIsMobileMenuOpen(false);

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, Newspaper, Calendar, ExternalLink } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { contentService } from '../../services/content';
 
 const NewsSection = () => {
@@ -34,7 +35,7 @@ const NewsSection = () => {
                             className="flex items-center gap-3 text-[#FFC107] mb-4"
                         >
                             <Newspaper size={20} />
-                            <span className="text-xs font-black uppercase tracking-[0.4em]">Updates</span>
+                            <span className="text-xs font-black uppercase tracking-[0.4em]">Insights</span>
                         </motion.div>
                         <motion.h2 
                             initial={{ opacity: 0, y: 20 }}
@@ -42,13 +43,13 @@ const NewsSection = () => {
                             transition={{ delay: 0.1 }}
                             className="text-4xl md:text-6xl font-serif font-black text-white tracking-tight"
                         >
-                            Latest <span className="text-[#FFC107]">News</span> & Updates.
+                            Latest <span className="text-[#FFC107]">News</span> & Updates
                         </motion.h2>
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {news.map((item, index) => (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+                    {news.slice(0, 3).map((item, index) => (
                         <motion.div
                             key={item.id}
                             initial={{ opacity: 0, y: 30 }}
@@ -102,6 +103,18 @@ const NewsSection = () => {
                         </motion.div>
                     ))}
                 </div>
+
+                {news.length > 3 && (
+                    <div className="flex justify-center pt-8">
+                        <Link 
+                            to="/news" 
+                            className="group relative px-12 py-5 bg-[#FFC107] text-[#0c0e14] rounded-full font-black uppercase tracking-[0.2em] text-[10px] shadow-2xl hover:scale-105 transition-all duration-300 flex items-center gap-3"
+                        >
+                            View All News & Updates
+                            <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                        </Link>
+                    </div>
+                )}
             </div>
         </section>
     );

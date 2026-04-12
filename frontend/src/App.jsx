@@ -3,6 +3,7 @@ import LandingPage from './components/Landing/LandingPage';
 import JobsPage from './pages/JobsPage';
 import Portfolio from './pages/Portfolio';
 import Testimonials from './pages/Testimonials';
+import NewsPage from './pages/NewsPage';
 import { useEffect } from 'react';
 
 const AdminRedirect = () => {
@@ -21,6 +22,7 @@ function App() {
         <Route path="/testimonials" element={<Testimonials />} />
         <Route path="/" element={<LandingPage />} />
         <Route path="/jobs" element={<JobsPage />} />
+        <Route path="/news" element={<NewsPage />} />
         <Route path="/ra-admin" element={<AdminRedirect />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

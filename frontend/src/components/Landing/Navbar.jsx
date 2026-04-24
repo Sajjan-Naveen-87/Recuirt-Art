@@ -50,8 +50,8 @@ function Navbar({ searchQuery, setSearchQuery, onSearchFocus }) {
               rel="noopener noreferrer"
               className="group flex items-center gap-1.5 sm:gap-2 bg-[#25D366]/10 hover:bg-[#25D366]/20 px-2 sm:px-4 py-1.5 sm:py-2 rounded-full border border-[#25D366]/20 hover:border-[#25D366]/50 transition-all duration-300 shadow-sm"
             >
-              <div className="w-6 h-6 sm:w-7 sm:h-7 md:w-10 md:h-10 rounded-full bg-[#25D366] flex items-center justify-center group-hover:scale-110 transition-transform flex-shrink-0">
-                <MessageCircle size={12} className="text-white fill-current sm:size-[14px] md:size-[18px]" />
+              <div className="w-6 h-6 sm:w-7 sm:h-7 md:w-10 md:h-10 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform flex-shrink-0">
+                <img src="/Whatsapp-Logo.png" alt="WhatsApp" className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 object-contain" />
               </div>
               <div className="flex flex-col">
                 <span className="hidden xs:block text-[6px] sm:text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] text-[#25D366] leading-none mb-0.5">Quick Connect</span>
@@ -237,7 +237,7 @@ function Navbar({ searchQuery, setSearchQuery, onSearchFocus }) {
                     className="px-6 py-4 rounded-xl bg-[#25D366]/10 text-[#25D366] border border-[#25D366]/30 flex items-center justify-between group"
                   >
                     <span className="text-lg font-bold">WhatsApp Resume</span>
-                    <MessageCircle size={20} className="fill-[#25D366]" />
+                    <img src="/Whatsapp-Logo.png" alt="WhatsApp Logo" className="w-6 h-6 object-contain" />
                   </a>
 
                   <a href="/#about-us" onClick={() => setIsMobileMenuOpen(false)} className="px-6 py-4 rounded-xl bg-[#FFC107] border border-[#FFC107] hover:scale-105 transition-all">About</a>

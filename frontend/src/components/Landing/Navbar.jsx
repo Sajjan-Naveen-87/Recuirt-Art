@@ -54,8 +54,7 @@ function Navbar({ searchQuery, setSearchQuery, onSearchFocus }) {
                 <img src="/Whatsapp-Logo.png" alt="WhatsApp" className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 object-contain" />
               </div>
               <div className="flex flex-col">
-                <span className="hidden sm:block text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] text-[#25D366] leading-none mb-0.5">Quick Connect</span>
-                <span className="text-white font-black text-[10px] xs:text-[11px] sm:text-[12px] md:text-14px uppercase tracking-widest group-hover:text-[#25D366] transition-colors whitespace-nowrap">
+                <span className="text-white font-medium text-[10px] xs:text-[11px] sm:text-[12px] md:text-14px tracking-widest group-hover:text-[#25D366] transition-colors whitespace-nowrap">
                   WhatsApp CV
                 </span>
               </div>
@@ -228,17 +227,6 @@ function Navbar({ searchQuery, setSearchQuery, onSearchFocus }) {
                 <div className="flex flex-col gap-3 text-xl font-serif font-black text-[#0c0e14]">
                   <button onClick={() => { window.scrollTo({ top: 0, behavior: 'smooth' }); setIsMobileMenuOpen(false); }} className="px-6 py-4 rounded-xl bg-[#FFC107] border border-[#FFC107] hover:scale-105 transition-all text-left">Home</button>
                   
-                  {/* Added WhatsApp Resume in mobile menu */}
-                  <a 
-                    href="https://wa.me/917668507705" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="px-6 py-4 rounded-xl bg-[#25D366]/10 text-[#25D366] border border-[#25D366]/30 flex items-center justify-between group"
-                  >
-                    <span className="text-lg font-bold">WhatsApp Resume</span>
-                    <img src="/Whatsapp-Logo.png" alt="WhatsApp Logo" className="w-6 h-6 object-contain" />
-                  </a>
 
                   <a href="/#about-us" onClick={() => setIsMobileMenuOpen(false)} className="px-6 py-4 rounded-xl bg-[#FFC107] border border-[#FFC107] hover:scale-105 transition-all">About</a>
                   <a href="/#services" onClick={() => setIsMobileMenuOpen(false)} className="px-6 py-4 rounded-xl bg-[#FFC107] border border-[#FFC107] hover:scale-105 transition-all">Services</a>

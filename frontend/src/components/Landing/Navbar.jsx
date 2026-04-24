@@ -55,8 +55,8 @@ function Navbar({ searchQuery, setSearchQuery, onSearchFocus }) {
               </div>
               <div className="flex flex-col">
                 <span className="hidden xs:block text-[6px] sm:text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] text-[#25D366] leading-none mb-0.5">Quick Connect</span>
-                <span className="text-white font-black text-[8px] sm:text-[10px] md:text-14px uppercase tracking-widest group-hover:text-[#25D366] transition-colors whitespace-nowrap">
-                  WhatsApp <span className="hidden sm:inline">Resume</span>
+                <span className="text-white font-black text-[7px] xs:text-[8px] sm:text-[10px] md:text-14px uppercase tracking-widest group-hover:text-[#25D366] transition-colors whitespace-nowrap">
+                  WhatsApp Resume
                 </span>
               </div>
             </a>

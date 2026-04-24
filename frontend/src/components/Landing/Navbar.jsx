@@ -37,26 +37,26 @@ function Navbar({ searchQuery, setSearchQuery, onSearchFocus }) {
           <Link 
             to="/" 
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="w-28 xs:w-32 sm:w-48 md:w-56 lg:w-72 h-10 sm:h-16 md:h-20 lg:h-24 overflow-hidden flex-shrink-0 flex items-center hover:opacity-90 transition-opacity cursor-pointer"
+            className="w-24 xs:w-28 sm:w-48 md:w-56 lg:w-72 h-8 sm:h-16 md:h-20 lg:h-24 overflow-hidden flex-shrink-0 flex items-center hover:opacity-90 transition-opacity cursor-pointer"
           >
             <img src="/Logo.png" alt="Recruit Art Logo" className="w-full h-full object-contain object-left" />
           </Link>
 
-          {/* WhatsApp Link - Visible on all screens, responsive size */}
+          {/* WhatsApp Link - Visible on all screens, optimized for clarity */}
           <div className="flex items-center ml-0.5 sm:ml-1 md:ml-4 border-l border-white/10 pl-1.5 sm:pl-2 md:pl-6 mr-0.5 sm:mr-1">
             <a 
               href="https://wa.me/917668507705" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="group flex items-center gap-1.5 sm:gap-2 bg-[#25D366]/10 hover:bg-[#25D366]/20 px-2 sm:px-4 py-1.5 sm:py-2 rounded-full border border-[#25D366]/20 hover:border-[#25D366]/50 transition-all duration-300 shadow-sm"
+              className="group flex items-center gap-1 sm:gap-2 bg-[#25D366]/10 hover:bg-[#25D366]/20 px-2 sm:px-4 py-1.5 sm:py-2.5 rounded-full border border-[#25D366]/20 hover:border-[#25D366]/50 transition-all duration-300 shadow-lg shadow-[#25D366]/5"
             >
-              <div className="w-6 h-6 sm:w-7 sm:h-7 md:w-10 md:h-10 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform flex-shrink-0">
+              <div className="w-6 h-6 sm:w-7 sm:h-7 md:w-10 md:h-10 rounded-full bg-[#25D366]/20 flex items-center justify-center group-hover:scale-110 transition-transform flex-shrink-0">
                 <img src="/Whatsapp-Logo.png" alt="WhatsApp" className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 object-contain" />
               </div>
               <div className="flex flex-col">
-                <span className="hidden xs:block text-[6px] sm:text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] text-[#25D366] leading-none mb-0.5">Quick Connect</span>
-                <span className="text-white font-black text-[7px] xs:text-[8px] sm:text-[10px] md:text-14px uppercase tracking-widest group-hover:text-[#25D366] transition-colors whitespace-nowrap">
-                  WhatsApp Resume
+                <span className="hidden sm:block text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] text-[#25D366] leading-none mb-0.5">Quick Connect</span>
+                <span className="text-white font-black text-[10px] xs:text-[11px] sm:text-[12px] md:text-14px uppercase tracking-widest group-hover:text-[#25D366] transition-colors whitespace-nowrap">
+                  WhatsApp CV
                 </span>
               </div>
             </a>

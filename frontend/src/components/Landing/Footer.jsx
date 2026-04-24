@@ -13,6 +13,9 @@ function Footer() {
             <a href="mailto:admin@recruitart.in" className="block text-sm md:text-base font-medium hover:text-[#FFC107] transition-colors">
               admin@recruitart.in
             </a>
+            <a href="tel:+917668507705" className="block text-sm md:text-base font-medium hover:text-[#FFC107] transition-colors">
+              +91 7668507705
+            </a>
             <p className="text-sm md:text-base leading-relaxed italic">
               Plot No. 40, Nagla Enclave Part 1, NIIT, Faridabad, Haryana 121004
             </p>

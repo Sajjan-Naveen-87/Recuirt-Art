@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Heart, ChevronDown, Search, Menu, X, MessageCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import VisitorCounter from './VisitorCounter';
 import { jobsService } from '../../services/jobs';
 import { generateJobKeywords } from '../../utils/searchUtils';
 
@@ -38,34 +37,29 @@ function Navbar({ searchQuery, setSearchQuery, onSearchFocus }) {
           <Link 
             to="/" 
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="w-36 sm:w-48 md:w-56 lg:w-72 h-12 sm:h-16 md:h-20 lg:h-24 overflow-hidden flex-shrink-0 flex items-center hover:opacity-90 transition-opacity cursor-pointer"
+            className="w-28 xs:w-32 sm:w-48 md:w-56 lg:w-72 h-10 sm:h-16 md:h-20 lg:h-24 overflow-hidden flex-shrink-0 flex items-center hover:opacity-90 transition-opacity cursor-pointer"
           >
             <img src="/Logo.png" alt="Recruit Art Logo" className="w-full h-full object-contain object-left" />
           </Link>
 
-          {/* WhatsApp Link - Visible on md+ screens */}
-          <div className="hidden sm:flex items-center ml-1 md:ml-4 border-l border-white/10 pl-2 md:pl-6 mr-1">
+          {/* WhatsApp Link - Visible on all screens, responsive size */}
+          <div className="flex items-center ml-0.5 sm:ml-1 md:ml-4 border-l border-white/10 pl-1.5 sm:pl-2 md:pl-6 mr-0.5 sm:mr-1">
             <a 
               href="https://wa.me/917668507705" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="group flex items-center gap-2 md:gap-3 bg-white/5 hover:bg-[#FFC107]/10 px-3 md:px-4 py-2 rounded-full border border-white/10 hover:border-[#FFC107]/50 transition-all duration-300 shadow-sm"
+              className="group flex items-center gap-1.5 sm:gap-2 bg-[#25D366]/10 hover:bg-[#25D366]/20 px-2 sm:px-4 py-1.5 sm:py-2 rounded-full border border-[#25D366]/20 hover:border-[#25D366]/50 transition-all duration-300 shadow-sm"
             >
-              <div className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-[#FFC107] flex items-center justify-center group-hover:scale-110 transition-transform flex-shrink-0">
-                <MessageCircle size={14} className="text-[#0c0e14] fill-current" />
+              <div className="w-6 h-6 sm:w-7 sm:h-7 md:w-10 md:h-10 rounded-full bg-[#25D366] flex items-center justify-center group-hover:scale-110 transition-transform flex-shrink-0">
+                <MessageCircle size={12} className="text-white fill-current sm:size-[14px] md:size-[18px]" />
               </div>
               <div className="flex flex-col">
-                <span className="text-[7px] md:text-[9px] font-black uppercase tracking-[0.2em] text-[#FFC107] leading-none mb-0.5">Quick Connect</span>
-                <span className="text-white font-black text-[9px] md:text-[11px] uppercase tracking-wider group-hover:text-[#FFC107] transition-colors whitespace-nowrap">
-                  WhatsApp Resume
+                <span className="hidden xs:block text-[6px] sm:text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] text-[#25D366] leading-none mb-0.5">Quick Connect</span>
+                <span className="text-white font-black text-[8px] sm:text-[10px] md:text-14px uppercase tracking-widest group-hover:text-[#25D366] transition-colors whitespace-nowrap">
+                  WhatsApp <span className="hidden sm:inline">Resume</span>
                 </span>
               </div>
             </a>
-          </div>
-
-          {/* Visitor Counter next to Logo on md+ screens */}
-          <div className="flex flex-shrink-0 ml-1">
-             <VisitorCounter compact={true} />
           </div>
         </div>
 
@@ -240,10 +234,10 @@ function Navbar({ searchQuery, setSearchQuery, onSearchFocus }) {
                     target="_blank" 
                     rel="noopener noreferrer"
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="px-6 py-4 rounded-xl bg-white/5 text-[#FFC107] border border-[#FFC107]/30 flex items-center justify-between group"
+                    className="px-6 py-4 rounded-xl bg-[#25D366]/10 text-[#25D366] border border-[#25D366]/30 flex items-center justify-between group"
                   >
-                    <span className="text-lg">WhatsApp Resume</span>
-                    <MessageCircle size={20} className="fill-[#FFC107]" />
+                    <span className="text-lg font-bold">WhatsApp Resume</span>
+                    <MessageCircle size={20} className="fill-[#25D366]" />
                   </a>
 
                   <a href="/#about-us" onClick={() => setIsMobileMenuOpen(false)} className="px-6 py-4 rounded-xl bg-[#FFC107] border border-[#FFC107] hover:scale-105 transition-all">About</a>

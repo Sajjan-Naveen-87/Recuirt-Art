@@ -77,10 +77,10 @@ function Footer() {
       {/* Bottom Bar */}
       <div className="max-w-7xl mx-auto mt-10 md:mt-12 flex flex-col md:flex-row justify-between items-center gap-8 md:gap-6 text-slate-500 text-sm font-medium">
         
-        <div className="flex flex-col items-center gap-4">
-          {/* Mobile Visitor Counter - Only visible on small screens */}
-          <div className="block lg:hidden">
-            <VisitorCounter compact={true} />
+        <div className="flex flex-col items-center gap-6">
+          {/* Visitor Counter - Visible on all screens in footer */}
+          <div className="block">
+            <VisitorCounter compact={false} />
           </div>
 
           {/* Social Icons */}

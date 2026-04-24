@@ -55,8 +55,8 @@ function Navbar({ searchQuery, setSearchQuery, onSearchFocus }) {
               </div>
               <div className="flex flex-col">
                 <span className="hidden xs:block text-[6px] sm:text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] text-[#25D366] leading-none mb-0.5">Quick Connect</span>
-                <span className="text-white font-black text-[8px] sm:text-[10px] md:text-14px uppercase tracking-widest group-hover:text-[#25D366] transition-colors whitespace-nowrap">
-                  WhatsApp <span className="hidden sm:inline">CV</span>
+                <span className="text-white font-black text-[7px] xs:text-[8px] sm:text-[10px] md:text-14px uppercase tracking-widest group-hover:text-[#25D366] transition-colors whitespace-nowrap">
+                  WhatsApp Resume
                 </span>
               </div>
             </a>
@@ -236,7 +236,7 @@ function Navbar({ searchQuery, setSearchQuery, onSearchFocus }) {
                     onClick={() => setIsMobileMenuOpen(false)}
                     className="px-6 py-4 rounded-xl bg-[#25D366]/10 text-[#25D366] border border-[#25D366]/30 flex items-center justify-between group"
                   >
-                    <span className="text-lg font-bold">WhatsApp CV</span>
+                    <span className="text-lg font-bold">WhatsApp Resume</span>
                     <img src="/Whatsapp-Logo.png" alt="WhatsApp Logo" className="w-6 h-6 object-contain" />
                   </a>
 
